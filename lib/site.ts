@@ -240,11 +240,30 @@ export const DISHES: Dish[] = [
 // Craving Finder filters over, so the two overlap by design on the three
 // photographed dosas.
 export const DOSA_MENU: Dish[] = [
-  { category: "Dosa", name: "Plain Dosa", price: "$9.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Kal Dosa", price: "$10.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Podi Dosa", price: "$10.95", diet: "Veg", spiceLevel: "Medium" },
-  { category: "Dosa", name: "Paper Dosa", price: "$10.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Ghee Plain Dosa", price: "$10.95", diet: "Veg", spiceLevel: "Mild" },
+    
+  { category: "Dosa", name: "Plain Dosa", price: "$8.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Onion Dosa", price: "$10.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Masala Dosa", price: "$15.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Paper Dosa", price: "$8.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Ghee Plain Dosa", price: "$9.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Ghee Podi Dosa", price: "$9.95", diet: "Veg", spiceLevel: "Medium" },
+  { category: "Dosa", name: "Paneer Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Mysore Masala Dosa", price: "$15.95", diet: "Veg", spiceLevel: "Medium" },
+  { category: "Dosa", name: "Cheese & Chilli Dosa", price: "$15.95", diet: "Veg", spiceLevel: "Spicy" },
+  { category: "Dosa", name: "Chicken Dosa", price: "$16.95", diet: "Non-Veg", spiceLevel: "Mild" },
+  { category: "Dosa", name: "Chicken 65 Dosa", price: "$16.95", diet: "Non-Veg", spiceLevel: "Spicy" },
+  { category: "Dosa", name: "Lamb Dosa", price: "$16.95", diet: "Non-Veg", spiceLevel: "Medium" },
+  { category: "Dosa", name: "Veg Dosa Chef Special", price: "$17.95", diet: "Veg", spiceLevel: "Medium" },
+  { category: "Dosa", name: "Non-Veg Dosa Chef Special", price: "$17.95", diet: "Non-Veg", spiceLevel: "Medium" },
+  { category: "Rava Dosa", name: "Rava Plain Dosa", price: "$15.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Rava Dosa", name: "Rava Onion Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Rava Dosa", name: "Rava Masala Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Rava Dosa", name: "Rava Paneer Dosa", price: "$17.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Rava Dosa", name: "Rava Chicken Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
+  { category: "Rava Dosa", name: "Rava Lamb Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
+  { category: "Uttapam", name: "Onion Uttapam", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
+  { category: "Uttapam", name: "Onion & Chilli Uttapam", price: "$16.95", diet: "Veg", spiceLevel: "Spicy" },
+
   {
     category: "Dosa",
     name: "Onion Dosa",
@@ -273,64 +292,69 @@ export const DOSA_MENU: Dish[] = [
     image: "/images/dish-paneer-dosa.jpg",
     alt: "Paneer dosa filled with spiced cottage cheese",
   },
-  { category: "Dosa", name: "Mysore Masala Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Medium" },
-  { category: "Dosa", name: "Cheese Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Cheese & Chilli Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Spicy" },
-  { category: "Dosa", name: "Chicken Dosa", price: "$16.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Chicken 65 Dosa", price: "$20.95", diet: "Non-Veg", spiceLevel: "Spicy" },
-  { category: "Dosa", name: "Butter Chicken Dosa", price: "$20.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Paneer Butter Dosa", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Lamb Dosa", price: "$16.95", diet: "Non-Veg", spiceLevel: "Medium" },
-  { category: "Dosa", name: "Veg Dosa", price: "$17.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Non-Veg Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Plain Egg", price: "$14.95", diet: "Egg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Egg Masala", price: "$16.95", diet: "Egg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Egg Paneer", price: "$16.95", diet: "Egg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Egg Chicken", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Egg Lamb", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Masala Spring Roll", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "70MM Chicken Dosa", price: "$20.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "70MM Lamb Dosa", price: "$20.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "70MM Veg Dosa", price: "$21.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "70MM Non-Veg Dosa", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Plain Dosa", price: "$16.45", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Onion Dosa", price: "$16.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Masala Dosa", price: "$17.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Paneer Dosa", price: "$17.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Chicken Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Dosa", name: "Rava Lamb Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
+  
 ];
 
 // The full priced biryani menu. Nothing in this section is Mild — the real
 // menu starts at one chilli — so the Craving Finder only ever offers Medium
 // and Spicy on this tab.
 export const BIRYANI_MENU: Dish[] = [
+  
   {
     category: "Biryani & More",
     name: "Vegetarian Dum Biryani",
-    price: "$18.95",
+    price: "$16.95",
     diet: "Veg",
     spiceLevel: "Spicy",
     image: "/images/dish-vegetarian-dum-biryani.jpg",
-    alt: "Vegetarian dum biryani with assorted vegetables and basmati rice",
+    alt: "Vegetarian dum biryani with assorted vegetables and basmati rice"
   },
   {
     category: "Biryani & More",
-    name: "Eggplant Biryani (Gutti Vankaya)",
-    price: "$18.95",
+    name: "Gobi 65 Biryani",
+    price: "$17.95",
     diet: "Veg",
-    spiceLevel: "Spicy",
+    spiceLevel: "Spicy"
   },
-  { category: "Biryani & More", name: "Gobi 65 Biryani", price: "$18.95", diet: "Veg", spiceLevel: "Spicy" },
   {
     category: "Biryani & More",
-    name: "Gongura Paneer Biryani",
+    name: "Soya Chaap Tikka Biryani",
+    price: "$17.95",
+    diet: "Veg",
+    spiceLevel: "Medium"
+  },
+  {
+    category: "Biryani & More",
+    name: "Paneer 65 Biryani",
     price: "$19.95",
     diet: "Veg",
-    spiceLevel: "Medium",
+    spiceLevel: "Spicy"
   },
-  { category: "Biryani & More", name: "Paneer 65 Biryani", price: "$18.95", diet: "Veg", spiceLevel: "Spicy" },
-  { category: "Biryani & More", name: "Egg 65 Biryani", price: "$19.95", diet: "Egg", spiceLevel: "Spicy" },
+  {
+    category: "Biryani & More",
+    name: "Paneer Tikka Biryani",
+    price: "$19.95",
+    diet: "Veg",
+    spiceLevel: "Medium"
+  },
+
+  // EGG BIRYANIS
+  {
+    category: "Biryani & More",
+    name: "Egg Biryani",
+    price: "$18.95",
+    diet: "Egg",
+    spiceLevel: "Medium"
+  },
+  {
+    category: "Biryani & More",
+    name: "Egg 65 Biryani",
+    price: "$18.95",
+    diet: "Egg",
+    spiceLevel: "Spicy"
+  },
+
+  // NON-VEGETARIAN BIRYANIS (CHICKEN, SEAFOOD, MEAT)
   {
     category: "Biryani & More",
     name: "Chicken Dum Biryani",
@@ -338,241 +362,355 @@ export const BIRYANI_MENU: Dish[] = [
     diet: "Non-Veg",
     spiceLevel: "Spicy",
     image: "/images/dish-chicken-dum-biryani.jpg",
-    alt: "Chicken dum biryani thali with raita, curry, onion and lemon",
-  },
-  {
-    category: "Biryani & More",
-    name: "Fry Chicken Biryani",
-    price: "$19.95",
-    diet: "Non-Veg",
-    spiceLevel: "Spicy",
+    alt: "Chicken dum biryani thali with raita, curry, onion and lemon"
   },
   {
     category: "Biryani & More",
     name: "Chicken 65 Biryani",
-    price: "$20.95",
+    price: "$19.95",
     diet: "Non-Veg",
     spiceLevel: "Spicy",
     image: "/images/dish-chicken-65-biryani.jpg",
-    alt: "Chicken 65 biryani served in a copper handi with raita and curry on the side",
+    alt: "Chicken 65 biryani served in a copper handi with raita and curry on the side"
   },
   {
     category: "Biryani & More",
     name: "Ghee Chicken Roast Biryani",
-    price: "$21.95",
+    price: "$19.95",
     diet: "Non-Veg",
-    spiceLevel: "Medium",
+    spiceLevel: "Medium"
   },
   {
     category: "Biryani & More",
     name: "Chicken Tikka Biryani",
-    price: "$21.95",
+    price: "$19.95",
     diet: "Non-Veg",
-    spiceLevel: "Medium",
+    spiceLevel: "Medium"
   },
   {
     category: "Biryani & More",
-    name: "Gongura Chicken Biryani",
-    price: "$21.95",
+    name: "Chicken Fry Piece Biryani",
+    price: "$19.95",
     diet: "Non-Veg",
-    spiceLevel: "Medium",
+    spiceLevel: "Spicy"
   },
-  { category: "Biryani & More", name: "Goat Dum Biryani", price: "$20.95", diet: "Non-Veg", spiceLevel: "Spicy" },
-  { category: "Biryani & More", name: "Lamb Keema Pulao", price: "$21.95", diet: "Non-Veg", spiceLevel: "Spicy" },
   {
     category: "Biryani & More",
-    name: "Gongura Goat Biryani",
+    name: "Pacchi Mirchi Chicken Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy"
+  },
+  {
+    category: "Biryani & More",
+    name: "Prawn Roast Biryani",
     price: "$21.95",
     diet: "Non-Veg",
-    spiceLevel: "Spicy",
+    spiceLevel: "Spicy"
   },
-  { category: "Biryani & More", name: "Fish 65 Biryani", price: "$21.95", diet: "Non-Veg", spiceLevel: "Spicy" },
-  { category: "Biryani & More", name: "Prawn 65 Biryani", price: "$21.95", diet: "Non-Veg", spiceLevel: "Spicy" },
-  { category: "Biryani & More", name: "Prawn Roast Biryani", price: "$22.95", diet: "Non-Veg", spiceLevel: "Spicy" },
+  {
+    category: "Biryani & More",
+    name: "Special Keema Pulao",
+    price: "$21.95",
+    diet: "Non-Veg",
+    spiceLevel: "Medium"
+  }
+
 ];
 
 // The full priced curry menu. The printed menu lists these as one "Curries"
 // section rather than splitting them the way DISH_CATEGORIES does for the
 // showcase, so the whole section shares a single category here.
 export const CURRY_MENU: Dish[] = [
-  {
-    category: "Curries",
-    name: "Daal Makhani",
-    price: "$20.95",
-    diet: "Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-dal-makhani.jpg",
-    alt: "Creamy dal makhani made with black lentils and kidney beans",
-  },
-  { category: "Curries", name: "Amritsari Daal", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Soya Chaap Makhani", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Soya Tikka Masala", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Paneer Tikka Masala", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  {
-    category: "Curries",
-    name: "Paneer Butter Masala",
-    price: "$20.95",
-    diet: "Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-paneer-butter-masala.jpg",
-    alt: "Paneer butter masala in a rich tomato gravy",
-  },
-  {
-    category: "Curries",
-    name: "Palak Paneer",
-    price: "$20.95",
-    diet: "Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-palak-paneer.jpg",
-    alt: "Palak paneer with soft paneer cubes in a spiced spinach gravy",
-  },
-  {
-    category: "Curries",
-    name: "Paneer Pudina Kali Mirch",
-    price: "$20.95",
-    diet: "Veg",
-    spiceLevel: "Spicy",
-  },
-  { category: "Curries", name: "Eggplant Masala", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Veg Korma", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  {
-    category: "Curries",
-    name: "Dhaba Aloo Gobi Mutter",
-    price: "$20.95",
-    diet: "Veg",
-    spiceLevel: "Mild",
-  },
-  { category: "Curries", name: "Mixed Veg Curry", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Veg Chettinad", price: "$20.95", diet: "Veg", spiceLevel: "Medium" },
-  { category: "Curries", name: "Dal Tadka", price: "$20.95", diet: "Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Veg Kolhapuri", price: "$20.95", diet: "Veg", spiceLevel: "Medium" },
-  { category: "Curries", name: "Kadai Panner", price: "$20.95", diet: "Veg", spiceLevel: "Medium" },
-
-  {
-    category: "Curries",
-    name: "Butter Chicken",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-butter-chicken.jpg",
-    alt: "Creamy butter chicken curry garnished with mint",
-  },
-  {
-    category: "Curries",
-    name: "Punjabi Butter Chicken",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Medium",
-  },
-  {
-    category: "Curries",
-    name: "Delhi Mughlai Chicken Curry",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-  },
-  {
-    category: "Curries",
-    name: "Chicken Kolhapuri",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Medium",
-  },
-  {
-    category: "Curries",
-    name: "Patiala Chicken Curry",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Medium",
-  },
-  { category: "Curries", name: "Palak Chicken", price: "$22.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  {
-    category: "Curries",
-    name: "Chicken Tikka Masala",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Medium",
-    image: "/images/dish-chicken-tikka-masala.jpg",
-    alt: "Chicken tikka masala in a creamy tomato gravy",
-  },
-  {
-    category: "Curries",
-    name: "Chicken Vindaloo",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Medium",
-  },
-  {
-    category: "Curries",
-    name: "Chicken Madras",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-chicken-madras.jpg",
-    alt: "Dark, richly spiced Chicken Madras curry garnished with onion and lemon",
-  },
-  {
-    category: "Curries",
-    name: "Andhra Chicken Curry",
-    price: "$22.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-  },
-  { category: "Curries", name: "Dum Ka Murgh", price: "$22.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Gongura Chicken", price: "$22.95", diet: "Non-Veg", spiceLevel: "Mild" },
-
-  {
-    category: "Curries",
-    name: "Lamb Roganjosh",
-    price: "$24.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-lamb-rogan-josh.jpg",
-    alt: "Lamb rogan josh in a rich Kashmiri-style spiced gravy",
-  },
-  { category: "Curries", name: "Lamb Korma", price: "$24.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Palak Lamb", price: "$24.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Lamb Vindaloo", price: "$24.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Lamb Choops", price: "$24.95", diet: "Non-Veg", spiceLevel: "Mild" },
-
-  {
-    category: "Curries",
-    name: "Goat Curry",
-    price: "$23.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-    image: "/images/dish-goat-curry.jpg",
-    alt: "Thick, dark, richly spiced goat curry",
-  },
-  { category: "Curries", name: "Goat Vindaloo", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Bhuna Goat", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Palak Goat", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Goat Korma", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  { category: "Curries", name: "Gongura Mutton", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-
-  {
-    category: "Curries",
-    name: "Fish Kerala Style",
-    price: "$23.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-  },
-  { category: "Curries", name: "Fish Korma", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  {
-    category: "Curries",
-    name: "Prawn Kerala Style",
-    price: "$23.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-  },
-  { category: "Curries", name: "Prawn Korma", price: "$23.95", diet: "Non-Veg", spiceLevel: "Mild" },
-  {
-    category: "Curries",
-    name: "Malabar Fish Curry",
-    price: "$23.95",
-    diet: "Non-Veg",
-    spiceLevel: "Mild",
-  },
+{
+category: "Curries",
+name: "Dal Tadka",
+price: "$18.50",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Dal Makhani",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-dal-makhani.jpg",
+alt: "Creamy dal makhani made with black lentils and kidney beans"
+},
+{
+category: "Curries",
+name: "Soya Chaap Tikka Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Paneer Tikka Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Paneer Butter Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-paneer-butter-masala.jpg",
+alt: "Paneer butter masala in a rich tomato gravy"
+},
+{
+category: "Curries",
+name: "Palak Paneer",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-palak-paneer.jpg",
+alt: "Palak paneer with soft paneer cubes in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Paneer Pudina Kali Mirch",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Spicy"
+},
+{
+category: "Curries",
+name: "Kadai Paneer",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Veg Kolhapuri",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Paneer Dhaniya Hara Pyaaz",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Veg Korma",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Veg Makhani",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Veg Saag",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Butter Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-butter-chicken.jpg",
+alt: "Creamy butter chicken curry garnished with mint"
+},
+{
+category: "Curries",
+name: "Punjabi Butter Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Delhi Mughlai Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Murgh Pudina Kali Mirch",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy"
+},
+{
+category: "Curries",
+name: "Chicken Kolhapuri",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Chicken Madras",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-chicken-madras.jpg",
+alt: "Dark, richly spiced Chicken Madras curry garnished with onion and lemon"
+},
+{
+category: "Curries",
+name: "Chicken Tikka Masala",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-chicken-tikka-masala.jpg",
+alt: "Chicken tikka masala in a creamy tomato gravy"
+},
+{
+category: "Curries",
+name: "Kadai Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Adarki Rara Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy"
+},
+{
+category: "Curries",
+name: "Chicken Korma",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Chicken Makhani",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Chicken Saag",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Mango Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Lamb Roganjosh",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-lamb-rogan-josh.jpg",
+alt: "Lamb rogan josh in a rich Kashmiri-style spiced gravy"
+},
+{
+category: "Curries",
+name: "Pepper Lamb Masala",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy"
+},
+{
+category: "Curries",
+name: "Lamb Korma",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Lamb Makhani",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Lamb Saag",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Goat Curry",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-goat-curry.jpg",
+alt: "Thick, dark, richly spiced goat curry"
+},
+{
+category: "Curries",
+name: "Bhuna Goat",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Delhi Mughlai Goat Curry",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Goat Karahi",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+},
+{
+category: "Curries",
+name: "Goat Korma",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Goat Makhani",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Goat Saag",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild"
+},
+{
+category: "Curries",
+name: "Prawn Masala",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium"
+}
 ];
 
 // Everything the Craving Finder is allowed to return. DISHES is deliberately

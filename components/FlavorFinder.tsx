@@ -55,12 +55,6 @@ const TAB_ORDER: CategoryKey[] = ["Dosas", "Biryanis", "Curries"];
 const SPICE_ORDER: SpiceLevel[] = ["Mild", "Medium", "Spicy"];
 const DIET_ORDER: Diet[] = ["Veg", "Non-Veg", "Egg"];
 
-const SPICE_HINT: Record<SpiceLevel, string> = {
-  Mild: "No chilli",
-  Medium: "🌶️",
-  Spicy: "🌶️🌶️",
-};
-
 // Chilli count as printed on the menu.
 const SPICE_CHILLIES: Record<SpiceLevel, string> = {
   Mild: "",
@@ -186,12 +180,12 @@ export function FlavorFinder() {
                       key={option}
                       type="button"
                       onClick={() => setSpice(option)}
-                      className="flex flex-col items-center gap-0.5 rounded-2xl border border-maroon-800/20 bg-cream-50 px-6 py-3 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                      className="inline-flex flex-row items-center justify-center gap-1.5 rounded-full border border-maroon-800/20 bg-cream-50 px-4 py-2 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}
-                      <span className="text-[10px] font-semibold tracking-normal normal-case opacity-70">
-                        {SPICE_HINT[option]}
-                      </span>
+                      {SPICE_CHILLIES[option] && (
+                        <span className="text-xs leading-none">{SPICE_CHILLIES[option]}</span>
+                      )}
                     </button>
                   ))
                 : dietOptions.map((option) => (
