@@ -1,26 +1,97 @@
+import Image from "next/image";
 import { Button } from "./Button";
 import { ArrowRightIcon } from "./Icons";
 import { SITE } from "@/lib/site";
 
+const HIGHLIGHTS = [
+  "House parties & birthdays",
+  "Weddings & functions",
+  "Corporate & office catering",
+];
+
+const COLLAGE = [
+  {
+    src: "/images/catering-buffet.jpg",
+    alt: "Chafing dishes of chilli chicken and butter chicken set up on a Dosa Hut catering buffet",
+    className: "sm:row-span-2",
+    sizes: "(max-width: 640px) 100vw, 280px",
+    position: "object-center",
+  },
+  {
+    src: "/images/catering-platter.jpg",
+    alt: "A packed Dosa Hut catering tray of rice, roti, dal makhani, butter chicken and chilli chicken",
+    className: "",
+    sizes: "(max-width: 640px) 100vw, 280px",
+    position: "object-center",
+  },
+  {
+    src: "/images/catering-biryani.jpg",
+    alt: "A biryani thali served with raita, salad and curry on a steel plate",
+    className: "",
+    sizes: "(max-width: 640px) 100vw, 280px",
+    position: "object-center",
+  },
+];
+
 export function Catering() {
   return (
-    <section id="catering" className="flex w-full justify-center bg-cream-50 px-5 py-10 md:px-16 md:py-16">
-      <div className="flex w-full max-w-[720px] flex-col items-center gap-4 text-center md:gap-5">
-        <span className="text-xs font-bold tracking-[0.16em] text-orange-500 uppercase md:text-[13px] md:tracking-[0.18em]">
-          Catering
-        </span>
-        <h2 className="font-display text-[30px] font-semibold text-maroon-800 md:text-[44px]">
-          Great Food for Your Next Event
-        </h2>
-        <p className="max-w-[560px] text-sm leading-relaxed text-ink-600 md:text-base">
-          From house parties to weddings and corporate events, we bring
-          biryanis, butter chicken, dosas, and more &mdash; freshly made,
-          never compromising quality for quantity.
-        </p>
-        <Button href={SITE.cateringUrl} size="md" className="mt-2">
-          ENQUIRE ABOUT CATERING
-          <ArrowRightIcon size={15} />
-        </Button>
+    <section
+      id="catering"
+      className="relative flex w-full justify-center overflow-hidden bg-maroon-950 px-5 py-14 md:px-16 md:py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(241,90,39,0.28),transparent_55%)]"
+      />
+
+      <div className="relative grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
+        <div className="flex flex-col items-start gap-5 text-left md:gap-6">
+          <span className="rounded-full border border-peach-400/40 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.2em] text-peach-400 uppercase">
+            Catering & Events
+          </span>
+          <h2 className="font-display text-[32px] leading-tight font-semibold text-cream-0 md:text-[48px]">
+            Great Food for Your Next Event
+          </h2>
+          <p className="max-w-[34rem] text-sm leading-relaxed text-cream-50/70 md:text-[16.5px]">
+            From house parties to weddings and corporate events, we bring
+            biryanis, butter chicken, dosas, and more &mdash; freshly made,
+            never compromising quality for quantity.
+          </p>
+
+          <ul className="flex flex-col gap-2.5">
+            {HIGHLIGHTS.map((item) => (
+              <li key={item} className="flex items-center gap-3">
+                <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
+                <span className="text-sm text-cream-50/85 md:text-[15px]">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Button href={SITE.cateringUrl} size="lg" className="mt-2 w-full sm:w-auto">
+            ENQUIRE ABOUT CATERING
+            <ArrowRightIcon size={15} />
+          </Button>
+        </div>
+
+        {/* Borderless bento collage: featured shot spans the full height on the
+            left, two detail shots stack on the right. Separation comes from the
+            grid gap alone — no borders, rings or shadows on any tile. */}
+        <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:grid-rows-2 sm:gap-3 sm:h-[23.75rem] md:h-[28.125rem]">
+          {COLLAGE.map((shot) => (
+            <div
+              key={shot.src}
+              className={`group relative h-52 overflow-hidden rounded-2xl border-0 sm:h-full ${shot.className}`}
+            >
+              <Image
+                src={shot.src}
+                alt={shot.alt}
+                fill
+                sizes={shot.sizes}
+                className={`h-full w-full border-0 object-cover transition-transform duration-500 ease-out group-hover:scale-105 ${shot.position}`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

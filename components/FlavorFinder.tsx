@@ -4,156 +4,134 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Button } from "./Button";
 import { ArrowRightIcon } from "./Icons";
-import { categorySlug, DISHES, SITE, type Dish } from "@/lib/site";
+import {
+  categorySlug,
+  CRAVING_MENU,
+  SITE,
+  type Diet,
+  type Dish,
+  type SpiceLevel,
+} from "@/lib/site";
 
 type CategoryKey = "Dosas" | "Biryanis" | "Curries";
 
-type DishTag = {
-  spice: string;
-  diet: string;
-  isVeg: boolean;
-};
-
-type Step = {
-  label: string;
-  options: string[];
-};
-
 type CategoryConfig = {
   tabLabel: string;
-  discoverHeading: string; // dynamic sub-title shown while this tab is active
+  discoverHeading: string;
+  menuLinkCategory: string; // category section the "view in menu" link jumps to
   dishCategories: string[]; // real categories from lib/site.ts to pull dishes from
-  steps: [Step, Step]; // exactly 2 questions: spice, then diet
-  vegDietLabel: string; // whichever diet option means "vegetarian" for this category
-  tags: Record<string, DishTag>; // keyed by real dish name
+  emptyMessage: string;
 };
 
-// Every tag below is a best-effort characterisation of a real, already-priced
-// and photographed menu item (see lib/site.ts) — no dish, price, or image is
-// invented here, only which quiz bucket each real dish falls into, and
-// isVeg is the strict, factual dietary classification used to guarantee a
-// vegetarian selection never surfaces a meat dish.
+const GENERIC_EMPTY = "No items found matching your exact craving preferences.";
+
 const CATEGORIES: Record<CategoryKey, CategoryConfig> = {
   Dosas: {
     tabLabel: "Dosas",
     discoverHeading: "Discover Your Perfect Dosa",
+    menuLinkCategory: "Dosa",
     dishCategories: ["Dosa"],
-    steps: [
-      { label: "Spice Level", options: ["Mild", "Medium", "Spicy"] },
-      { label: "Diet", options: ["Vegetarian", "Non-Veg / Meat"] },
-    ],
-    vegDietLabel: "Vegetarian",
-    tags: {
-      "Masala Dosa": { spice: "Mild", diet: "Vegetarian", isVeg: true },
-      "Onion Dosa": { spice: "Mild", diet: "Vegetarian", isVeg: true },
-      "Paneer Dosa": { spice: "Mild", diet: "Vegetarian", isVeg: true },
-    },
+    emptyMessage: GENERIC_EMPTY,
   },
   Biryanis: {
     tabLabel: "Biryanis",
     discoverHeading: "Discover Your Perfect Biryani",
+    menuLinkCategory: "Biryani & More",
     dishCategories: ["Biryani & More"],
-    steps: [
-      { label: "Flavor Profile", options: ["Mild Aromatic", "Extra Spicy & Rich"] },
-      { label: "Diet", options: ["Pure Veg / Paneer", "Chicken / Mutton"] },
-    ],
-    vegDietLabel: "Pure Veg / Paneer",
-    tags: {
-      "Vegetarian Dum Biryani": { spice: "Mild Aromatic", diet: "Pure Veg / Paneer", isVeg: true },
-      "Chicken Dum Biryani": { spice: "Mild Aromatic", diet: "Chicken / Mutton", isVeg: false },
-      "Chicken 65 Biryani": { spice: "Extra Spicy & Rich", diet: "Chicken / Mutton", isVeg: false },
-    },
+    emptyMessage:
+      "Sorry, no Biryani options match your exact combination. Try switching to Medium or Spicy level!",
   },
   Curries: {
     tabLabel: "Curries",
     discoverHeading: "Discover Your Perfect Curry",
-    dishCategories: ["Vegetarian Curries", "Chicken Curries", "Goat & Lamb Curry"],
-    steps: [
-      { label: "Heat Level", options: ["Mild", "Medium", "Hot"] },
-      { label: "Diet", options: ["Vegetarian", "Chicken / Lamb / Goat"] },
-    ],
-    vegDietLabel: "Vegetarian",
-    tags: {
-      "Paneer Butter Masala": { spice: "Mild", diet: "Vegetarian", isVeg: true },
-      "Butter Chicken": { spice: "Mild", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Chicken Tikka Masala": { spice: "Medium", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Chicken Madras": { spice: "Hot", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Goat Curry": { spice: "Hot", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Goat Karahi": { spice: "Hot", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Lamb Rogan Josh": { spice: "Hot", diet: "Chicken / Lamb / Goat", isVeg: false },
-      "Dal Makhani": { spice: "Mild", diet: "Vegetarian", isVeg: true },
-      "Palak Paneer": { spice: "Medium", diet: "Vegetarian", isVeg: true },
-    },
+    menuLinkCategory: "Vegetarian Curries",
+    dishCategories: ["Curries"],
+    emptyMessage:
+      "No curries found for this specific combination. Try selecting Mild or Medium Spice Level!",
   },
 };
 
 const TAB_ORDER: CategoryKey[] = ["Dosas", "Biryanis", "Curries"];
+const SPICE_ORDER: SpiceLevel[] = ["Mild", "Medium", "Spicy"];
+const DIET_ORDER: Diet[] = ["Veg", "Non-Veg", "Egg"];
 
-function dishesForCategory(config: CategoryConfig): Dish[] {
-  return DISHES.filter((d) => config.dishCategories.includes(d.category) && config.tags[d.name]);
-}
+const SPICE_HINT: Record<SpiceLevel, string> = {
+  Mild: "No chilli",
+  Medium: "🌶️",
+  Spicy: "🌶️🌶️",
+};
 
-// Graceful fallback so a real recommendation always appears, even for
-// combinations the actual menu doesn't have an exact match for (e.g. this
-// menu has no non-vegetarian dosa) — it never invents a dish, it just widens
-// the match instead of returning nothing.
-//
-// Critically: when the user asks for Vegetarian, the pool is filtered to
-// isVeg dishes BEFORE any fallback tier runs, so no widening step can ever
-// hand back a meat dish to a vegetarian selection. The reverse (a non-veg
-// seeker occasionally seeing a veg dish, only when the menu truly has no
-// matching meat option in that category) is the one allowed asymmetry.
-function findMatches(config: CategoryConfig, spice: string, diet: string): Dish[] {
-  const wantsVeg = diet === config.vegDietLabel;
-  const pool = dishesForCategory(config).filter((d) => !wantsVeg || config.tags[d.name].isVeg);
+// Chilli count as printed on the menu.
+const SPICE_CHILLIES: Record<SpiceLevel, string> = {
+  Mild: "",
+  Medium: "🌶️",
+  Spicy: "🌶️🌶️",
+};
 
-  const exact = pool.filter((d) => {
-    const t = config.tags[d.name];
-    return t.spice === spice && t.diet === diet;
-  });
-  if (exact.length >= 2) return exact.slice(0, 2);
+const DIET_DOT: Record<Diet, string> = {
+  Veg: "bg-green-500",
+  "Non-Veg": "bg-red-500",
+  Egg: "bg-amber-400",
+};
 
-  const dietOnly = pool.filter((d) => config.tags[d.name].diet === diet);
-  if (dietOnly.length >= 2) return dietOnly.slice(0, 2);
-
-  return pool.slice(0, 2);
+function poolFor(config: CategoryConfig): Dish[] {
+  return CRAVING_MENU.filter((dish) => config.dishCategories.includes(dish.category));
 }
 
 export function FlavorFinder() {
   const [category, setCategory] = useState<CategoryKey>("Dosas");
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<string[]>([]);
+  const [spice, setSpice] = useState<SpiceLevel | null>(null);
+  const [diet, setDiet] = useState<Diet | null>(null);
 
   const config = CATEGORIES[category];
+  const pool = useMemo(() => poolFor(config), [config]);
+
+  // Only offer filter values this category's menu actually contains, so no
+  // option is a guaranteed dead end.
+  const spiceOptions = useMemo(
+    () => SPICE_ORDER.filter((level) => pool.some((dish) => dish.spiceLevel === level)),
+    [pool],
+  );
+  const dietOptions = useMemo(
+    () => DIET_ORDER.filter((value) => pool.some((dish) => dish.diet === value)),
+    [pool],
+  );
+
+  // Strict match only — both selected criteria must equal the dish's own
+  // stated values. Nothing is widened or inferred when there is no match.
+  const results = useMemo(() => {
+    if (!spice || !diet) return null;
+    return pool.filter((dish) => dish.spiceLevel === spice && dish.diet === diet);
+  }, [pool, spice, diet]);
 
   function switchCategory(key: CategoryKey) {
     setCategory(key);
-    setStep(0);
-    setAnswers([]);
-  }
-
-  function pick(value: string) {
-    setAnswers((prev) => [...prev, value]);
-    setStep((s) => s + 1);
+    setSpice(null);
+    setDiet(null);
   }
 
   function reset() {
-    setStep(0);
-    setAnswers([]);
+    setSpice(null);
+    setDiet(null);
   }
 
-  const results = useMemo(() => {
-    if (answers.length < 2) return null;
-    return findMatches(config, answers[0], answers[1]);
-  }, [config, answers]);
-
-  const done = step >= 2 && results;
-  const wantsVeg = answers[1] === config.vegDietLabel;
-  const crossedToVeg = done && !wantsVeg && results!.some((d) => config.tags[d.name].isVeg);
+  const step = spice === null ? 0 : 1;
 
   return (
-    <section className="flex w-full flex-col items-center gap-6 bg-cream-50 px-5 py-10 md:gap-10 md:px-16 md:py-16">
-      <div className="flex max-w-[620px] flex-col items-center gap-3 text-center md:gap-4">
+    <section className="relative flex w-full justify-center overflow-hidden bg-gradient-to-b from-[#FFF8F5] via-[#FDEDE3] to-[#F8E1D3] px-5 py-12 md:px-16 md:py-20">
+      {/* Soft dot pattern keeps this section feeling playful and interactive,
+          in contrast to the solid dark Catering banner directly below it. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-50"
+        style={{
+          backgroundImage: "radial-gradient(rgba(58,13,13,0.10) 1px, transparent 1px)",
+          backgroundSize: "1.25rem 1.25rem",
+        }}
+      />
+
+      <div className="relative flex w-full flex-col items-center gap-6 md:gap-9">
+      <div className="flex max-w-[38.75rem] flex-col items-center gap-3 text-center md:gap-4">
         <h2 className="font-display text-[28px] font-semibold text-maroon-800 md:text-[42px]">
           Craving Finder
         </h2>
@@ -162,7 +140,7 @@ export function FlavorFinder() {
         </p>
       </div>
 
-      <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-center justify-center gap-2.5">
         {TAB_ORDER.map((key) => (
           <button
             key={key}
@@ -183,11 +161,11 @@ export function FlavorFinder() {
         {config.discoverHeading}
       </span>
 
-      <div className="flex w-full max-w-[720px] flex-col items-center gap-6 rounded-[22px] border border-maroon-800/10 bg-cream-0 p-6 shadow-[0_18px_36px_-24px_rgba(58,13,13,0.3)] md:p-10">
-        {!done && (
+      <div className="flex w-full max-w-[45rem] flex-col items-center gap-6 rounded-[26px] border border-orange-500/20 bg-cream-0/95 p-6 shadow-[0_28px_60px_-28px_rgba(58,13,13,0.45)] backdrop-blur-sm md:p-10">
+        {!results && (
           <>
             <div className="flex items-center gap-2">
-              {config.steps.map((_, i) => (
+              {[0, 1].map((i) => (
                 <span
                   key={i}
                   className={`h-1.5 w-8 rounded-full transition-colors ${
@@ -198,109 +176,156 @@ export function FlavorFinder() {
             </div>
 
             <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
-              {config.steps[step].label}
+              {step === 0 ? "Spice Level" : "Diet"}
             </span>
 
             <div className="flex w-full flex-wrap items-center justify-center gap-3">
-              {config.steps[step].options.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => pick(option)}
-                  className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
-                >
-                  {option}
-                </button>
-              ))}
+              {step === 0
+                ? spiceOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => setSpice(option)}
+                      className="flex flex-col items-center gap-0.5 rounded-2xl border border-maroon-800/20 bg-cream-50 px-6 py-3 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                    >
+                      {option}
+                      <span className="text-[10px] font-semibold tracking-normal normal-case opacity-70">
+                        {SPICE_HINT[option]}
+                      </span>
+                    </button>
+                  ))
+                : dietOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => setDiet(option)}
+                      className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                    >
+                      {option}
+                    </button>
+                  ))}
             </div>
+
+            {step === 1 && (
+              <button
+                type="button"
+                onClick={() => setSpice(null)}
+                className="text-sm font-bold tracking-wide text-maroon-700 underline underline-offset-4 hover:text-orange-500"
+              >
+                Back
+              </button>
+            )}
           </>
         )}
 
-        {done && results && (
+        {results && (
           <>
-            <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
-              Perfect Picks For You
-            </span>
+            <div className="flex flex-col items-center gap-1.5 text-center">
+              <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
+                {results.length > 0 ? "Perfect Picks For You" : "Nothing Matches Yet"}
+              </span>
+              <span className="text-[11px] font-bold tracking-[0.14em] text-orange-500 uppercase">
+                {config.tabLabel} &middot; {diet} &middot; {spice}
+              </span>
+            </div>
 
-            {crossedToVeg && (
-              <p className="-mt-3 text-center text-[13px] text-ink-600 italic">
-                We don&rsquo;t have a matching {answers[1]?.toLowerCase()} option here &mdash; here are our
-                closest picks instead.
+            {results.length === 0 ? (
+              <p className="max-w-[28rem] text-center text-sm leading-relaxed text-ink-600">
+                {config.emptyMessage}
               </p>
-            )}
-
-            <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
-              {results.map((dish) => {
-                const tag = config.tags[dish.name];
-                return (
-                  <div
-                    key={dish.name}
-                    className="flex h-full flex-col gap-3 overflow-hidden rounded-[18px] border border-maroon-800/10 bg-cream-50"
-                  >
-                    <div className="relative h-[160px] w-full shrink-0">
+            ) : (
+              <>
+                <ul className="scrollbar-thin -mx-2 flex w-full snap-x snap-mandatory items-stretch gap-4 overflow-x-auto px-2 pb-3">
+                  {results.map((dish) => (
+                    <li
+                      key={dish.name}
+                      className="relative flex min-h-[17rem] min-w-[13.75rem] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-[18px] bg-[#4A0E17] sm:min-w-[16.25rem]"
+                    >
                       {dish.image ? (
-                        <Image
-                          src={dish.image}
-                          alt={dish.alt ?? dish.name}
-                          fill
-                          sizes="(max-width: 640px) 100vw, 340px"
-                          className="object-cover"
-                        />
+                        <>
+                          <Image
+                            src={dish.image}
+                            alt={dish.alt ?? dish.name}
+                            fill
+                            sizes="(max-width: 640px) 220px, 260px"
+                            className="object-cover"
+                          />
+                          <span
+                            aria-hidden
+                            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10"
+                          />
+                        </>
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-maroon-800">
-                          <span className="font-display px-4 text-center text-lg font-semibold text-cream-50/90">
-                            {dish.name}
-                          </span>
-                        </div>
-                      )}
-                      <span
-                        className={`absolute top-2.5 left-2.5 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide uppercase shadow-sm ${
-                          tag.isVeg ? "bg-cream-0 text-green-700" : "bg-cream-0 text-maroon-800"
-                        }`}
-                      >
                         <span
-                          className={`h-[7px] w-[7px] rounded-full border ${
-                            tag.isVeg ? "border-green-700 bg-green-700" : "border-maroon-800 bg-maroon-800"
-                          }`}
-                        />
-                        {tag.isVeg ? "Veg" : "Non-Veg"}
-                      </span>
-                    </div>
-                    <div className="flex flex-1 flex-col gap-1.5 px-4 pb-4">
-                      <div className="flex flex-1 flex-col gap-1.5">
-                        <span className="text-[11px] font-bold tracking-[0.14em] text-orange-500 uppercase">
-                          {dish.category}
-                        </span>
-                        <span className="font-display text-lg font-semibold text-maroon-900">{dish.name}</span>
-                        <p className="line-clamp-2 min-h-[36px] text-[13px] leading-snug text-ink-600">
-                          {dish.alt ?? ""}
-                        </p>
-                        <span className="text-[11px] font-semibold text-ink-600">
-                          {tag.spice} &middot; {tag.diet}
-                        </span>
-                        <span className="text-base font-bold text-maroon-800">{dish.price}</span>
-                      </div>
-                      <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row">
-                        <Button
-                          href={SITE.orderUrl}
-                          size="md"
-                          full
-                          className="sm:flex-1 !gap-1.5 !px-3 !py-2.5 !text-[12.5px] whitespace-nowrap"
+                          aria-hidden
+                          className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(241,90,39,0.35),transparent_60%)]"
                         >
-                          ORDER THIS
-                          <ArrowRightIcon size={13} />
-                        </Button>
+                          <span className="absolute inset-0 flex items-center justify-center text-5xl opacity-15">
+                            🍛
+                          </span>
+                        </span>
+                      )}
+
+                      <div className="relative flex flex-col items-start gap-2 p-4">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full bg-black/45 px-2 py-0.5 text-[10px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
+                            {dish.spiceLevel}
+                            {dish.spiceLevel && SPICE_CHILLIES[dish.spiceLevel]
+                              ? ` ${SPICE_CHILLIES[dish.spiceLevel]}`
+                              : ""}
+                          </span>
+                          {dish.diet && (
+                            <span className="flex items-center gap-1 rounded-full bg-black/45 px-2 py-0.5 text-[10px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
+                              <span
+                                aria-hidden
+                                className={`h-1.5 w-1.5 rounded-full ${DIET_DOT[dish.diet]}`}
+                              />
+                              {dish.diet}
+                            </span>
+                          )}
+                        </div>
+
+                        <span className="font-display text-lg leading-tight font-semibold text-cream-0">
+                          {dish.name}
+                        </span>
+
+                        <span className="rounded-full bg-orange-500 px-2.5 py-1 text-[13px] font-bold text-cream-0">
+                          {dish.price}
+                        </span>
+
                         <a
-                          href={`#menu-${categorySlug(dish.category)}`}
-                          className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-full border border-maroon-800/25 px-3 py-2.5 text-[12.5px] font-bold tracking-wide text-maroon-800 transition-colors hover:border-maroon-800 sm:flex-1"
+                          href={SITE.orderUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Order ${dish.name} online`}
+                          className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-cream-0/35 bg-cream-0/10 px-3 py-2 text-[12px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm transition-colors hover:bg-cream-0/20"
                         >
-                          VIEW IN MENU
+                          Order Now
+                          <ArrowRightIcon size={12} />
                         </a>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    </li>
+                  ))}
+                </ul>
+                <span className="-mt-2 text-[11px] font-semibold text-ink-600">
+                  {results.length === 1
+                    ? "1 match"
+                    : `${results.length} matches · swipe to browse`}
+                </span>
+              </>
+            )}
+
+            <div className="flex w-full max-w-sm flex-col gap-2.5 sm:max-w-none sm:flex-row sm:justify-center">
+              <Button href={SITE.orderUrl} size="md" full className="sm:w-auto">
+                ORDER ONLINE
+                <ArrowRightIcon size={13} />
+              </Button>
+              <a
+                href={`#menu-${categorySlug(config.menuLinkCategory)}`}
+                className="inline-flex w-full items-center justify-center rounded-full border border-maroon-800/25 px-5 py-2.5 text-[12.5px] font-bold tracking-wide whitespace-nowrap text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
+              >
+                VIEW IN MENU
+              </a>
             </div>
 
             <button
@@ -312,6 +337,7 @@ export function FlavorFinder() {
             </button>
           </>
         )}
+        </div>
       </div>
     </section>
   );

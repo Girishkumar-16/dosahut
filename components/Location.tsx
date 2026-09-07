@@ -1,5 +1,6 @@
 import { Button } from "./Button";
 import { ChevronRightIcon, ClockIcon, PhoneIcon, PinIcon } from "./Icons";
+import { LocationMap } from "./LocationMap";
 import { HOURS, SITE } from "@/lib/site";
 
 export function Location() {
@@ -62,15 +63,7 @@ export function Location() {
           </div>
         </div>
 
-        <div className="relative h-[420px] w-full overflow-hidden rounded-[22px] border border-maroon-800/10 bg-cream-200 shadow-[0_24px_48px_-24px_rgba(58,13,13,0.35)] md:h-[560px]">
-          <iframe
-            src={SITE.mapEmbedUrl}
-            title="Dosa Hut Sunshine Coast location map"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 h-full w-full border-0"
-          />
-        </div>
+        <LocationMap />
       </div>
     </section>
   );

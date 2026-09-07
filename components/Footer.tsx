@@ -62,7 +62,12 @@ export function Footer() {
           <a href={SITE.orderUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-cream-50/70 hover:text-cream-50">
             Order Online
           </a>
-          <a href="#catering" className="text-sm font-medium text-cream-50/70 hover:text-cream-50">
+          <a
+            href={SITE.cateringUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-cream-50/70 hover:text-cream-50"
+          >
             Catering
           </a>
         </nav>
@@ -88,7 +93,7 @@ export function Footer() {
       <div className="mx-auto h-px w-full max-w-[1200px] bg-cream-50/10" />
 
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-3 md:flex-row md:justify-center md:gap-5">
-        <span className="text-sm font-bold text-cream-50/70">Available to order on</span>
+        <span className="text-base font-bold text-cream-50/70">Available to order on</span>
         <div className="flex gap-3">
           <a
             href={SITE.uberEatsUrl}

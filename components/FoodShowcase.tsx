@@ -31,7 +31,7 @@ export function FoodShowcase() {
           Crowd Pleasers
         </h2>
         <p className="text-sm font-semibold tracking-wide text-orange-500 uppercase md:text-base">
-          Top 3 Must-Try Dishes Handpicked for You
+          Must-Try Dishes Handpicked for You
         </p>
       </div>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Button } from "./Button";
+import { HeroCarousel } from "./HeroCarousel";
 import { ArrowRightIcon } from "./Icons";
 import { WeekendSpecialModal } from "./WeekendSpecialModal";
 import { DISHES, SITE, type Dish } from "@/lib/site";
@@ -23,18 +23,25 @@ const PLANET_NAMES = [
 
 const PLANETS: Dish[] = PLANET_NAMES.map((name) => DISHES.find((d) => d.name === name)!);
 
+// The carousel shows three trios; the orbit uses the full set.
+const SLIDER_DISHES = PLANETS.slice(0, 9);
+
 const ROTATION_MS = 60000;
 const DISH_SIZE = 128;
 
 // Medium Ellipse Radius
-const ORBIT_RADIUS_X = 550; 
+const ORBIT_RADIUS_X = 550;
 const ORBIT_RADIUS_Y = 200;
+
+// The orbit spans ~1230px including the dish diameter, so it only fits from
+// Tailwind's xl breakpoint up. Below that the hero shows the carousel instead.
+const ORBIT_MIN_WIDTH = 1280;
 
 function useOrbitEnabled() {
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
     function update() {
-      setEnabled(window.innerWidth >= 1300);
+      setEnabled(window.innerWidth >= ORBIT_MIN_WIDTH);
     }
     update();
     window.addEventListener("resize", update);
@@ -83,21 +90,30 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex h-[660px] w-full flex-col items-center justify-center overflow-hidden bg-cream-50 md:h-[780px]"
+      className="relative flex min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden bg-maroon-950 py-16 md:min-h-[45rem] md:py-24 xl:bg-cream-50"
     >
-      {/* Light premium radial gradient — replaces the busy food-photo collage */}
+      {/* Mobile and tablet: full-bleed timed carousel. */}
+      <div className="absolute inset-0 z-0 xl:hidden">
+        <HeroCarousel dishes={SLIDER_DISHES} enabled={!orbitEnabled} />
+      </div>
+
+      {/* Laptop and up: the original light gradient behind the orbiting dishes. */}
       <div
-        className="pointer-events-none absolute inset-0"
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden xl:block"
         style={{
           background:
             "radial-gradient(circle at center, #FFF7F4 0%, #F9ECE4 55%, #F2DDD0 100%)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(241,90,39,0.12),transparent_60%)]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(circle_at_center,rgba(241,90,39,0.12),transparent_60%)] xl:block"
+      />
 
       {/* Orbiting Dishes */}
       {orbitEnabled && (
-        <div className="pointer-events-none absolute inset-0 hidden items-center justify-center lg:flex">
+        <div className="pointer-events-none absolute inset-0 hidden items-center justify-center xl:flex">
           {PLANETS.map((dish, i) => {
             const baseDeg = (360 / PLANETS.length) * i;
             const deg = ((baseDeg + angle) * Math.PI) / 180;
@@ -109,9 +125,10 @@ export function Hero() {
             return (
               <div
                 key={dish.name}
-                className="pointer-events-auto absolute top-1/2 left-1/2"
+                className="group pointer-events-auto absolute top-1/2 left-1/2"
                 style={{
                   transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
+                  zIndex: isActive ? 20 : 1,
                 }}
                 onMouseEnter={() => handleMouseEnter(dish)}
                 onMouseLeave={handleMouseLeave}
@@ -138,9 +155,7 @@ export function Hero() {
                   aria-label={`Order ${dish.name} online`}
                   style={{ height: DISH_SIZE, width: DISH_SIZE }}
                   className={`relative block overflow-hidden rounded-full border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-300 ease-out ${
-                    isActive
-                      ? "scale-125 border-orange-500 drop-shadow-2xl"
-                      : "scale-100"
+                    isActive ? "scale-125 border-orange-500 drop-shadow-2xl" : "scale-100"
                   }`}
                 >
                   {dish.image ? (
@@ -149,7 +164,7 @@ export function Hero() {
                       alt={dish.alt ?? dish.name}
                       fill
                       sizes={`${DISH_SIZE}px`}
-                      className="object-cover"
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-maroon-800">
@@ -159,37 +174,62 @@ export function Hero() {
                     </div>
                   )}
                 </a>
+
+                {/* Floating glass badge. It sits outside the anchor because the
+                    anchor is a circular clip — a badge inside it would be cut
+                    off by the curve — and below the photo so the dish stays
+                    fully visible. */}
+                <div className="pointer-events-none absolute top-full left-1/2 mt-5 flex w-max max-w-[14rem] -translate-x-1/2 translate-y-2 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-heading text-sm leading-tight font-bold tracking-wide text-white uppercase">
+                      {dish.name}
+                    </span>
+                    <span className="shrink-0 text-xs font-semibold text-orange-500">
+                      {dish.price}
+                    </span>
+                  </div>
+                  <span className="mt-1 flex items-center gap-1 text-[10px] leading-none font-medium tracking-wider text-peach-400 uppercase">
+                    Click to order online
+                    <ArrowRightIcon size={9} />
+                  </span>
+                </div>
               </div>
             );
           })}
         </div>
       )}
 
-      {/* Main Center Content */}
-      <div className="relative z-10 mx-auto flex w-full max-w-[720px] flex-col items-center gap-4 px-4 text-center">
-        {/* Slightly Larger Tagline */}
-        <h1 className="font-heading text-base font-bold tracking-tight text-maroon-900 uppercase sm:text-xl md:text-[35px] whitespace-nowrap">
+      {/* Overlay is click-through below xl so swipes reach the carousel
+          underneath; only the buttons take pointer events. */}
+      <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-4 pb-10 text-center sm:px-6 xl:pb-0">
+        {/* Below xl the copy sits directly on the photos — no dimming overlay —
+            so legibility comes from text shadows instead. */}
+        <h1 className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-balance text-cream-0 uppercase [text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.95)] sm:text-4xl md:text-[2.75rem] xl:text-[35px] xl:text-maroon-900 xl:[text-shadow:none]">
           India, Served with a Sunshine Coast Soul.
         </h1>
 
-        {/* Description Text */}
-        <p className="max-w-[500px] text-xs leading-relaxed text-ink-600 sm:text-sm md:text-base">
+        <p className="max-w-[31.25rem] text-sm leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] md:text-base xl:text-ink-600 xl:[text-shadow:none]">
           Where coastal relaxation meets authentic Indian heat. Sizzling
           tandoori grills, rich slow-cooked curries, street-side chaats, and
           iconic crispy dosas &mdash; crafted fresh right here in Buddina.
         </p>
 
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Button href={SITE.orderUrl} full className="sm:w-auto">
-            ORDER ONLINE
-            <ArrowRightIcon />
-          </Button>
+        <div className="pointer-events-auto mt-2 flex flex-col items-center gap-3">
+          <a
+            href={SITE.orderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-heading inline-flex items-center justify-center gap-2 rounded-md bg-orange-500 px-6 py-2.5 text-sm font-bold tracking-wide text-cream-0 uppercase transition-colors hover:bg-orange-600"
+          >
+            Order Now
+            <ArrowRightIcon size={14} />
+          </a>
           <button
             type="button"
             onClick={() => setWeekendOpen(true)}
-            className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-maroon-800/25 bg-transparent px-9 py-[18px] text-[15px] font-bold tracking-wide text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
+            className="font-heading inline-flex items-center justify-center gap-2.5 rounded-md border border-cream-0/45 bg-cream-0/10 px-9 py-4 text-base font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm transition-colors hover:border-cream-0 hover:bg-cream-0/20 xl:border-maroon-800/25 xl:bg-transparent xl:text-maroon-800 xl:backdrop-blur-none xl:hover:border-maroon-800 xl:hover:bg-transparent"
           >
-            🔥 WEEKEND SPECIAL
+            🔥 Weekend Special
           </button>
         </div>
       </div>
