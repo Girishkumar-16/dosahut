@@ -86,7 +86,7 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-maroon-800 to-maroon-900">
-                    <span className="font-display px-6 text-center text-3xl font-semibold text-cream-50/90 md:text-4xl">
+                    <span className="font-display px-6 text-center text-4xl font-semibold text-cream-50/90 md:text-5xl">
                       {d.name}
                     </span>
                   </div>
@@ -120,18 +120,18 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
       </div>
 
       <div key={dish.name} className="dish-info-enter mt-6 flex flex-col items-center gap-1.5 text-center">
-        <span className="text-[11px] font-bold tracking-[0.16em] text-orange-500 uppercase">
+        <span className="text-[12.5px] font-bold tracking-[0.16em] text-orange-500 uppercase">
           {dish.category}
         </span>
-        <span className="font-display text-2xl font-semibold text-ink-900 md:text-[32px]">
+        <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl leading-snug text-ink-900">
           {dish.name}
         </span>
-        <span className="text-lg font-bold text-maroon-800 md:text-xl">{dish.price}</span>
+        <span className="text-xl font-bold text-maroon-800 md:text-2xl">{dish.price}</span>
       </div>
 
       {count > 1 && (
         <div className="hidden mx-auto mt-4 flex w-full max-w-[220px] items-center gap-3">
-          <span className="font-heading shrink-0 text-[11px] font-semibold tracking-wide text-ink-600 tabular-nums">
+          <span className="font-heading shrink-0 text-[12.5px] font-semibold tracking-wide text-ink-600 tabular-nums">
             {String(index + 1).padStart(2, "0")}/{String(count).padStart(2, "0")}
           </span>
           <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-maroon-800/10">

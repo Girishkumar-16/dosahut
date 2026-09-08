@@ -9,7 +9,7 @@ export function TrustStrip() {
     <div className="flex w-full flex-col items-center justify-center gap-1 bg-orange-500 px-6 py-4 text-center md:h-[60px] md:flex-row md:gap-3.5 md:py-0">
       {ITEMS.map((item, i) => (
         <span key={item} className="flex items-center gap-3.5">
-          <span className="text-xs font-bold tracking-[0.06em] text-cream-0 md:text-[13.5px] md:tracking-[0.08em]">
+          <span className="text-sm font-bold tracking-[0.06em] text-cream-0 md:text-[15.5px] md:tracking-[0.08em]">
             {item}
           </span>
           {i < ITEMS.length - 1 && (

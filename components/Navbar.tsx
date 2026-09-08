@@ -61,7 +61,7 @@ export function Navbar() {
 
         <a
           href="#location"
-          className="font-heading ml-auto flex shrink-0 items-center gap-2 text-[11px] font-bold tracking-[0.08em] text-cream-50 uppercase transition-colors hover:text-peach-400 sm:text-xs md:text-sm"
+          className="font-heading ml-auto flex shrink-0 items-center gap-2 text-[12.5px] font-bold tracking-[0.08em] text-cream-50 uppercase transition-colors hover:text-peach-400 sm:text-sm md:text-base"
         >
           <PinIcon size={18} />
           Find Your Coast
@@ -69,7 +69,7 @@ export function Navbar() {
       </div>
 
       {/* Desktop and laptop: logo left, everything else right. */}
-      <div className="hidden items-center justify-between px-16 py-4 lg:flex">
+      <div className="hidden items-center justify-between px-8 py-4 lg:flex xl:px-16">
         <a href="#top" className="shrink-0">
           <Image
             src="/images/logo.png"
@@ -81,13 +81,13 @@ export function Navbar() {
           />
         </a>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6 xl:gap-8">
           {/* Plain anchors — no category dropdowns. */}
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="font-heading text-[15px] font-semibold tracking-wide text-cream-50 uppercase hover:text-peach-400"
+              className="font-heading text-[17px] font-semibold tracking-wide text-cream-50 uppercase hover:text-peach-400"
             >
               {link.label}
             </a>
@@ -95,7 +95,7 @@ export function Navbar() {
 
           <a
             href="#location"
-            className="font-heading flex shrink-0 items-center gap-2 text-[15px] font-semibold tracking-wide text-cream-50 uppercase transition-colors hover:text-peach-400"
+            className="font-heading flex shrink-0 items-center gap-2 text-[17px] font-semibold tracking-wide text-cream-50 uppercase transition-colors hover:text-peach-400"
           >
             <PinIcon size={18} />
             Find Your Coast
@@ -105,7 +105,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setOrderOpen((v) => !v)}
-              className="font-heading inline-flex items-center gap-2 rounded-full bg-orange-500 px-7 py-3.5 text-[15px] font-semibold tracking-wide text-cream-0 transition-colors hover:bg-orange-600"
+              className="btn-primary-glow font-heading inline-flex min-h-[44px] items-center gap-2 rounded-full px-7 py-3.5 text-lg font-bold tracking-wider uppercase"
             >
               ORDER ONLINE
               <ChevronRightIcon
@@ -130,7 +130,7 @@ export function Navbar() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setOrderOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-maroon-800 hover:bg-cream-100"
+                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-base font-semibold text-maroon-800 hover:bg-cream-100"
                     >
                       {platform.logo ? (
                         <Image src={platform.logo} alt="" width={80} height={30} className="h-4 w-auto" />
@@ -181,7 +181,7 @@ export function Navbar() {
               key={link.label}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="font-heading text-2xl font-bold tracking-wide text-maroon-900 uppercase transition-colors hover:text-orange-500 sm:text-3xl"
+              className="font-heading text-3xl font-bold tracking-wide text-maroon-900 uppercase transition-colors hover:text-orange-500 sm:text-4xl"
             >
               {link.label}
             </a>
@@ -194,7 +194,7 @@ export function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="font-heading flex w-full items-center justify-center rounded-md bg-orange-500 px-6 py-4 text-base font-bold tracking-wide text-cream-0 uppercase transition-colors hover:bg-orange-600"
+            className="btn-primary-glow font-heading flex min-h-[44px] w-full max-w-full items-center justify-center rounded-md px-5 py-3 text-lg font-bold tracking-wider uppercase sm:px-7 sm:py-3.5 sm:text-xl"
           >
             Order Now
           </a>

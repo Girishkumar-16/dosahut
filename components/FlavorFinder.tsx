@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import { Button } from "./Button";
+import { PrimaryGlowButton } from "./PrimaryGlowButton";
 import { ArrowRightIcon } from "./Icons";
 import {
   categorySlug,
@@ -126,10 +126,10 @@ export function FlavorFinder() {
 
       <div className="relative flex w-full flex-col items-center gap-6 md:gap-9">
       <div className="flex max-w-[38.75rem] flex-col items-center gap-3 text-center md:gap-4">
-        <h2 className="font-display text-[28px] font-semibold text-maroon-800 md:text-[42px]">
+        <h2 className="font-display text-3xl leading-snug font-bold sm:text-4xl lg:text-5xl text-maroon-800">
           Craving Finder
         </h2>
-        <p className="text-sm font-semibold tracking-wide text-orange-500 uppercase md:text-base">
+        <p className="text-base font-semibold tracking-wide text-orange-500 uppercase md:text-lg">
           Answer 2 Questions, Get Your Perfect Meal
         </p>
       </div>
@@ -140,7 +140,7 @@ export function FlavorFinder() {
             key={key}
             type="button"
             onClick={() => switchCategory(key)}
-            className={`rounded-full border px-5 py-2.5 text-sm font-bold tracking-wide uppercase transition-colors ${
+            className={`rounded-full border px-5 py-2.5 text-base font-bold tracking-wide uppercase transition-colors ${
               category === key
                 ? "border-orange-500 bg-orange-500 text-cream-0"
                 : "border-maroon-800/20 bg-cream-0 text-maroon-700 hover:border-maroon-800/40"
@@ -151,7 +151,7 @@ export function FlavorFinder() {
         ))}
       </div>
 
-      <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
+      <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-maroon-900">
         {config.discoverHeading}
       </span>
 
@@ -169,7 +169,7 @@ export function FlavorFinder() {
               ))}
             </div>
 
-            <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
+            <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-maroon-900">
               {step === 0 ? "Spice Level" : "Diet"}
             </span>
 
@@ -180,11 +180,11 @@ export function FlavorFinder() {
                       key={option}
                       type="button"
                       onClick={() => setSpice(option)}
-                      className="inline-flex flex-row items-center justify-center gap-1.5 rounded-full border border-maroon-800/20 bg-cream-50 px-4 py-2 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                      className="inline-flex flex-row items-center justify-center gap-1.5 rounded-full border border-maroon-800/20 bg-cream-50 px-4 py-2 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}
                       {SPICE_CHILLIES[option] && (
-                        <span className="text-xs leading-none">{SPICE_CHILLIES[option]}</span>
+                        <span className="text-sm leading-none">{SPICE_CHILLIES[option]}</span>
                       )}
                     </button>
                   ))
@@ -193,7 +193,7 @@ export function FlavorFinder() {
                       key={option}
                       type="button"
                       onClick={() => setDiet(option)}
-                      className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-sm font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                      className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}
                     </button>
@@ -204,7 +204,7 @@ export function FlavorFinder() {
               <button
                 type="button"
                 onClick={() => setSpice(null)}
-                className="text-sm font-bold tracking-wide text-maroon-700 underline underline-offset-4 hover:text-orange-500"
+                className="text-base font-bold tracking-wide text-maroon-700 underline underline-offset-4 hover:text-orange-500"
               >
                 Back
               </button>
@@ -215,16 +215,16 @@ export function FlavorFinder() {
         {results && (
           <>
             <div className="flex flex-col items-center gap-1.5 text-center">
-              <span className="font-display text-xl font-semibold text-maroon-900 md:text-2xl">
+              <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-maroon-900">
                 {results.length > 0 ? "Perfect Picks For You" : "Nothing Matches Yet"}
               </span>
-              <span className="text-[11px] font-bold tracking-[0.14em] text-orange-500 uppercase">
+              <span className="text-[12.5px] font-bold tracking-[0.14em] text-orange-500 uppercase">
                 {config.tabLabel} &middot; {diet} &middot; {spice}
               </span>
             </div>
 
             {results.length === 0 ? (
-              <p className="max-w-[28rem] text-center text-sm leading-relaxed text-ink-600">
+              <p className="max-w-[28rem] text-center text-xl leading-relaxed text-ink-600 lg:text-2xl">
                 {config.emptyMessage}
               </p>
             ) : (
@@ -254,7 +254,7 @@ export function FlavorFinder() {
                           aria-hidden
                           className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(241,90,39,0.35),transparent_60%)]"
                         >
-                          <span className="absolute inset-0 flex items-center justify-center text-5xl opacity-15">
+                          <span className="absolute inset-0 flex items-center justify-center text-6xl opacity-15">
                             🍛
                           </span>
                         </span>
@@ -262,14 +262,14 @@ export function FlavorFinder() {
 
                       <div className="relative flex flex-col items-start gap-2 p-4">
                         <div className="flex flex-wrap items-center gap-1.5">
-                          <span className="rounded-full bg-black/45 px-2 py-0.5 text-[10px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
+                          <span className="rounded-full bg-black/45 px-2 py-0.5 text-[11.5px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
                             {dish.spiceLevel}
                             {dish.spiceLevel && SPICE_CHILLIES[dish.spiceLevel]
                               ? ` ${SPICE_CHILLIES[dish.spiceLevel]}`
                               : ""}
                           </span>
                           {dish.diet && (
-                            <span className="flex items-center gap-1 rounded-full bg-black/45 px-2 py-0.5 text-[10px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
+                            <span className="flex items-center gap-1 rounded-full bg-black/45 px-2 py-0.5 text-[11.5px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
                               <span
                                 aria-hidden
                                 className={`h-1.5 w-1.5 rounded-full ${DIET_DOT[dish.diet]}`}
@@ -279,11 +279,11 @@ export function FlavorFinder() {
                           )}
                         </div>
 
-                        <span className="font-display text-lg leading-tight font-semibold text-cream-0">
+                        <span className="font-display text-xl leading-tight font-semibold text-cream-0">
                           {dish.name}
                         </span>
 
-                        <span className="rounded-full bg-orange-500 px-2.5 py-1 text-[13px] font-bold text-cream-0">
+                        <span className="rounded-full bg-orange-500 px-2.5 py-1 text-[15px] font-bold text-cream-0">
                           {dish.price}
                         </span>
 
@@ -292,7 +292,7 @@ export function FlavorFinder() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Order ${dish.name} online`}
-                          className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-cream-0/35 bg-cream-0/10 px-3 py-2 text-[12px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm transition-colors hover:bg-cream-0/20"
+                          className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-cream-0/35 bg-cream-0/10 px-3 py-2 text-[14px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm transition-colors hover:bg-cream-0/20"
                         >
                           Order Now
                           <ArrowRightIcon size={12} />
@@ -301,7 +301,7 @@ export function FlavorFinder() {
                     </li>
                   ))}
                 </ul>
-                <span className="-mt-2 text-[11px] font-semibold text-ink-600">
+                <span className="-mt-2 text-[12.5px] font-semibold text-ink-600">
                   {results.length === 1
                     ? "1 match"
                     : `${results.length} matches · swipe to browse`}
@@ -310,13 +310,13 @@ export function FlavorFinder() {
             )}
 
             <div className="flex w-full max-w-sm flex-col gap-2.5 sm:max-w-none sm:flex-row sm:justify-center">
-              <Button href={SITE.orderUrl} size="md" full className="sm:w-auto">
+              <PrimaryGlowButton href={SITE.orderUrl} full className="sm:w-auto">
                 ORDER ONLINE
                 <ArrowRightIcon size={13} />
-              </Button>
+              </PrimaryGlowButton>
               <a
                 href={`#menu-${categorySlug(config.menuLinkCategory)}`}
-                className="inline-flex w-full items-center justify-center rounded-full border border-maroon-800/25 px-5 py-2.5 text-[12.5px] font-bold tracking-wide whitespace-nowrap text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
+                className="inline-flex w-full items-center justify-center rounded-full border border-maroon-800/25 px-5 py-2.5 text-[14.5px] font-bold tracking-wide whitespace-nowrap text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
               >
                 VIEW IN MENU
               </a>
@@ -325,7 +325,7 @@ export function FlavorFinder() {
             <button
               type="button"
               onClick={reset}
-              className="text-sm font-bold tracking-wide text-maroon-700 underline underline-offset-4 hover:text-orange-500"
+              className="text-base font-bold tracking-wide text-maroon-700 underline underline-offset-4 hover:text-orange-500"
             >
               Start Over
             </button>

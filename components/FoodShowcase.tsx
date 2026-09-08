@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "./Button";
+import { PrimaryGlowButton } from "./PrimaryGlowButton";
 import { DishCarousel } from "./DishCarousel";
 import { categorySlug, DISHES, DISH_CATEGORIES, SITE } from "@/lib/site";
 
@@ -27,10 +28,10 @@ export function FoodShowcase() {
   return (
     <section id="menu" className="flex w-full flex-col items-center gap-6 px-5 py-10 md:gap-9 md:px-16 md:py-16">
       <div className="flex max-w-[620px] flex-col items-center gap-3 text-center md:gap-4">
-        <h2 className="font-display text-[34px] font-semibold text-maroon-800 md:text-[46px]">
+        <h2 className="font-display text-3xl leading-snug font-bold sm:text-4xl lg:text-5xl text-maroon-800">
           Crowd Pleasers
         </h2>
-        <p className="text-sm font-semibold tracking-wide text-orange-500 uppercase md:text-base">
+        <p className="text-base font-semibold tracking-wide text-orange-500 uppercase md:text-lg">
           Must-Try Dishes Handpicked for You
         </p>
       </div>
@@ -41,7 +42,7 @@ export function FoodShowcase() {
             key={category}
             type="button"
             onClick={() => setActive(category)}
-            className={`shrink-0 rounded-full border px-4.5 py-2.5 text-[13px] font-bold whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-sm ${
+            className={`shrink-0 rounded-full border px-4.5 py-2.5 text-[15px] font-bold whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-base ${
               category === active
                 ? "border-maroon-800 bg-maroon-800 text-cream-50"
                 : "border-maroon-800/20 text-maroon-700 hover:border-maroon-800/40"
@@ -68,18 +69,18 @@ export function FoodShowcase() {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <span className="font-display text-lg font-semibold text-maroon-800 md:text-[22px]">
+            <span className="font-display text-xl font-semibold text-maroon-800 md:text-[25.5px]">
               Finish With a Cup of Chai
             </span>
-            <p className="text-[13px] leading-snug text-ink-600 md:text-[14.5px]">
+            <p className="text-[15px] leading-snug text-ink-600 md:text-[16.5px]">
               Our signature masala chai &mdash; slow-brewed and served hot, the
               way every good meal at Dosa Hut ends.
             </p>
           </div>
         </div>
-        <Button href={SITE.orderUrl} variant="outline-dark" size="md" full className="md:w-auto md:shrink-0">
+        <PrimaryGlowButton href={SITE.orderUrl} full className="md:w-auto md:shrink-0">
           ORDER ONLINE
-        </Button>
+        </PrimaryGlowButton>
       </div>
 
       <Button href={SITE.menuPdfUrl} variant="outline-dark" size="md" external>

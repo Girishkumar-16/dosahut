@@ -27,13 +27,20 @@ const PLANETS: Dish[] = PLANET_NAMES.map((name) => DISHES.find((d) => d.name ===
 const SLIDER_DISHES = PLANETS.slice(0, 9);
 
 const ROTATION_MS = 60000;
-const DISH_SIZE = 128;
 
-// Medium Ellipse Radius
-const ORBIT_RADIUS_X = 550;
-const ORBIT_RADIUS_Y = 200;
+// Each dish is a stretched 2:1 oval with a full elliptical corner radius. The
+// size is fixed in px so the ovals never resize mid-orbit, which would show up
+// as a shimmer along the path.
+const DISH_WIDTH = 200;
+const DISH_HEIGHT = 100;
 
-// The orbit spans ~1230px including the dish diameter, so it only fits from
+// Medium Ellipse Radius. X is pulled in to pay for the extra dish width, so the
+// ovals still clear the max-w-3xl copy column at their inner edge; Y clears the
+// copy block by ~190px so the ovals passing above and below it miss the text.
+const ORBIT_RADIUS_X = 510;
+const ORBIT_RADIUS_Y = 240;
+
+// The orbit spans ~1220px including the dish width, so it only fits from
 // Tailwind's xl breakpoint up. Below that the hero shows the carousel instead.
 const ORBIT_MIN_WIDTH = 1280;
 
@@ -139,8 +146,8 @@ export function Hero() {
                   className="absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-300 ease-out"
                   style={{
                     bottom: isActive ? -20 : -16,
-                    width: isActive ? 120 : 96,
-                    height: isActive ? 20 : 16,
+                    width: isActive ? 176 : 156,
+                    height: isActive ? 18 : 14,
                     background:
                       "radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 80%)",
                     opacity: isActive ? 1 : 0.7,
@@ -153,9 +160,9 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Order ${dish.name} online`}
-                  style={{ height: DISH_SIZE, width: DISH_SIZE }}
-                  className={`relative block overflow-hidden rounded-full border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-300 ease-out ${
-                    isActive ? "scale-125 border-orange-500 drop-shadow-2xl" : "scale-100"
+                  style={{ height: DISH_HEIGHT, width: DISH_WIDTH }}
+                  className={`relative block overflow-hidden rounded-[50%] border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-300 ease-out ${
+                    isActive ? "scale-110 border-orange-500 drop-shadow-2xl" : "scale-100"
                   }`}
                 >
                   {dish.image ? (
@@ -163,12 +170,12 @@ export function Hero() {
                       src={dish.image}
                       alt={dish.alt ?? dish.name}
                       fill
-                      sizes={`${DISH_SIZE}px`}
+                      sizes={`${DISH_WIDTH}px`}
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-maroon-800">
-                      <span className="font-display px-1 text-center text-xs font-semibold text-cream-50/90">
+                      <span className="font-display px-1 text-center text-sm font-semibold text-cream-50/90">
                         {dish.name}
                       </span>
                     </div>
@@ -176,19 +183,19 @@ export function Hero() {
                 </a>
 
                 {/* Floating glass badge. It sits outside the anchor because the
-                    anchor is a circular clip — a badge inside it would be cut
-                    off by the curve — and below the photo so the dish stays
+                    anchor is an elliptical clip — a badge inside it would be
+                    cut off by the curve — and below the photo so the dish stays
                     fully visible. */}
                 <div className="pointer-events-none absolute top-full left-1/2 mt-5 flex w-max max-w-[14rem] -translate-x-1/2 translate-y-2 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
                   <div className="flex items-baseline gap-2">
-                    <span className="font-heading text-sm leading-tight font-bold tracking-wide text-white uppercase">
+                    <span className="font-heading text-base leading-tight font-bold tracking-wide text-white uppercase">
                       {dish.name}
                     </span>
-                    <span className="shrink-0 text-xs font-semibold text-orange-500">
+                    <span className="shrink-0 text-sm font-semibold text-orange-500">
                       {dish.price}
                     </span>
                   </div>
-                  <span className="mt-1 flex items-center gap-1 text-[10px] leading-none font-medium tracking-wider text-peach-400 uppercase">
+                  <span className="mt-1 flex items-center gap-1 text-[11.5px] leading-none font-medium tracking-wider text-peach-400 uppercase">
                     Click to order online
                     <ArrowRightIcon size={9} />
                   </span>
@@ -204,22 +211,22 @@ export function Hero() {
       <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-4 pb-10 text-center sm:px-6 xl:pb-0">
         {/* Below xl the copy sits directly on the photos — no dimming overlay —
             so legibility comes from text shadows instead. */}
-        <h1 className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-balance text-cream-0 uppercase [text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.95)] sm:text-4xl md:text-[2.75rem] xl:text-[35px] xl:text-maroon-900 xl:[text-shadow:none]">
+        <h1 className="font-heading text-5xl leading-tight font-extrabold tracking-tight text-balance text-cream-0 uppercase [text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.95)] sm:text-6xl lg:text-7xl xl:text-maroon-900 xl:[text-shadow:none]">
           India, Served with a Sunshine Coast Soul.
         </h1>
 
-        <p className="max-w-[31.25rem] text-sm leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] md:text-base xl:text-ink-600 xl:[text-shadow:none]">
+        <p className="max-w-[34rem] text-xl leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] lg:text-2xl xl:text-ink-600 xl:[text-shadow:none]">
           Where coastal relaxation meets authentic Indian heat. Sizzling
           tandoori grills, rich slow-cooked curries, street-side chaats, and
           iconic crispy dosas &mdash; crafted fresh right here in Buddina.
         </p>
 
-        <div className="pointer-events-auto mt-2 flex flex-col items-center gap-3">
+        <div className="pointer-events-auto mt-2 flex w-full max-w-xs flex-col items-center gap-3 sm:w-auto sm:max-w-none sm:flex-row">
           <a
             href={SITE.orderUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-heading inline-flex items-center justify-center gap-2 rounded-md bg-orange-500 px-6 py-2.5 text-sm font-bold tracking-wide text-cream-0 uppercase transition-colors hover:bg-orange-600"
+            className="btn-primary-glow font-heading inline-flex min-h-[44px] w-full max-w-full items-center justify-center gap-2 rounded-md px-5 py-3 text-lg font-bold tracking-wider uppercase sm:w-auto sm:px-7 sm:py-3.5 sm:text-xl lg:px-8"
           >
             Order Now
             <ArrowRightIcon size={14} />
@@ -227,7 +234,7 @@ export function Hero() {
           <button
             type="button"
             onClick={() => setWeekendOpen(true)}
-            className="font-heading inline-flex items-center justify-center gap-2.5 rounded-md border border-cream-0/45 bg-cream-0/10 px-9 py-4 text-base font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm transition-colors hover:border-cream-0 hover:bg-cream-0/20 xl:border-maroon-800/25 xl:bg-transparent xl:text-maroon-800 xl:backdrop-blur-none xl:hover:border-maroon-800 xl:hover:bg-transparent"
+            className="font-heading inline-flex min-h-[44px] w-full max-w-full items-center justify-center gap-2.5 rounded-md border border-cream-0/45 bg-cream-0/10 px-5 py-3 text-lg font-bold tracking-wider text-cream-0 uppercase backdrop-blur-sm sm:w-auto sm:px-7 sm:py-3.5 sm:text-xl lg:px-8 transition-colors hover:border-cream-0 hover:bg-cream-0/20 xl:border-maroon-800/25 xl:bg-transparent xl:text-maroon-800 xl:backdrop-blur-none xl:hover:border-maroon-800 xl:hover:bg-transparent"
           >
             🔥 Weekend Special
           </button>

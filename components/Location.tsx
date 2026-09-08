@@ -1,4 +1,5 @@
 import { Button } from "./Button";
+import { PrimaryGlowButton } from "./PrimaryGlowButton";
 import { ChevronRightIcon, ClockIcon, PhoneIcon, PinIcon } from "./Icons";
 import { LocationMap } from "./LocationMap";
 import { HOURS, SITE } from "@/lib/site";
@@ -9,10 +10,10 @@ export function Location() {
       <div className="grid w-full max-w-[1200px] grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-14">
         <div className="flex flex-col gap-6 md:gap-6.5">
           <div className="flex flex-col gap-3 md:gap-4">
-            <span className="text-xs font-bold tracking-[0.16em] text-orange-500 uppercase md:text-[13px] md:tracking-[0.18em]">
+            <span className="text-sm font-bold tracking-[0.16em] text-orange-500 uppercase md:text-[15px] md:tracking-[0.18em]">
               Visit Us
             </span>
-            <h2 className="font-display text-[32px] font-semibold text-maroon-800 md:text-[44px]">
+            <h2 className="font-display text-3xl leading-snug font-bold sm:text-4xl lg:text-5xl text-maroon-800">
               Dosa Hut Sunshine Coast
             </h2>
           </div>
@@ -24,25 +25,25 @@ export function Location() {
             className="flex items-start gap-2.5 md:gap-3.5"
           >
             <PinIcon size={18} color="#E8622C" className="mt-0.5 shrink-0" />
-            <span className="text-[15px] leading-relaxed text-ink-900 md:text-[16.5px]">
+            <span className="text-[17px] leading-relaxed text-ink-900 md:text-[19px]">
               {SITE.addressLine1}, {SITE.addressLine2}
             </span>
           </a>
 
           <a href={SITE.phoneHref} className="flex items-center gap-2.5 md:gap-3.5">
             <PhoneIcon size={18} color="#E8622C" className="shrink-0" />
-            <span className="text-[15px] text-ink-900 md:text-[16.5px]">{SITE.phoneDisplay}</span>
+            <span className="text-[17px] text-ink-900 md:text-[19px]">{SITE.phoneDisplay}</span>
           </a>
 
           <div className="rounded-2xl border border-maroon-800/10 bg-cream-0 px-5.5 py-5 md:px-6.5">
             <div className="mb-1.5 flex items-center gap-2.5">
               <ClockIcon size={17} color="#3A0D0D" />
-              <span className="text-sm font-bold text-maroon-800">Opening Hours</span>
+              <span className="text-base font-bold text-maroon-800">Opening Hours</span>
             </div>
             {HOURS.map((row, i) => (
               <div
                 key={row.day}
-                className={`flex justify-between py-3 text-sm ${
+                className={`flex justify-between py-3 text-base ${
                   i < HOURS.length - 1 ? "border-b border-maroon-800/10" : ""
                 }`}
               >
@@ -57,9 +58,9 @@ export function Location() {
               GET DIRECTIONS
               <ChevronRightIcon size={15} />
             </Button>
-            <Button href={SITE.orderUrl} size="md" full className="sm:w-auto">
+            <PrimaryGlowButton href={SITE.orderUrl} full className="sm:w-auto">
               ORDER ONLINE
-            </Button>
+            </PrimaryGlowButton>
           </div>
         </div>
 

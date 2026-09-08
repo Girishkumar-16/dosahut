@@ -98,7 +98,7 @@ export function WeekendSpecialModal({ open, onClose }: { open: boolean; onClose:
           </button>
 
           <div className="flex flex-col items-center gap-5 overflow-y-auto px-5 pt-8 pb-6 text-center sm:px-7 sm:pt-9 sm:pb-8">
-            <span className="text-xs font-bold tracking-[0.22em] text-peach-400 uppercase">
+            <span className="text-sm font-bold tracking-[0.22em] text-peach-400 uppercase">
               Chef&rsquo;s Weekend Secret
             </span>
 
@@ -125,7 +125,7 @@ export function WeekendSpecialModal({ open, onClose }: { open: boolean; onClose:
               </div>
 
               <span
-                className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-3 py-1 text-[9px] font-bold tracking-[0.14em] text-cream-0 uppercase whitespace-nowrap"
+                className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-3 py-1 text-[10.5px] font-bold tracking-[0.14em] text-cream-0 uppercase whitespace-nowrap"
                 style={{ animation: "pulse-glow 1.8s ease-in-out infinite" }}
               >
                 Limited Portions Only
@@ -133,25 +133,25 @@ export function WeekendSpecialModal({ open, onClose }: { open: boolean; onClose:
             </div>
 
             <div className="mt-2 flex flex-col items-center gap-2">
-              <h2 className="font-display text-xl font-semibold text-cream-0 sm:text-2xl">{FEATURED_DISH.name}</h2>
+              <h2 className="font-display text-3xl leading-snug font-bold text-cream-0 sm:text-4xl">{FEATURED_DISH.name}</h2>
 
               <div className="flex flex-wrap items-center justify-center gap-2">
-                <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] font-bold tracking-wide text-cream-50/90 uppercase">
+                <span className="rounded-full border border-white/20 px-3 py-1 text-[11.5px] font-bold tracking-wide text-cream-50/90 uppercase">
                   Fri &ndash; Sun Only
                 </span>
-                <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] font-bold tracking-wide text-cream-50/90 uppercase">
+                <span className="rounded-full border border-white/20 px-3 py-1 text-[11.5px] font-bold tracking-wide text-cream-50/90 uppercase">
                   Chef Special
                 </span>
               </div>
 
-              <span className="mt-1 font-display text-2xl font-bold text-orange-400 sm:text-3xl">{FEATURED_DISH.price}</span>
+              <span className="mt-1 font-display text-3xl font-bold text-orange-400 sm:text-4xl">{FEATURED_DISH.price}</span>
             </div>
 
             <a
               href={SITE.orderUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative mt-2 flex w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-orange-500 px-7 py-4 text-[15px] font-bold tracking-wide text-cream-0 transition-colors hover:bg-orange-600"
+              className="btn-primary-glow group relative mt-2 flex min-h-[44px] w-full max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full px-5 py-3 text-lg font-bold tracking-wider uppercase sm:px-7 sm:py-3.5 sm:text-xl"
             >
               <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/25 transition-transform duration-700 ease-out group-hover:translate-x-[350%]" />
               ORDER ONLINE

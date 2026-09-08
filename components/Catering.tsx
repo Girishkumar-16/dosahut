@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "./Button";
+import { PrimaryGlowButton } from "./PrimaryGlowButton";
 import { ArrowRightIcon } from "./Icons";
 import { SITE } from "@/lib/site";
 
@@ -46,13 +46,13 @@ export function Catering() {
 
       <div className="relative grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
         <div className="flex flex-col items-start gap-5 text-left md:gap-6">
-          <span className="rounded-full border border-peach-400/40 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.2em] text-peach-400 uppercase">
+          <span className="rounded-full border border-peach-400/40 px-3.5 py-1.5 text-[12.5px] font-bold tracking-[0.2em] text-peach-400 uppercase">
             Catering & Events
           </span>
-          <h2 className="font-display text-[32px] leading-tight font-semibold text-cream-0 md:text-[48px]">
+          <h2 className="font-display text-3xl leading-snug font-bold sm:text-4xl lg:text-5xl text-cream-0">
             Great Food for Your Next Event
           </h2>
-          <p className="max-w-[34rem] text-sm leading-relaxed text-cream-50/70 md:text-[16.5px]">
+          <p className="max-w-[38rem] text-xl leading-relaxed text-cream-50/70 lg:text-2xl">
             From house parties to weddings and corporate events, we bring
             biryanis, butter chicken, dosas, and more &mdash; freshly made,
             never compromising quality for quantity.
@@ -62,15 +62,15 @@ export function Catering() {
             {HIGHLIGHTS.map((item) => (
               <li key={item} className="flex items-center gap-3">
                 <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
-                <span className="text-sm text-cream-50/85 md:text-[15px]">{item}</span>
+                <span className="text-base text-cream-50/85 md:text-[17px]">{item}</span>
               </li>
             ))}
           </ul>
 
-          <Button href={SITE.cateringUrl} size="lg" className="mt-2 w-full sm:w-auto">
+          <PrimaryGlowButton href={SITE.cateringUrl} className="mt-2 w-full sm:w-auto">
             ENQUIRE ABOUT CATERING
             <ArrowRightIcon size={15} />
-          </Button>
+          </PrimaryGlowButton>
         </div>
 
         {/* Borderless bento collage: featured shot spans the full height on the

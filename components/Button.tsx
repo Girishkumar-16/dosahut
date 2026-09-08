@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
-type Variant = "primary" | "outline" | "outline-dark";
+// Primary orange CTAs live in <PrimaryGlowButton>; this component covers the
+// secondary, outlined actions.
+type Variant = "outline" | "outline-dark";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2.5 rounded-full font-bold tracking-wide transition-colors";
+  "inline-flex min-h-[44px] max-w-full items-center justify-center gap-2.5 rounded-full font-bold leading-none tracking-wide transition-colors";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-orange-500 text-cream-0 border border-orange-500 shadow-[0_12px_28px_-8px_rgba(232,98,44,0.55)] hover:bg-orange-600",
   outline:
     "bg-transparent text-cream-50 border border-cream-50/50 hover:border-cream-50",
   "outline-dark":
@@ -17,13 +17,13 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  md: "px-7 py-3.5 text-[13.5px]",
-  lg: "px-9 py-[18px] text-[15px]",
+  md: "px-5 py-3 text-base sm:px-6 sm:py-3.5 sm:text-lg lg:px-7",
+  lg: "px-5 py-3 text-lg sm:px-7 sm:py-3.5 sm:text-xl lg:px-9",
 };
 
 export function Button({
   href,
-  variant = "primary",
+  variant = "outline-dark",
   size = "lg",
   children,
   className = "",

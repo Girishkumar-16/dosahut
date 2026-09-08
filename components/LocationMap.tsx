@@ -104,14 +104,14 @@ export function LocationMap() {
             <PinIcon size={24} color="#E8622C" />
           </span>
           <div className="flex flex-col gap-1.5">
-            <span className="font-display text-xl font-semibold text-maroon-900">
+            <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-maroon-900">
               {SITE.name}
             </span>
-            <span className="text-sm leading-relaxed text-ink-600">
+            <span className="text-base leading-relaxed text-ink-600">
               {SITE.addressLine1}, {SITE.addressLine2}
             </span>
           </div>
-          <p className="max-w-[19rem] text-[12.5px] leading-relaxed text-ink-600/80">
+          <p className="max-w-[19rem] text-[14.5px] leading-relaxed text-ink-600/80">
             The interactive map couldn&rsquo;t load &mdash; an ad blocker or
             network restriction may be blocking it.
           </p>
@@ -119,7 +119,7 @@ export function LocationMap() {
             href={SITE.placeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-maroon-800/25 bg-cream-0 px-5 py-2.5 text-[13px] font-bold tracking-wide text-maroon-800 uppercase transition-colors hover:border-maroon-800"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-maroon-800/25 bg-cream-0 px-5 py-2.5 text-[15px] font-bold tracking-wide text-maroon-800 uppercase transition-colors hover:border-maroon-800"
           >
             View on Google Maps
             <ChevronRightIcon size={14} />
