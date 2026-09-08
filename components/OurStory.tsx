@@ -4,7 +4,7 @@ import { STORY_STATS } from "@/lib/site";
 export function OurStory() {
   return (
     <section id="our-story" className="flex w-full justify-center px-5 py-10 md:px-16 md:py-16">
-      <div className="grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 md:grid-cols-[1.1fr_0.9fr] md:gap-16">
+      <div className="grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-12 lg:gap-14">
         <div className="flex flex-col gap-4 md:gap-5">
           <span className="text-sm font-bold tracking-[0.16em] text-orange-500 uppercase md:text-[15px] md:tracking-[0.18em]">
             Our Story
@@ -34,13 +34,13 @@ export function OurStory() {
           </div>
         </div>
 
-        <div className="relative mx-auto h-[260px] w-full max-w-[520px] overflow-hidden rounded-[22px] shadow-[0_24px_48px_-24px_rgba(58,13,13,0.35)] md:h-[340px]">
+        <div className="group relative mx-auto h-[320px] w-full overflow-hidden rounded-3xl border border-orange-500/20 shadow-2xl sm:h-[400px] lg:h-[500px] lg:min-h-[480px]">
           <Image
-            src="/images/original-storefront.png"
-            alt="The original Dosa Hut storefront where it all began"
+            src="/images/dosa-hut-restaurant.png"
+            alt="The Dosa Hut shopfront, its orange sign reading Dosa Hut above a row of yellow-framed windows and a bench on the footpath"
             fill
-            sizes="(max-width: 768px) 100vw, 520px"
-            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 700px"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
       </div>
