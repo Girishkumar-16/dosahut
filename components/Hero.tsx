@@ -216,9 +216,9 @@ export function Hero() {
         </h1>
 
         <p className="max-w-[34rem] text-xl leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] lg:text-2xl xl:text-ink-600 xl:[text-shadow:none]">
-          Where coastal relaxation meets authentic Indian heat. Sizzling
-          tandoori grills, rich slow-cooked curries, street-side chaats, and
-          iconic crispy dosas &mdash; crafted fresh right here in Buddina.
+          Coastal vibes. Authentic Indian heat. Tandoori grills, slow-cooked
+          curries, street-side chaats &amp; crispy dosas &mdash; freshly made
+          in Buddina.
         </p>
 
         <div className="pointer-events-auto mt-2 flex w-full max-w-xs flex-col items-center gap-3 sm:w-auto sm:max-w-none sm:flex-row">
