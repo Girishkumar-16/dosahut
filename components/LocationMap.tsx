@@ -121,7 +121,7 @@ export function LocationMap() {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-maroon-800/25 bg-cream-0 px-5 py-2.5 text-[15px] font-bold tracking-wide text-maroon-800 uppercase transition-colors hover:border-maroon-800"
           >
-            View on Google Maps
+            Open in Google Maps
             <ChevronRightIcon size={14} />
           </a>
         </div>

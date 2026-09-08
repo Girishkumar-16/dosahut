@@ -55,13 +55,6 @@ const TAB_ORDER: CategoryKey[] = ["Dosas", "Biryanis", "Curries"];
 const SPICE_ORDER: SpiceLevel[] = ["Mild", "Medium", "Spicy"];
 const DIET_ORDER: Diet[] = ["Veg", "Non-Veg", "Egg"];
 
-// Chilli count as printed on the menu.
-const SPICE_CHILLIES: Record<SpiceLevel, string> = {
-  Mild: "",
-  Medium: "🌶️",
-  Spicy: "🌶️🌶️",
-};
-
 const DIET_DOT: Record<Diet, string> = {
   Veg: "bg-green-500",
   "Non-Veg": "bg-red-500",
@@ -180,12 +173,9 @@ export function FlavorFinder() {
                       key={option}
                       type="button"
                       onClick={() => setSpice(option)}
-                      className="inline-flex flex-row items-center justify-center gap-1.5 rounded-full border border-maroon-800/20 bg-cream-50 px-4 py-2 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
+                      className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}
-                      {SPICE_CHILLIES[option] && (
-                        <span className="text-sm leading-none">{SPICE_CHILLIES[option]}</span>
-                      )}
                     </button>
                   ))
                 : dietOptions.map((option) => (
@@ -264,9 +254,6 @@ export function FlavorFinder() {
                         <div className="flex flex-wrap items-center gap-1.5">
                           <span className="rounded-full bg-black/45 px-2 py-0.5 text-[11.5px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">
                             {dish.spiceLevel}
-                            {dish.spiceLevel && SPICE_CHILLIES[dish.spiceLevel]
-                              ? ` ${SPICE_CHILLIES[dish.spiceLevel]}`
-                              : ""}
                           </span>
                           {dish.diet && (
                             <span className="flex items-center gap-1 rounded-full bg-black/45 px-2 py-0.5 text-[11.5px] font-bold tracking-wide text-cream-0 uppercase backdrop-blur-sm">

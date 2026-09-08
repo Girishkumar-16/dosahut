@@ -33,6 +33,12 @@
   --color-ink-600: #5c4a44;
 }
 
+html {
+  /* Anchor links — the navbar's Sunshine Coast pin, the menu category jumps —
+     glide to their section instead of snapping. */
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--color-cream-50);
   color: var(--color-ink-900);
@@ -140,6 +146,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .dish-info-enter,
   .category-enter {
     animation: none;

@@ -5,15 +5,8 @@ import Image from "next/image";
 import { ChevronRightIcon, CloseIcon, MenuIcon, PinIcon } from "./Icons";
 import { NAV_LINKS, SITE } from "@/lib/site";
 
-const ORDER_PLATFORMS = [
-  { label: "Order Direct", href: SITE.orderUrl, logo: null },
-  { label: "Uber Eats", href: SITE.uberEatsUrl, logo: "/images/logo-ubereats.png" },
-  { label: "DoorDash", href: SITE.doorDashUrl, logo: "/images/logo-doordash.png" },
-];
-
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [orderOpen, setOrderOpen] = useState(false);
 
   // Stop the page behind the full-height drawer from scrolling.
   useEffect(() => {
@@ -64,7 +57,7 @@ export function Navbar() {
           className="font-heading ml-auto flex shrink-0 items-center gap-2 text-[12.5px] font-bold tracking-[0.08em] text-cream-50 uppercase transition-colors hover:text-peach-400 sm:text-sm md:text-base"
         >
           <PinIcon size={18} />
-          Find Your Coast
+          Sunshine Coast
         </a>
       </div>
 
@@ -98,52 +91,18 @@ export function Navbar() {
             className="font-heading flex shrink-0 items-center gap-2 text-[17px] font-semibold tracking-wide text-cream-50 uppercase transition-colors hover:text-peach-400"
           >
             <PinIcon size={18} />
-            Find Your Coast
+            Sunshine Coast
           </a>
 
-          <div className="relative shrink-0">
-            <button
-              type="button"
-              onClick={() => setOrderOpen((v) => !v)}
-              className="btn-primary-glow font-heading inline-flex min-h-[44px] items-center gap-2 rounded-full px-7 py-3.5 text-lg font-bold tracking-wider uppercase"
-            >
-              ORDER ONLINE
-              <ChevronRightIcon
-                size={13}
-                className={`transition-transform ${orderOpen ? "-rotate-90" : "rotate-90"}`}
-              />
-            </button>
-
-            {orderOpen && (
-              <>
-                <button
-                  type="button"
-                  aria-label="Close order menu"
-                  onClick={() => setOrderOpen(false)}
-                  className="fixed inset-0 z-10 cursor-default"
-                />
-                <div className="absolute top-full right-0 z-20 mt-2 flex w-56 flex-col gap-1 rounded-2xl border border-maroon-800/10 bg-cream-0 p-2.5 shadow-[0_16px_32px_-12px_rgba(0,0,0,0.35)]">
-                  {ORDER_PLATFORMS.map((platform) => (
-                    <a
-                      key={platform.label}
-                      href={platform.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setOrderOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-base font-semibold text-maroon-800 hover:bg-cream-100"
-                    >
-                      {platform.logo ? (
-                        <Image src={platform.logo} alt="" width={80} height={30} className="h-4 w-auto" />
-                      ) : (
-                        <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500" />
-                      )}
-                      {platform.label}
-                    </a>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          <a
+            href={SITE.orderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary-glow font-heading inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-full px-7 py-3.5 text-lg font-bold tracking-wider uppercase"
+          >
+            ORDER ONLINE
+            <ChevronRightIcon size={13} />
+          </a>
         </div>
       </div>
 

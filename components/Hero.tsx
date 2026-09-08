@@ -28,20 +28,23 @@ const SLIDER_DISHES = PLANETS.slice(0, 9);
 
 const ROTATION_MS = 60000;
 
-// Each dish is a stretched 2:1 oval with a full elliptical corner radius. The
+// Each dish is a stretched 3:2 oval with a full elliptical corner radius. The
 // size is fixed in px so the ovals never resize mid-orbit, which would show up
 // as a shimmer along the path.
-const DISH_WIDTH = 200;
-const DISH_HEIGHT = 100;
+const DISH_WIDTH = 140;
+const DISH_HEIGHT = 94;
 
-// Medium Ellipse Radius. X is pulled in to pay for the extra dish width, so the
-// ovals still clear the max-w-3xl copy column at their inner edge; Y clears the
-// copy block by ~190px so the ovals passing above and below it miss the text.
-const ORBIT_RADIUS_X = 510;
+// The path is an ellipse, not a circle: a wide horizontal spread with a
+// shallower vertical depth. The unequal radii are what keep the centre clear —
+// the top and bottom arcs stop 193px from centre, against a copy column that
+// runs roughly 163px tall, so the headline sits inside the top curve and the
+// CTA buttons inside the bottom one.
+const ORBIT_RADIUS_X = 460;
 const ORBIT_RADIUS_Y = 240;
 
-// The orbit spans ~1220px including the dish width, so it only fits from
-// Tailwind's xl breakpoint up. Below that the hero shows the carousel instead.
+// The orbit spans ~1060px including the dish width, plus room for the outward
+// hover cards, so it only runs from Tailwind's xl breakpoint up. Below that the
+// hero shows the carousel instead.
 const ORBIT_MIN_WIDTH = 1280;
 
 function useOrbitEnabled() {
@@ -97,7 +100,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden bg-maroon-950 py-16 md:min-h-[45rem] md:py-24 xl:bg-cream-50"
+      className="relative flex min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden bg-maroon-950 py-16 md:min-h-[45rem] md:py-24 xl:min-h-[52rem] xl:pb-28 xl:bg-cream-50"
     >
       {/* Mobile and tablet: full-bleed timed carousel. */}
       <div className="absolute inset-0 z-0 xl:hidden">
@@ -128,6 +131,20 @@ export function Hero() {
             const y = ORBIT_RADIUS_Y * Math.sin(deg);
 
             const isActive = active?.name === dish.name;
+            // Strictly radial: the card projects along whichever axis the dish
+            // is furthest out on, always pointing away from the centre. The
+            // comparison is in normalised orbit units, which splits the path
+            // into four quadrants at its diagonals — top and bottom quarters
+            // open vertically, the left and right arcs open sideways.
+            const onVerticalArc =
+              Math.abs(y) / ORBIT_RADIUS_Y > Math.abs(x) / ORBIT_RADIUS_X;
+            const cardPosition = onVerticalArc
+              ? y < 0
+                ? "bottom-full left-1/2 mb-3 -translate-x-1/2"
+                : "top-full left-1/2 mt-3 -translate-x-1/2"
+              : x >= 0
+                ? "top-1/2 left-full ml-3 -translate-y-1/2"
+                : "top-1/2 right-full mr-3 -translate-y-1/2";
 
             return (
               <div
@@ -135,7 +152,7 @@ export function Hero() {
                 className="group pointer-events-auto absolute top-1/2 left-1/2"
                 style={{
                   transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-                  zIndex: isActive ? 20 : 1,
+                  zIndex: isActive ? 50 : 1,
                 }}
                 onMouseEnter={() => handleMouseEnter(dish)}
                 onMouseLeave={handleMouseLeave}
@@ -145,9 +162,9 @@ export function Hero() {
                   aria-hidden
                   className="absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-300 ease-out"
                   style={{
-                    bottom: isActive ? -20 : -16,
-                    width: isActive ? 176 : 156,
-                    height: isActive ? 18 : 14,
+                    bottom: isActive ? -18 : -14,
+                    width: isActive ? 136 : 118,
+                    height: isActive ? 16 : 13,
                     background:
                       "radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 80%)",
                     opacity: isActive ? 1 : 0.7,
@@ -161,7 +178,7 @@ export function Hero() {
                   rel="noopener noreferrer"
                   aria-label={`Order ${dish.name} online`}
                   style={{ height: DISH_HEIGHT, width: DISH_WIDTH }}
-                  className={`relative block overflow-hidden rounded-[50%] border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-300 ease-out ${
+                  className={`relative block overflow-hidden rounded-[50%] border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-200 ease-out ${
                     isActive ? "scale-110 border-orange-500 drop-shadow-2xl" : "scale-100"
                   }`}
                 >
@@ -184,9 +201,10 @@ export function Hero() {
 
                 {/* Floating glass badge. It sits outside the anchor because the
                     anchor is an elliptical clip — a badge inside it would be
-                    cut off by the curve — and below the photo so the dish stays
-                    fully visible. */}
-                <div className="pointer-events-none absolute top-full left-1/2 mt-5 flex w-max max-w-[14rem] -translate-x-1/2 translate-y-2 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                    cut off by the curve. */}
+                <div
+                  className={`pointer-events-none absolute z-50 flex w-max max-w-[9rem] scale-95 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:scale-100 group-hover:opacity-100 ${cardPosition}`}
+                >
                   <div className="flex items-baseline gap-2">
                     <span className="font-heading text-base leading-tight font-bold tracking-wide text-white uppercase">
                       {dish.name}
@@ -208,14 +226,14 @@ export function Hero() {
 
       {/* Overlay is click-through below xl so swipes reach the carousel
           underneath; only the buttons take pointer events. */}
-      <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-4 pb-10 text-center sm:px-6 xl:pb-0">
+      <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center gap-4 px-4 pt-6 pb-10 text-center sm:px-6 xl:pb-6">
         {/* Below xl the copy sits directly on the photos — no dimming overlay —
             so legibility comes from text shadows instead. */}
-        <h1 className="font-heading text-5xl leading-tight font-extrabold tracking-tight text-balance text-cream-0 uppercase [text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.95)] sm:text-6xl lg:text-7xl xl:text-maroon-900 xl:[text-shadow:none]">
+        <h1 className="font-heading text-5xl leading-tight font-extrabold tracking-tight text-balance text-cream-0 uppercase [text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.95)] sm:text-6xl lg:text-7xl xl:text-5xl xl:text-maroon-900 xl:[text-shadow:none]">
           India, Served with a Sunshine Coast Soul.
         </h1>
 
-        <p className="max-w-[34rem] text-xl leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] lg:text-2xl xl:text-ink-600 xl:[text-shadow:none]">
+        <p className="max-w-[34rem] text-xl leading-relaxed text-cream-0 [text-shadow:0_1px_8px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)] lg:text-2xl xl:text-xl xl:text-ink-600 xl:[text-shadow:none]">
           Coastal vibes. Authentic Indian heat. Tandoori grills, slow-cooked
           curries, street-side chaats &amp; crispy dosas &mdash; freshly made
           in Buddina.

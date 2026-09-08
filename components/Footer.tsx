@@ -92,42 +92,6 @@ export function Footer() {
 
       <div className="mx-auto h-px w-full max-w-[1200px] bg-cream-50/10" />
 
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-5">
-        <span className="text-xl font-extrabold text-cream-50/80 sm:text-2xl">Available to order on</span>
-        <div className="flex items-center justify-center gap-3">
-          <a
-            href={SITE.uberEatsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-[72px] items-center justify-center rounded-full bg-white px-8 sm:h-20 sm:px-10"
-          >
-            <Image
-              src="/images/logo-ubereats.png"
-              alt="Order on Uber Eats"
-              width={120}
-              height={45}
-              className="h-14 w-auto sm:h-16"
-            />
-          </a>
-          <a
-            href={SITE.doorDashUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-[72px] items-center justify-center rounded-full bg-white px-8 sm:h-20 sm:px-10"
-          >
-            <Image
-              src="/images/logo-doordash.png"
-              alt="Order on DoorDash"
-              width={120}
-              height={45}
-              className="h-14 w-auto sm:h-16"
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="mx-auto h-px w-full max-w-[1200px] bg-cream-50/10" />
-
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-3 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
         <span className="text-[15px] text-cream-50/45">
           &copy; {new Date().getFullYear()} Dosa Hut Multi Cuisine Restaurant. All rights reserved.
