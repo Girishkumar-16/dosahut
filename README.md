@@ -1,4 +1,4 @@
-# Dosa Hut Aspley — Landing Page
+# Dosa Hut Sunshine Coast — Landing Page
 
 A bridge landing page for the Dosa Hut Aspley branch: introduces the restaurant,
 showcases the food and location, and funnels visitors to the existing Dosa Hut
