@@ -23,7 +23,7 @@ export function Footer() {
             alt="Dosa Hut logo"
             width={272}
             height={182}
-            className="h-14 w-auto md:h-[64px]"
+            className="h-16 w-auto md:h-20"
           />
           <p className="max-w-[280px] text-base leading-relaxed text-cream-50/60">
             Authentic Indian &amp; multi-cuisine favourites, freshly made

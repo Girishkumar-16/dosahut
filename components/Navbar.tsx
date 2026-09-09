@@ -37,7 +37,7 @@ export function Navbar() {
             alt="Dosa Hut logo"
             width={272}
             height={182}
-            className="h-11 w-auto md:h-14"
+            className="h-14 w-auto md:h-16"
             priority
           />
         </a>
@@ -69,7 +69,7 @@ export function Navbar() {
             alt="Dosa Hut logo"
             width={272}
             height={182}
-            className="h-16 w-auto"
+            className="h-20 w-auto"
             priority
           />
         </a>
