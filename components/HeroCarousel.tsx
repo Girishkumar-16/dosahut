@@ -53,7 +53,7 @@ export function HeroCarousel({ dishes, enabled }: { dishes: Dish[]; enabled: boo
       aria-label="Featured dishes"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="absolute inset-0 z-0 overflow-hidden"
+      className="absolute inset-0 overflow-hidden"
     >
       {/* Slide 1 — full-bleed banner */}
       <div
@@ -99,20 +99,29 @@ export function HeroCarousel({ dishes, enabled }: { dishes: Dish[]; enabled: boo
       })}
 
 
-      <div className="pointer-events-auto absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
+      {/* The dots sit above every other hero layer and take pointer events of
+          their own, so neither the copy overlay nor the slides can swallow a
+          tap. Each dash is only 6px tall, so the button around it is padded out
+          to a 44px target and the dash itself is drawn as an inner span. */}
+      <div className="pointer-events-auto absolute inset-x-0 bottom-2 z-30 flex items-center justify-center">
         {Array.from({ length: slideCount }, (_, i) => (
           <button
             key={i}
             type="button"
             onClick={() => goTo(i)}
-            aria-label={`Show slide ${i + 1}`}
+            aria-label={`Go to slide ${i + 1}`}
             aria-current={i === index}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === index
-                ? "w-7 bg-orange-500 shadow-[0_0_10px_rgba(241,90,39,0.9)]"
-                : "w-1.5 bg-cream-0/45 hover:bg-cream-0/70"
-            }`}
-          />
+            className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center bg-transparent"
+          >
+            <span
+              aria-hidden
+              className={`block h-2 rounded-full transition-all duration-300 ease-out ${
+                i === index
+                  ? "w-6 bg-orange-500 shadow-[0_0_10px_rgba(241,90,39,0.9)]"
+                  : "w-2 bg-cream-0/50 hover:bg-cream-0"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

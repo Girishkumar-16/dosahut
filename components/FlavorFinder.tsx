@@ -303,7 +303,10 @@ export function FlavorFinder() {
               </PrimaryGlowButton>
               <a
                 href={`#menu-${categorySlug(config.menuLinkCategory)}`}
-                className="inline-flex w-full items-center justify-center rounded-full border border-maroon-800/25 px-5 py-2.5 text-[14.5px] font-bold tracking-wide whitespace-nowrap text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
+                onClick={() =>
+                  document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="inline-flex w-full cursor-pointer items-center justify-center rounded-full border border-maroon-800/25 px-5 py-2.5 text-[14.5px] font-bold tracking-wide whitespace-nowrap text-maroon-800 transition-colors hover:border-maroon-800 sm:w-auto"
               >
                 VIEW IN MENU
               </a>

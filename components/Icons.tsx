@@ -152,25 +152,3 @@ export function InstagramIcon({ className, size = 16 }: IconProps) {
     </svg>
   );
 }
-
-export function YoutubeIcon({ className, size = 16 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-      <rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" strokeWidth={1.7} />
-      <path d="M10 9.5v5l4.5-2.5Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-export function LinkedinIcon({ className, size = 16 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-      <rect x="3" y="9" width="4" height="12" fill="currentColor" />
-      <circle cx="5" cy="4.5" r="2.2" fill="currentColor" />
-      <path
-        d="M11 9h4v2c1-1.5 2.5-2.3 4.3-2.3 3 0 4.7 2 4.7 5.6V21h-4v-6c0-1.6-.6-2.7-2-2.7-1.1 0-1.8.8-2.1 1.5-.1.3-.1.7-.1 1.1V21h-4V9Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}

@@ -47,6 +47,22 @@ const ORBIT_RADIUS_Y = 240;
 // hero shows the carousel instead.
 const ORBIT_MIN_WIDTH = 1280;
 
+// Visitors who ask for reduced motion get a still orbit: the dishes stay where
+// they are and remain hoverable, but nothing rotates.
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function update() {
+      setReduced(query.matches);
+    }
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
+
 function useOrbitEnabled() {
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
@@ -62,6 +78,7 @@ function useOrbitEnabled() {
 
 export function Hero() {
   const orbitEnabled = useOrbitEnabled();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [angle, setAngle] = useState(0);
   const [paused, setPaused] = useState(false);
   const [active, setActive] = useState<Dish | null>(null);
@@ -71,7 +88,7 @@ export function Hero() {
   const lastTsRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!orbitEnabled) return;
+    if (!orbitEnabled || prefersReducedMotion) return;
     function tick(ts: number) {
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const dt = ts - lastTsRef.current;
@@ -85,7 +102,7 @@ export function Hero() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [paused, orbitEnabled]);
+  }, [paused, orbitEnabled, prefersReducedMotion]);
 
   const handleMouseEnter = (dish: Dish) => {
     setPaused(true);
@@ -103,7 +120,7 @@ export function Hero() {
       className="relative flex min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden bg-maroon-950 py-16 md:min-h-[45rem] md:py-24 xl:min-h-[52rem] xl:pb-28 xl:bg-cream-50"
     >
       {/* Mobile and tablet: full-bleed timed carousel. */}
-      <div className="absolute inset-0 z-0 xl:hidden">
+      <div className="absolute inset-0 xl:hidden">
         <HeroCarousel dishes={SLIDER_DISHES} enabled={!orbitEnabled} />
       </div>
 
@@ -136,6 +153,7 @@ export function Hero() {
             // comparison is in normalised orbit units, which splits the path
             // into four quadrants at its diagonals — top and bottom quarters
             // open vertically, the left and right arcs open sideways.
+            const dishSlug = dish.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
             const onVerticalArc =
               Math.abs(y) / ORBIT_RADIUS_Y > Math.abs(x) / ORBIT_RADIUS_X;
             const cardPosition = onVerticalArc
@@ -156,6 +174,8 @@ export function Hero() {
                 }}
                 onMouseEnter={() => handleMouseEnter(dish)}
                 onMouseLeave={handleMouseLeave}
+                onFocus={() => handleMouseEnter(dish)}
+                onBlur={handleMouseLeave}
               >
                 {/* Shadow */}
                 <div
@@ -176,7 +196,9 @@ export function Hero() {
                   href={SITE.orderUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Order ${dish.name} online`}
+                  aria-label={`${dish.name}, ${dish.price} — order online`}
+                  aria-expanded={isActive}
+                  aria-describedby={`${dishSlug}-card`}
                   style={{ height: DISH_HEIGHT, width: DISH_WIDTH }}
                   className={`relative block overflow-hidden rounded-[50%] border-2 border-maroon-800/15 shadow-[0_10px_24px_-8px_rgba(58,13,13,0.35)] transition-all duration-200 ease-out ${
                     isActive ? "scale-110 border-orange-500 drop-shadow-2xl" : "scale-100"
@@ -203,7 +225,8 @@ export function Hero() {
                     anchor is an elliptical clip — a badge inside it would be
                     cut off by the curve. */}
                 <div
-                  className={`pointer-events-none absolute z-50 flex w-max max-w-[9rem] scale-95 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:scale-100 group-hover:opacity-100 ${cardPosition}`}
+                  id={`${dishSlug}-card`}
+                  className={`pointer-events-none absolute z-50 flex w-max max-w-[9rem] scale-95 flex-col rounded-xl border border-white/10 bg-maroon-950/90 p-3 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 ease-out group-hover:scale-100 group-hover:opacity-100 group-focus-within:scale-100 group-focus-within:opacity-100 ${cardPosition}`}
                 >
                   <div className="flex items-baseline gap-2">
                     <span className="font-heading text-base leading-tight font-bold tracking-wide text-white uppercase">

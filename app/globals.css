@@ -33,6 +33,14 @@
   --color-ink-600: #5c4a44;
 }
 
+/* Tailwind v4's preflight resets buttons to cursor: default. Every button here
+   is a real action, so the pointer comes back globally rather than one
+   cursor-pointer utility at a time. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
 html {
   /* Anchor links — the navbar's Sunshine Coast pin, the menu category jumps —
      glide to their section instead of snapping. */
@@ -146,7 +154,15 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  /* Tailwind v4's preflight resets buttons to cursor: default. Every button here
+   is a real action, so the pointer comes back globally rather than one
+   cursor-pointer utility at a time. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+html {
     scroll-behavior: auto;
   }
   .dish-info-enter,

@@ -97,10 +97,20 @@ export function Footer() {
           &copy; {new Date().getFullYear()} Dosa Hut Multi Cuisine Restaurant. All rights reserved.
         </span>
         <div className="flex items-center justify-center gap-7 lg:justify-start">
-          <a href={SITE.mainSiteUrl} className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50">
-            Privacy
+          <a
+            href={SITE.mainSiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50"
+          >
+            Dosa Hut Australia
           </a>
-          <a href={SITE.mainSiteUrl} className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50">
+          <a
+            href={SITE.sitemapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50"
+          >
             Sitemap
           </a>
         </div>
