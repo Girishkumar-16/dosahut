@@ -32,11 +32,8 @@ const PRELOAD_NEXT_MS = 2500;
 const POSTER = "/images/hero-video-poster.jpg";
 
 /**
- * The hero background for mobile, tablet and iPad: the clips play full-bleed,
- * one after another, looping back to the first.
- *
- * Desktop (xl and above) shows the orbiting dishes instead and never mounts
- * this component.
+ * The hero background at every width: the clips play full-bleed, one after
+ * another, looping back to the first.
  */
 export function HeroVideo() {
   const prefersReducedMotion = usePrefersReducedMotion();
