@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { HeroVideo } from "./HeroVideo";
-import { ArrowRightIcon, FlameIcon } from "./Icons";
+import { ArrowRightIcon } from "./Icons";
 import { WeekendSpecialModal } from "./WeekendSpecialModal";
 import { SITE } from "@/lib/site";
 
@@ -41,15 +41,13 @@ export function Hero() {
             Order Now
             <ArrowRightIcon size={14} />
           </a>
-          {/* Cream box, maroon flame, maroon label — no dark fill behind the
-              icon. The flame is an SVG rather than the 🔥 emoji, which cannot
-              be recoloured. */}
+          {/* The original glass treatment: translucent cream fill, cream
+              hairline border, cream label over the video. */}
           <button
             type="button"
             onClick={() => setWeekendOpen(true)}
-            className="font-heading inline-flex min-h-[44px] w-full max-w-full items-center justify-center gap-2.5 rounded-md border-2 border-maroon-800 bg-cream-0 px-5 py-3 text-lg font-bold tracking-wider text-maroon-800 uppercase shadow-sm transition-colors hover:bg-cream-50 sm:w-auto sm:px-7 sm:py-3.5 sm:text-xl lg:px-8"
+            className="font-heading inline-flex min-h-[44px] w-full max-w-full items-center justify-center gap-2.5 rounded-md border border-cream-0/45 bg-cream-0/10 px-5 py-3 text-lg font-bold tracking-wider text-cream-0 uppercase backdrop-blur-sm transition-colors hover:border-cream-0 hover:bg-cream-0/20 sm:w-auto sm:px-7 sm:py-3.5 sm:text-xl lg:px-8"
           >
-            <FlameIcon size={20} />
             Weekend Special
           </button>
         </div>
