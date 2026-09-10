@@ -8,22 +8,32 @@ import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 import { useSwipe } from "@/lib/use-swipe";
 
 const DISPLAY_MS = 3400;
+// The ambient cross-fade is slow on purpose. A tap is not ambient, though: at
+// 2.4s a visitor who presses an arrow sees nothing move for a beat and reads
+// the button as broken, so manual input gets a snappy transition instead.
 const TRANSITION_MS = 2400;
+const MANUAL_TRANSITION_MS = 320;
 
 export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: string }) {
   const count = dishes.length;
   const prefersReducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const swipe = useSwipe((direction) =>
-    setIndex((i) => (i + direction + count) % count),
-  );
+  // True while the last slide change came from an arrow or a swipe.
+  const [manualNav, setManualNav] = useState(false);
+  const swipe = useSwipe((direction) => {
+    setManualNav(true);
+    setIndex((i) => (i + direction + count) % count);
+  });
 
   // Reduced motion stops the auto-advance only. The arrows and swipe below
   // keep working exactly as they do for everyone else.
   useEffect(() => {
     if (paused || prefersReducedMotion || count < 2) return;
-    const id = setTimeout(() => setIndex((i) => (i + 1) % count), DISPLAY_MS);
+    const id = setTimeout(() => {
+      setManualNav(false);
+      setIndex((i) => (i + 1) % count);
+    }, DISPLAY_MS);
     return () => clearTimeout(id);
   }, [index, paused, prefersReducedMotion, count]);
 
@@ -48,6 +58,7 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
     // The container's own touchend never fires once propagation stops, so the
     // pause it set on touchstart is released here instead of sticking on.
     setPaused(false);
+    setManualNav(true);
     go(delta);
   }
 
@@ -113,7 +124,7 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
                 transform: `translateX(calc(-50% + ${translate}%)) scale(${scale})`,
                 WebkitTransform: `translateX(calc(-50% + ${translate}%)) scale(${scale})`,
                 opacity,
-                transitionDuration: `${TRANSITION_MS}ms`,
+                transitionDuration: `${manualNav ? MANUAL_TRANSITION_MS : TRANSITION_MS}ms`,
                 zIndex: isCurrent ? 3 : isSide ? 2 : 1,
                 pointerEvents: isCurrent ? "auto" : "none",
               }}

@@ -4,21 +4,24 @@ import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 const MAIN_VIDEO = "/videos/854216-hd_1920_1080_25fps.mp4";
-// Collage order, left to right.
-const SECONDARY_VIDEOS = ["/videos/video3.mp4", "/videos/video4.mp4", "/videos/video2.mp4"];
-// Same three clips full-bleed on phones, except video4: its first six seconds
-// are a static pan, and a 4s window from the top would end before the pour
-// starts. The mobile cut begins at 0:06, where the action is.
+// Collage order, left to right: the pour, then the dosa.
+const SECONDARY_VIDEOS = ["/videos/video3.mp4", "/videos/mysore-masala-dosa.mp4"];
+// The phone sequence is its own shortlist, not the collage's: video4 opens on
+// six static seconds and video2 was dropped, so full-bleed gets the dosa clip
+// and the pour instead. Each clip carries its own hold: the dosa clip runs its
+// natural 4.9s rather than being cut short, while the 8s pour is capped at 4s
+// to keep the pace up.
 const MOBILE_SECONDARY_VIDEOS = [
-  "/videos/video3.mp4",
-  "/videos/video4-mobile.mp4",
-  "/videos/video2.mp4",
+  { src: "/videos/video3.mp4", ms: 4000 },
+  // Slowed to 0.7x, which stretches the 4.9s clip to just under 7s — the hold
+  // below matches. Done with playbackRate rather than a re-encode so there is
+  // no second copy of the asset to keep in step.
+  { src: "/videos/mysore-masala-dosa.mp4", ms: 7000, rate: 0.7 },
 ];
 const POSTER = "/images/hero-video-poster.jpg";
 
-const MOBILE_SEQUENCE = [MAIN_VIDEO, ...MOBILE_SECONDARY_VIDEOS];
 const MOBILE_MAIN_MS = 7000;
-const MOBILE_SECONDARY_MS = 4000;
+const MOBILE_STEP_COUNT = MOBILE_SECONDARY_VIDEOS.length + 1;
 
 // Tablet and iPad keep the two-segment shape: the main clip, then the three-up
 // collage, both on a fast rotation so the hero never dwells.
@@ -65,7 +68,7 @@ function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
   const sequenceRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const collageRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  const stepCount = isMobile ? MOBILE_SEQUENCE.length : 2;
+  const stepCount = isMobile ? MOBILE_STEP_COUNT : 2;
   // Clips mount only once the sequence has reached them, so the first load
   // fetches the main clip alone rather than all four.
   const [maxReached, setMaxReached] = useState(0);
@@ -75,7 +78,7 @@ function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
     const ms = isMobile
       ? step === 0
         ? MOBILE_MAIN_MS
-        : MOBILE_SECONDARY_MS
+        : MOBILE_SECONDARY_VIDEOS[step - 1].ms
       : step === 0
         ? MAIN_MS
         : COLLAGE_MS;
@@ -113,6 +116,8 @@ function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
     });
     playing.forEach((v) => {
       v.currentTime = 0;
+      v.playbackRate =
+        isMobile && step > 0 ? (MOBILE_SECONDARY_VIDEOS[step - 1].rate ?? 1) : 1;
       v.play().catch(() => {});
     });
   }, [step, isMobile, maxReached, prefersReducedMotion]);
@@ -137,7 +142,7 @@ function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
 
       {/* Under 768px — the remaining clips, one at a time, full-bleed. */}
       {isMobile &&
-        MOBILE_SECONDARY_VIDEOS.map((src, i) =>
+        MOBILE_SECONDARY_VIDEOS.map(({ src }, i) =>
           i + 1 > maxReached ? null : (
             <video
               key={`seq-${src}`}
@@ -156,12 +161,12 @@ function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
           ),
         )}
 
-      {/* 768px and up — the three-frame collage. */}
+      {/* 768px and up — the two-frame collage. */}
       {!isMobile && maxReached > 0 && (
         <div
-          // Three columns, no gap, on a solid ground so no cell can flash
-          // through to the page background while a clip buffers.
-          className={`absolute inset-0 grid grid-cols-3 gap-0 bg-maroon-950 transition-opacity duration-1000 ease-in-out ${
+          // Two equal columns, no gap, on a solid ground so neither cell can
+          // flash through to the page background while a clip buffers.
+          className={`absolute inset-0 grid grid-cols-2 gap-0 bg-maroon-950 transition-opacity duration-1000 ease-in-out ${
             step === 1 ? "opacity-100" : "opacity-0"
           }`}
         >
