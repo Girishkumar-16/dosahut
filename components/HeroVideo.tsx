@@ -3,18 +3,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
-// One sequence for every width this component runs at. Each clip plays right
-// through and hands over on its own `ended` event, so nothing is cut short.
-// The fallback is only reached if `ended` never arrives — a stalled or blocked
-// load — so the hero cannot freeze on one frame; each is the clip's real
-// length (20s and 21.9s) plus headroom.
+// One sequence for every width this component runs at. A clip hands over just
+// before its playable end; the fallback timer is only reached if that never
+// happens — a stalled or blocked load — so the hero cannot freeze on a frame.
+// Both clips ship exactly as supplied — no re-encode, so no generation loss.
+// endTrimMs stops playback that far before the real end instead of cutting the
+// file, which is how the closing banner is avoided without touching the asset.
 const CLIPS = [
-  // The externally cut copy, 17.3s, already free of the Dosa Hut logo card
-  // that closed the original. Shipped exactly as supplied at 720x1280: every
-  // preset available here either degraded it or matched its size for nothing.
-  { src: "/videos/Lark20260910-153609.mp4", fallbackMs: 20000 },
-  // Trimmed to 16s from a 20s source, stopping before its closing fade.
-  { src: "/videos/Lark20260910-153613.mp4", fallbackMs: 19000 },
+  {
+    src: "/videos/Lark20260910-153613.mp4",
+    endTrimMs: 2000,
+    fallbackMs: 21000,
+  },
+  { src: "/videos/Lark20260910-153609.mp4", endTrimMs: 0, fallbackMs: 20000 },
 ];
 
 // A long, gentle dissolve rather than a cut.
@@ -61,11 +62,15 @@ export function HeroVideo() {
 
   // Hand over just before the clip ends rather than waiting for `ended`, so
   // the dissolve is already under way as the last frames play out.
-  function handleTimeUpdate(e: React.SyntheticEvent<HTMLVideoElement>, i: number) {
+  function handleTimeUpdate(
+    e: React.SyntheticEvent<HTMLVideoElement>,
+    i: number,
+  ) {
     if (i !== step) return;
     const v = e.currentTarget;
     if (!v.duration || Number.isNaN(v.duration)) return;
-    if (v.duration - v.currentTime <= HANDOVER_LEAD_MS / 1000) advance(i);
+    const playableEnd = v.duration - CLIPS[i].endTrimMs / 1000;
+    if (v.currentTime >= playableEnd - HANDOVER_LEAD_MS / 1000) advance(i);
   }
 
   // Only the visible clip plays. Decoding both at once is what makes a video
@@ -126,12 +131,6 @@ export function HeroVideo() {
           }`}
         />
       ))}
-
-      {/* Contrast layer for the headline. A flat 40% wash greyed the footage
-          out, so the dimming is now weighted to the top and bottom edges —
-          where the navbar and the CTA buttons sit — and stays light across
-          the middle, where the copy already carries its own text shadows. */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/15 to-black/45" />
     </div>
   );
 }

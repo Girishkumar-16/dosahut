@@ -23,8 +23,10 @@ export function WhyUs() {
               key={feature.title}
               className="flex flex-col gap-3.5 rounded-[18px] border border-cream-50/14 bg-cream-50/5 p-6 md:gap-4.5 md:rounded-[20px] md:p-8.5"
             >
-              <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[14px] border border-orange-500/40 bg-orange-500/15 md:h-14 md:w-14 md:rounded-2xl">
-                <Icon size={22} color="#F2A574" />
+              {/* Cream tile, maroon border, maroon icon — the icon reads as a
+                  solid mark against the fill rather than a tint on a tint. */}
+              <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[14px] border border-maroon-800 bg-cream-0 md:h-14 md:w-14 md:rounded-2xl">
+                <Icon size={22} color="#6b0f0f" />
               </div>
               <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-cream-0">
                 {feature.title}
