@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronRightIcon } from "./Icons";
 import type { Dish } from "@/lib/site";
@@ -31,6 +31,24 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
 
   function go(delta: number) {
     setIndex((i) => (i + delta + count) % count);
+  }
+
+  const lastTouchNavRef = useRef(0);
+
+  function navigate(delta: number, e: React.SyntheticEvent) {
+    // The arrows sit inside the swipe surface; without this a tap would also
+    // register as the start of a gesture and could reach the card underneath.
+    e.stopPropagation();
+    if (e.type === "touchend") {
+      e.preventDefault();
+      lastTouchNavRef.current = Date.now();
+    } else if (Date.now() - lastTouchNavRef.current < 700) {
+      return;
+    }
+    // The container's own touchend never fires once propagation stops, so the
+    // pause it set on touchstart is released here instead of sticking on.
+    setPaused(false);
+    go(delta);
   }
 
   function openOrder() {
@@ -128,16 +146,18 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
             <button
               type="button"
               aria-label="Previous dish"
-              onClick={() => go(-1)}
-              className="absolute top-1/2 left-1 z-[4] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:left-3"
+              onClick={(e) => navigate(-1, e)}
+              onTouchEnd={(e) => navigate(-1, e)}
+              className="absolute top-1/2 left-1 z-40 flex h-11 min-h-[44px] w-11 min-w-[44px] -translate-y-1/2 cursor-pointer touch-manipulation items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors select-none hover:bg-cream-0 sm:left-3"
             >
               <ChevronRightIcon size={15} className="rotate-180" />
             </button>
             <button
               type="button"
               aria-label="Next dish"
-              onClick={() => go(1)}
-              className="absolute top-1/2 right-1 z-[4] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:right-3"
+              onClick={(e) => navigate(1, e)}
+              onTouchEnd={(e) => navigate(1, e)}
+              className="absolute top-1/2 right-1 z-40 flex h-11 min-h-[44px] w-11 min-w-[44px] -translate-y-1/2 cursor-pointer touch-manipulation items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors select-none hover:bg-cream-0 sm:right-3"
             >
               <ChevronRightIcon size={15} />
             </button>
