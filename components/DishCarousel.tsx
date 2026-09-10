@@ -4,22 +4,29 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronRightIcon } from "./Icons";
 import type { Dish } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
+import { useSwipe } from "@/lib/use-swipe";
 
 const DISPLAY_MS = 3400;
 const TRANSITION_MS = 2400;
 
 export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: string }) {
+  const count = dishes.length;
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const count = dishes.length;
+  const swipe = useSwipe((direction) =>
+    setIndex((i) => (i + direction + count) % count),
+  );
 
+  // Reduced motion stops the auto-advance only. The arrows and swipe below
+  // keep working exactly as they do for everyone else.
   useEffect(() => {
-    if (paused || count < 2) return;
+    if (paused || prefersReducedMotion || count < 2) return;
     const id = setTimeout(() => setIndex((i) => (i + 1) % count), DISPLAY_MS);
     return () => clearTimeout(id);
-  }, [index, paused, count]);
+  }, [index, paused, prefersReducedMotion, count]);
 
-  if (count === 0) return null;
   const dish = dishes[index];
 
   function go(delta: number) {
@@ -27,8 +34,13 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
   }
 
   function openOrder() {
+    // iOS synthesises a click at the end of a drag; a swipe is not a request
+    // to open the ordering site.
+    if (swipe.didSwipe()) return;
     window.open(orderUrl, "_blank", "noopener,noreferrer");
   }
+
+  if (count === 0) return null;
 
   return (
     <div className="w-full max-w-[1200px]">
@@ -36,6 +48,19 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
         className="relative mx-auto h-[260px] w-full overflow-hidden sm:h-[300px] md:h-[360px]"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onTouchStart={(e) => {
+          // A touch pauses the timer so the slide the visitor swiped to stays
+          // put; touchend hands it back rather than leaving it frozen, which
+          // is what a synthesised mouseenter would do on iOS.
+          setPaused(true);
+          swipe.onTouchStart(e);
+        }}
+        onTouchMove={swipe.onTouchMove}
+        onTouchEnd={(e) => {
+          swipe.onTouchEnd(e);
+          setPaused(false);
+        }}
+        style={{ touchAction: "pan-y" }}
       >
         {dishes.map((d, i) => {
           let diff = i - index;
@@ -63,11 +88,12 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
               }
               aria-label={isCurrent ? `Order ${d.name} online` : undefined}
               aria-hidden={!isCurrent}
-              className={`absolute inset-y-0 left-1/2 flex w-[68%] max-w-[460px] items-center justify-center transition-all ease-in-out sm:w-[52%] ${
+              className={`transform-gpu absolute inset-y-0 left-1/2 flex w-[68%] max-w-[460px] items-center justify-center transition-all ease-in-out will-change-[transform,opacity] sm:w-[52%] ${
                 isCurrent ? "cursor-pointer" : ""
               }`}
               style={{
                 transform: `translateX(calc(-50% + ${translate}%)) scale(${scale})`,
+                WebkitTransform: `translateX(calc(-50% + ${translate}%)) scale(${scale})`,
                 opacity,
                 transitionDuration: `${TRANSITION_MS}ms`,
                 zIndex: isCurrent ? 3 : isSide ? 2 : 1,
@@ -103,7 +129,7 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
               type="button"
               aria-label="Previous dish"
               onClick={() => go(-1)}
-              className="absolute top-1/2 left-1 z-[4] flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:left-3"
+              className="absolute top-1/2 left-1 z-[4] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:left-3"
             >
               <ChevronRightIcon size={15} className="rotate-180" />
             </button>
@@ -111,7 +137,7 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
               type="button"
               aria-label="Next dish"
               onClick={() => go(1)}
-              className="absolute top-1/2 right-1 z-[4] flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:right-3"
+              className="absolute top-1/2 right-1 z-[4] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-maroon-800/15 bg-cream-0/90 text-maroon-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-cream-0 sm:right-3"
             >
               <ChevronRightIcon size={15} />
             </button>

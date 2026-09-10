@@ -105,13 +105,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* The full-bleed hero banner is the LCP element below xl, where it is
-            the first paint of the page. Above xl the hero is the light orbit
+        {/* The hero video's poster is the LCP element below xl, where it paints
+            before the clip can start. Above xl the hero is the light orbit
             instead, so the preload is scoped to the widths that use it. */}
         <link
           rel="preload"
           as="image"
-          href="/images/hero-banner.png"
+          href="/images/hero-video-poster.jpg"
           media="(max-width: 1279px)"
         />
         <script

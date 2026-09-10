@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { HeroCarousel } from "./HeroCarousel";
+import { HeroVideo } from "./HeroVideo";
 import { ArrowRightIcon } from "./Icons";
 import { WeekendSpecialModal } from "./WeekendSpecialModal";
 import { DISHES, SITE, type Dish } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 const PLANET_NAMES = [
   "Masala Dosa",
@@ -23,9 +24,6 @@ const PLANET_NAMES = [
 
 const PLANETS: Dish[] = PLANET_NAMES.map((name) => DISHES.find((d) => d.name === name)!);
 
-// The carousel shows three trios; the orbit uses the full set.
-const SLIDER_DISHES = PLANETS.slice(0, 9);
-
 const ROTATION_MS = 60000;
 
 // Each dish is a stretched 3:2 oval with a full elliptical corner radius. The
@@ -36,32 +34,17 @@ const DISH_HEIGHT = 94;
 
 // The path is an ellipse, not a circle: a wide horizontal spread with a
 // shallower vertical depth. The unequal radii are what keep the centre clear —
-// the top and bottom arcs stop 193px from centre, against a copy column that
+// the top and bottom arcs stop 183px from centre, against a copy column that
 // runs roughly 163px tall, so the headline sits inside the top curve and the
-// CTA buttons inside the bottom one.
-const ORBIT_RADIUS_X = 460;
-const ORBIT_RADIUS_Y = 240;
+// CTA buttons inside the bottom one — about 20px of margin, the tightest this
+// layout tolerates.
+const ORBIT_RADIUS_X = 440;
+const ORBIT_RADIUS_Y = 230;
 
 // The orbit spans ~1060px including the dish width, plus room for the outward
 // hover cards, so it only runs from Tailwind's xl breakpoint up. Below that the
 // hero shows the carousel instead.
 const ORBIT_MIN_WIDTH = 1280;
-
-// Visitors who ask for reduced motion get a still orbit: the dishes stay where
-// they are and remain hoverable, but nothing rotates.
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    function update() {
-      setReduced(query.matches);
-    }
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  return reduced;
-}
 
 function useOrbitEnabled() {
   const [enabled, setEnabled] = useState(false);
@@ -119,9 +102,10 @@ export function Hero() {
       id="top"
       className="relative flex min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden bg-maroon-950 py-16 md:min-h-[45rem] md:py-24 xl:min-h-[52rem] xl:pb-28 xl:bg-cream-50"
     >
-      {/* Mobile and tablet: full-bleed timed carousel. */}
+      {/* Mobile, tablet and iPad: the looping video hero. Desktop keeps the
+          orbiting dishes below and never mounts this. */}
       <div className="absolute inset-0 xl:hidden">
-        <HeroCarousel dishes={SLIDER_DISHES} enabled={!orbitEnabled} />
+        <HeroVideo />
       </div>
 
       {/* Laptop and up: the original light gradient behind the orbiting dishes. */}

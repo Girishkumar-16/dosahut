@@ -47,7 +47,7 @@ export function Navbar() {
           aria-label="Open menu"
           aria-expanded={open}
           onClick={() => setOpen(true)}
-          className="flex h-10 w-10 shrink-0 items-center justify-center text-cream-50 transition-colors hover:text-peach-400"
+          className="flex h-11 w-11 shrink-0 items-center justify-center text-cream-50 transition-colors hover:text-peach-400"
         >
           <MenuIcon size={24} />
         </button>
@@ -128,7 +128,7 @@ export function Navbar() {
             type="button"
             aria-label="Close menu"
             onClick={() => setOpen(false)}
-            className="flex h-10 w-10 items-center justify-center text-maroon-900 transition-colors hover:text-orange-500"
+            className="flex h-11 w-11 items-center justify-center text-maroon-900 transition-colors hover:text-orange-500"
           >
             <CloseIcon size={22} />
           </button>

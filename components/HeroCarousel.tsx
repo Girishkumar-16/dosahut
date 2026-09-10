@@ -1,64 +1,62 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Dish } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
+import { useSwipe } from "@/lib/use-swipe";
 
 // Slide 1 is the full-bleed banner, slides 2-4 are three-column collages.
 const BANNER_MS = 5000;
 const COLLAGE_MS = 7000;
-const SWIPE_THRESHOLD_PX = 40;
-
 export function HeroCarousel({ dishes, enabled }: { dishes: Dish[]; enabled: boolean }) {
   const trios = [dishes.slice(0, 3), dishes.slice(3, 6), dishes.slice(6, 9)].filter(
     (trio) => trio.length === 3,
   );
   const slideCount = 1 + trios.length;
 
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   // Slides mount only once they have been reached, so the first paint fetches
   // the banner alone rather than all ten hero images at once.
   const [maxReached, setMaxReached] = useState(0);
-  const touchStartX = useRef<number | null>(null);
 
   function goTo(next: number) {
     setIndex(next);
     setMaxReached((m) => Math.max(m, next));
   }
 
+  // Reduced motion stops the slideshow advancing by itself. It never disables
+  // the swipe or the dots below — those are the visitor's own actions.
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || prefersReducedMotion) return;
     const id = setTimeout(
       () => goTo((index + 1) % slideCount),
       index === 0 ? BANNER_MS : COLLAGE_MS,
     );
     return () => clearTimeout(id);
-  }, [enabled, index, slideCount]);
+  }, [enabled, prefersReducedMotion, index, slideCount]);
 
-  function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX;
-  }
-
-  function handleTouchEnd(e: React.TouchEvent) {
-    if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(dx) < SWIPE_THRESHOLD_PX) return;
-    goTo((index + (dx < 0 ? 1 : -1) + slideCount) % slideCount);
-  }
+  const swipe = useSwipe((direction) =>
+    goTo((index + direction + slideCount) % slideCount),
+  );
 
   return (
     <div
       role="group"
       aria-label="Featured dishes"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={swipe.onTouchStart}
+      onTouchMove={swipe.onTouchMove}
+      onTouchEnd={swipe.onTouchEnd}
+      // pan-y keeps vertical page scrolling native while horizontal drags stay
+      // ours, which is what makes swipe detection reliable in iOS Safari.
+      style={{ touchAction: "pan-y" }}
       className="absolute inset-0 overflow-hidden"
     >
       {/* Slide 1 — full-bleed banner */}
       <div
         aria-hidden={index !== 0}
-        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+        className={`transform-gpu absolute inset-0 transition-opacity duration-1000 ease-in-out will-change-[opacity,transform] ${
           index === 0 ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -79,7 +77,7 @@ export function HeroCarousel({ dishes, enabled }: { dishes: Dish[]; enabled: boo
           <div
             key={slide}
             aria-hidden={index !== slide}
-            className={`absolute inset-0 grid grid-cols-3 gap-0 transition-opacity duration-1000 ease-in-out ${
+            className={`transform-gpu absolute inset-0 grid grid-cols-3 gap-0 transition-opacity duration-1000 ease-in-out will-change-[opacity,transform] ${
               index === slide ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -108,7 +106,10 @@ export function HeroCarousel({ dishes, enabled }: { dishes: Dish[]; enabled: boo
           <button
             key={i}
             type="button"
-            onClick={() => goTo(i)}
+            onClick={() => {
+              if (swipe.didSwipe()) return;
+              goTo(i);
+            }}
             aria-label={`Go to slide ${i + 1}`}
             aria-current={i === index}
             className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center bg-transparent"
