@@ -1,196 +1,137 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
-const MAIN_VIDEO = "/videos/854216-hd_1920_1080_25fps.mp4";
-// Collage order, left to right: the pour, then the dosa.
-const SECONDARY_VIDEOS = ["/videos/video3.mp4", "/videos/mysore-masala-dosa.mp4"];
-// The phone sequence is its own shortlist, not the collage's: video4 opens on
-// six static seconds and video2 was dropped, so full-bleed gets the dosa clip
-// and the pour instead. Each clip carries its own hold: the dosa clip runs its
-// natural 4.9s rather than being cut short, while the 8s pour is capped at 4s
-// to keep the pace up.
-const MOBILE_SECONDARY_VIDEOS = [
-  { src: "/videos/video3.mp4", ms: 4000 },
-  // Slowed to 0.7x, which stretches the 4.9s clip to just under 7s — the hold
-  // below matches. Done with playbackRate rather than a re-encode so there is
-  // no second copy of the asset to keep in step.
-  { src: "/videos/mysore-masala-dosa.mp4", ms: 7000, rate: 0.7 },
+// One sequence for every width this component runs at. Each clip plays right
+// through and hands over on its own `ended` event, so nothing is cut short.
+// The fallback is only reached if `ended` never arrives — a stalled or blocked
+// load — so the hero cannot freeze on one frame; each is the clip's real
+// length (20s and 21.9s) plus headroom.
+const CLIPS = [
+  // The externally cut copy, 17.3s, already free of the Dosa Hut logo card
+  // that closed the original. Shipped exactly as supplied at 720x1280: every
+  // preset available here either degraded it or matched its size for nothing.
+  { src: "/videos/Lark20260910-153609.mp4", fallbackMs: 20000 },
+  // Trimmed to 16s from a 20s source, stopping before its closing fade.
+  { src: "/videos/Lark20260910-153613.mp4", fallbackMs: 19000 },
 ];
+
+// A long, gentle dissolve rather than a cut.
+const CROSSFADE_MS = 2000;
+// How early the next clip starts. Kept short so the outgoing clip plays out
+// almost to its final frame; the dissolve then carries on over the top of it.
+const HANDOVER_LEAD_MS = 300;
+// How long after a clip starts before the next one begins downloading.
+const PRELOAD_NEXT_MS = 2500;
+
+// The poster is the first clip's own opening frame, so the handover to
+// playback is invisible — a different image here shows as a flash on every
+// refresh.
 const POSTER = "/images/hero-video-poster.jpg";
 
-const MOBILE_MAIN_MS = 7000;
-const MOBILE_STEP_COUNT = MOBILE_SECONDARY_VIDEOS.length + 1;
-
-// Tablet and iPad keep the two-segment shape: the main clip, then the three-up
-// collage, both on a fast rotation so the hero never dwells.
-const MAIN_MS = 7000;
-const COLLAGE_MS = 9000;
-
-const COLLAGE_MIN_WIDTH = 768;
-
-function useIsMobile() {
-  // Server-rendered markup assumes the wider layout; the first client effect
-  // corrects it. Both layouts open on the same clip and poster, so there is
-  // nothing to see during that swap.
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia(`(max-width: ${COLLAGE_MIN_WIDTH - 1}px)`);
-    function update() {
-      setIsMobile(query.matches);
-    }
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  return isMobile;
-}
-
 /**
- * The mobile, tablet and iPad hero background.
+ * The hero background for mobile, tablet and iPad: the clips play full-bleed,
+ * one after another, looping back to the first.
  *
- * Under 768px the four clips play in sequence, each full-bleed. From 768px up
- * the main clip is followed by a three-frame collage. Desktop (xl and above)
- * shows the orbiting dishes instead and never mounts this component.
+ * Desktop (xl and above) shows the orbiting dishes instead and never mounts
+ * this component.
  */
 export function HeroVideo() {
-  const isMobile = useIsMobile();
-  // Keyed on the layout: switching between the two remounts the player, which
-  // restarts the sequence at step 0 without an effect reaching for setState.
-  return <HeroVideoPlayer key={isMobile ? "sequence" : "collage"} isMobile={isMobile} />;
-}
-
-function HeroVideoPlayer({ isMobile }: { isMobile: boolean }) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [step, setStep] = useState(0);
-  const mainRef = useRef<HTMLVideoElement>(null);
-  const sequenceRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const collageRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const refs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  const stepCount = isMobile ? MOBILE_STEP_COUNT : 2;
-  // Clips mount only once the sequence has reached them, so the first load
-  // fetches the main clip alone rather than all four.
-  const [maxReached, setMaxReached] = useState(0);
+  // `timeupdate` fires several times a second, so the handover window below
+  // can be hit more than once. Without this guard each hit queues another
+  // step increment and the sequence skips straight past the next clip.
+  const advancedFromRef = useRef(-1);
+
+  const advance = useCallback((from: number) => {
+    if (advancedFromRef.current === from) return;
+    advancedFromRef.current = from;
+    setStep((prev) => (prev + 1) % CLIPS.length);
+  }, []);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-    const ms = isMobile
-      ? step === 0
-        ? MOBILE_MAIN_MS
-        : MOBILE_SECONDARY_VIDEOS[step - 1].ms
-      : step === 0
-        ? MAIN_MS
-        : COLLAGE_MS;
-    const id = setTimeout(() => {
-      const next = (step + 1) % stepCount;
-      setStep(next);
-      setMaxReached((m) => Math.max(m, next));
-    }, ms);
+    const id = setTimeout(() => advance(step), CLIPS[step].fallbackMs);
     return () => clearTimeout(id);
-  }, [step, stepCount, isMobile, prefersReducedMotion]);
+  }, [step, advance, prefersReducedMotion]);
 
-  // Only the visible clip plays. Decoding four streams at once is what makes a
-  // video hero stutter on an older phone.
+  // Hand over just before the clip ends rather than waiting for `ended`, so
+  // the dissolve is already under way as the last frames play out.
+  function handleTimeUpdate(e: React.SyntheticEvent<HTMLVideoElement>, i: number) {
+    if (i !== step) return;
+    const v = e.currentTarget;
+    if (!v.duration || Number.isNaN(v.duration)) return;
+    if (v.duration - v.currentTime <= HANDOVER_LEAD_MS / 1000) advance(i);
+  }
+
+  // Only the visible clip plays. Decoding both at once is what makes a video
+  // hero stutter on an older phone.
   useEffect(() => {
     if (prefersReducedMotion) return;
-    const all = [
-      mainRef.current,
-      ...sequenceRefs.current,
-      ...collageRefs.current,
-    ].filter(Boolean) as HTMLVideoElement[];
-
-    const playing: HTMLVideoElement[] = [];
-    if (step === 0 && mainRef.current) playing.push(mainRef.current);
-    if (isMobile && step > 0) {
-      const el = sequenceRefs.current[step - 1];
-      if (el) playing.push(el);
+    const active = refs.current[step];
+    if (active) {
+      active.currentTime = 0;
+      active.play().catch(() => {});
     }
-    if (!isMobile && step === 1) {
-      playing.push(...(collageRefs.current.filter(Boolean) as HTMLVideoElement[]));
-    }
+    // The outgoing clip is left running until the fade is over; pausing it
+    // straight away is what makes a cross-fade look like a freeze.
+    const pauseId = setTimeout(() => {
+      refs.current.forEach((v, i) => {
+        if (v && i !== step) v.pause();
+      });
+    }, CROSSFADE_MS);
 
-    all.forEach((v) => {
-      if (playing.includes(v)) return;
-      v.pause();
-    });
-    playing.forEach((v) => {
-      v.currentTime = 0;
-      v.playbackRate =
-        isMobile && step > 0 ? (MOBILE_SECONDARY_VIDEOS[step - 1].rate ?? 1) : 1;
-      v.play().catch(() => {});
-    });
-  }, [step, isMobile, maxReached, prefersReducedMotion]);
+    // The next clip is fetched a few seconds in rather than up front, so the
+    // first paint competes with one download instead of two — but early
+    // enough that it is buffered long before the dissolve needs it.
+    const preloadId = setTimeout(() => {
+      const next = refs.current[(step + 1) % CLIPS.length];
+      if (next && next.preload !== "auto") {
+        next.preload = "auto";
+        next.load();
+      }
+    }, PRELOAD_NEXT_MS);
 
-  const videoClass =
-    "transform-gpu absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out will-change-[opacity]";
+    return () => {
+      clearTimeout(pauseId);
+      clearTimeout(preloadId);
+    };
+  }, [step, prefersReducedMotion]);
 
   return (
-    <div aria-hidden className="relative z-0 h-full w-full overflow-hidden bg-maroon-950">
-      {/* Step 1 on both layouts — the full-bleed main clip. */}
-      <video
-        ref={mainRef}
-        src={MAIN_VIDEO}
-        poster={POSTER}
-        autoPlay={!prefersReducedMotion}
-        muted
-        playsInline
-        loop
-        preload="auto"
-        className={`${videoClass} ${step === 0 ? "opacity-100" : "opacity-0"}`}
-      />
-
-      {/* Under 768px — the remaining clips, one at a time, full-bleed. */}
-      {isMobile &&
-        MOBILE_SECONDARY_VIDEOS.map(({ src }, i) =>
-          i + 1 > maxReached ? null : (
-            <video
-              key={`seq-${src}`}
-              ref={(el) => {
-                sequenceRefs.current[i] = el;
-              }}
-              src={src}
-              poster={POSTER}
-              autoPlay={!prefersReducedMotion}
-              muted
-              playsInline
-              loop
-              preload="metadata"
-              className={`${videoClass} ${step === i + 1 ? "opacity-100" : "opacity-0"}`}
-            />
-          ),
-        )}
-
-      {/* 768px and up — the two-frame collage. */}
-      {!isMobile && maxReached > 0 && (
-        <div
-          // Two equal columns, no gap, on a solid ground so neither cell can
-          // flash through to the page background while a clip buffers.
-          className={`absolute inset-0 grid grid-cols-2 gap-0 bg-maroon-950 transition-opacity duration-1000 ease-in-out ${
-            step === 1 ? "opacity-100" : "opacity-0"
+    <div
+      aria-hidden
+      className="relative z-0 h-full w-full overflow-hidden bg-maroon-950"
+    >
+      {CLIPS.map(({ src }, i) => (
+        <video
+          key={src}
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
+          src={src}
+          poster={POSTER}
+          autoPlay={!prefersReducedMotion}
+          muted
+          playsInline
+          onEnded={() => advance(i)}
+          onTimeUpdate={(e) => handleTimeUpdate(e, i)}
+          preload={i === 0 ? "auto" : "none"}
+          className={`transform-gpu absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out will-change-[opacity] ${
+            i === step ? "opacity-100" : "opacity-0"
           }`}
-        >
-          {SECONDARY_VIDEOS.map((src, i) => (
-            <video
-              key={`collage-${src}`}
-              ref={(el) => {
-                collageRefs.current[i] = el;
-              }}
-              src={src}
-              autoPlay={!prefersReducedMotion}
-              muted
-              playsInline
-              loop
-              preload="metadata"
-              poster={POSTER}
-              className="transform-gpu block h-full w-full object-cover will-change-[opacity]"
-            />
-          ))}
-        </div>
-      )}
+        />
+      ))}
 
-      {/* Contrast layer for the headline above it. */}
-      <div className="absolute inset-0 z-10 bg-black/40" />
+      {/* Contrast layer for the headline. A flat 40% wash greyed the footage
+          out, so the dimming is now weighted to the top and bottom edges —
+          where the navbar and the CTA buttons sit — and stays light across
+          the middle, where the copy already carries its own text shadows. */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/15 to-black/45" />
     </div>
   );
 }
