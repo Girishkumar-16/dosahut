@@ -31,6 +31,18 @@ const PRELOAD_NEXT_MS = 2500;
  */
 export function HeroVideo() {
   const [step, setStep] = useState(0);
+  // A clip stays fully transparent until it reports that it is actually
+  // playing. While it buffers — or if autoplay is refused outright — there is
+  // nothing on screen for the browser to paint its start-playback button over,
+  // whatever the CSS does. The flag is never cleared: once a clip has played,
+  // returning to it should not blank the hero again.
+  const [hasPlayed, setHasPlayed] = useState<boolean[]>(() => CLIPS.map(() => false));
+
+  const markPlaying = useCallback((i: number) => {
+    setHasPlayed((prev) =>
+      prev[i] ? prev : prev.map((played, idx) => (idx === i ? true : played)),
+    );
+  }, []);
   const refs = useRef<(HTMLVideoElement | null)[]>([]);
   const stepRef = useRef(0);
 
@@ -158,10 +170,11 @@ export function HeroVideo() {
           disablePictureInPicture
           tabIndex={-1}
           preload={i === 0 ? "auto" : "none"}
+          onPlaying={() => markPlaying(i)}
           onEnded={() => advance(i)}
           onTimeUpdate={(e) => handleTimeUpdate(e, i)}
           className={`pointer-events-none transform-gpu absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out will-change-[opacity] ${
-            i === step ? "opacity-100" : "opacity-0"
+            i === step && hasPlayed[i] ? "opacity-100" : "opacity-0"
           }`}
         />
       ))}
