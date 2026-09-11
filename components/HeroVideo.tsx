@@ -166,6 +166,9 @@ export function HeroVideo() {
           autoPlay
           muted
           playsInline
+          // Present in the served HTML, not only after hydration: older iOS
+          // Safari reads this attribute when it first parses the element.
+          {...{ "webkit-playsinline": "true" }}
           controls={false}
           disablePictureInPicture
           tabIndex={-1}
