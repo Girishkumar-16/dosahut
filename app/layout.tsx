@@ -105,15 +105,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* The hero video's poster is the LCP element below xl, where it paints
-            before the clip can start. Above xl the hero is the light orbit
-            instead, so the preload is scoped to the widths that use it. */}
-        <link
-          rel="preload"
-          as="image"
-          href="/images/hero-video-poster.jpg"
-          media="(max-width: 1279px)"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(RESTAURANT_JSON_LD) }}

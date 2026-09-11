@@ -24,10 +24,6 @@ const HANDOVER_LEAD_MS = 300;
 // How long after a clip starts before the next one begins downloading.
 const PRELOAD_NEXT_MS = 2500;
 
-// The poster is the first clip's own opening frame, so the handover to
-// playback is invisible — a different image here shows as a flash on every
-// refresh.
-const POSTER = "/images/hero-video-poster.jpg";
 
 /**
  * The hero background at every width: the clips play full-bleed, one after
@@ -117,6 +113,8 @@ export function HeroVideo() {
       v.setAttribute("muted", "");
       v.setAttribute("playsinline", "true");
       v.setAttribute("webkit-playsinline", "true");
+      v.removeAttribute("controls");
+      v.play().catch(() => {});
     });
   }, []);
 
@@ -153,12 +151,12 @@ export function HeroVideo() {
             refs.current[i] = el;
           }}
           src={src}
-          poster={POSTER}
           autoPlay
           muted
           playsInline
           controls={false}
           disablePictureInPicture
+          tabIndex={-1}
           preload={i === 0 ? "auto" : "none"}
           onEnded={() => advance(i)}
           onTimeUpdate={(e) => handleTimeUpdate(e, i)}

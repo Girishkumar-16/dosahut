@@ -73,15 +73,23 @@ export function FlavorFinder() {
   const config = CATEGORIES[category];
   const pool = useMemo(() => poolFor(config), [config]);
 
-  // Only offer filter values this category's menu actually contains, so no
-  // option is a guaranteed dead end.
+  // Each list is narrowed by the *other* selection, not just by the category.
+  // Offering a spice level that no dish in the chosen diet has — or a diet that
+  // no dish at the chosen spice has — is what produced the dead-end screen, so
+  // those options are never rendered in the first place.
   const spiceOptions = useMemo(
-    () => SPICE_ORDER.filter((level) => pool.some((dish) => dish.spiceLevel === level)),
-    [pool],
+    () =>
+      SPICE_ORDER.filter((level) =>
+        pool.some((dish) => dish.spiceLevel === level && (!diet || dish.diet === diet)),
+      ),
+    [pool, diet],
   );
   const dietOptions = useMemo(
-    () => DIET_ORDER.filter((value) => pool.some((dish) => dish.diet === value)),
-    [pool],
+    () =>
+      DIET_ORDER.filter((value) =>
+        pool.some((dish) => dish.diet === value && (!spice || dish.spiceLevel === spice)),
+      ),
+    [pool, spice],
   );
 
   // Strict match only — both selected criteria must equal the dish's own
@@ -90,6 +98,22 @@ export function FlavorFinder() {
     if (!spice || !diet) return null;
     return pool.filter((dish) => dish.spiceLevel === spice && dish.diet === diet);
   }, [pool, spice, diet]);
+
+  // Cascade: picking one filter drops the other if the pair has no dishes.
+  // Returning to that step then shows only the options that still apply.
+  function chooseSpice(level: SpiceLevel) {
+    setSpice(level);
+    if (diet && !pool.some((dish) => dish.spiceLevel === level && dish.diet === diet)) {
+      setDiet(null);
+    }
+  }
+
+  function chooseDiet(value: Diet) {
+    setDiet(value);
+    if (spice && !pool.some((dish) => dish.diet === value && dish.spiceLevel === spice)) {
+      setSpice(null);
+    }
+  }
 
   function switchCategory(key: CategoryKey) {
     setCategory(key);
@@ -172,7 +196,7 @@ export function FlavorFinder() {
                     <button
                       key={option}
                       type="button"
-                      onClick={() => setSpice(option)}
+                      onClick={() => chooseSpice(option)}
                       className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}
@@ -182,7 +206,7 @@ export function FlavorFinder() {
                     <button
                       key={option}
                       type="button"
-                      onClick={() => setDiet(option)}
+                      onClick={() => chooseDiet(option)}
                       className="rounded-full border border-maroon-800/20 bg-cream-50 px-6 py-3 text-base font-bold tracking-wide text-maroon-700 uppercase transition-colors hover:border-orange-500 hover:text-orange-500"
                     >
                       {option}

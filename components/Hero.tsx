@@ -21,7 +21,7 @@ export function Hero() {
       </div>
 
       <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center gap-4 px-4 pt-6 pb-10 text-center sm:px-6">
-        <h1 className="font-heading text-5xl leading-tight font-extrabold tracking-tight text-balance text-maroon-800 uppercase sm:text-6xl lg:text-7xl xl:text-5xl">
+        <h1 className="font-heading text-5xl leading-tight font-extrabold tracking-tight text-balance text-orange-500 uppercase drop-shadow-sm sm:text-6xl lg:text-7xl xl:text-5xl">
           India, Served with a Sunshine Coast Soul.
         </h1>
 

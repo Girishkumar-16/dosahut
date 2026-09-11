@@ -40,10 +40,14 @@
 video::-webkit-media-controls,
 video::-webkit-media-controls-panel,
 video::-webkit-media-controls-start-playback-button,
-video::-webkit-media-controls-overlay-play-button {
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-container,
+video::-internal-media-controls-overlay-cast-button {
   display: none !important;
   -webkit-appearance: none !important;
   opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Tailwind v4's preflight resets buttons to cursor: default. Every button here
@@ -167,19 +171,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The hero videos are pure background. WebKit will otherwise paint its own
-   start-playback overlay over them whenever autoplay is refused — a play
-   button the visitor cannot meaningfully use, since the clips are decoration
-   and the component retries playback on the first interaction anyway. */
-video::-webkit-media-controls,
-video::-webkit-media-controls-panel,
-video::-webkit-media-controls-start-playback-button,
-video::-webkit-media-controls-overlay-play-button {
-  display: none !important;
-  -webkit-appearance: none !important;
-  opacity: 0 !important;
-}
-
 /* Tailwind v4's preflight resets buttons to cursor: default. Every button here
    is a real action, so the pointer comes back globally rather than one
    cursor-pointer utility at a time. */
