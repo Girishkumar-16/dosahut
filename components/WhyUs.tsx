@@ -3,20 +3,22 @@ import { FEATURES } from "@/lib/site";
 
 const ICONS = [FlameIcon, UtensilsIcon, LeafIcon, DeviceIcon];
 
-// Cormorant Garamond's bold "1" is a bare stroke with no distinguishing serif
-// at this size, so in "100% Halal & Pure Veg" and "90+ Dosa Varieties" it
-// reads as a capital "I" rather than a digit. Rendering just the leading
-// number/symbol run in the heading font (Oswald), which gives "1" a clear
-// top flag and foot, fixes the ambiguity without changing the display font
-// used for every other title.
+// Cormorant Garamond's "1" is a bare vertical stroke at this weight and
+// size — same shape as a capital "I" — so "100% Halal & Pure Veg" misreads.
+// Switching the numeral to a different font family (tried earlier) fixed
+// the ambiguity but looked visibly inconsistent next to the other titles.
+// Italicizing just the numeral keeps the same font and does the job: real
+// italic Cormorant Garamond gives "1" a distinct hooked stroke, unlike "I".
+// Only titles that actually contain a "1" get this — "90+ Dosa Varieties"
+// has no ambiguous digit, so it stays untouched like every other title.
 const LEADING_NUMBER = /^([\d%+]+)(\s.*)$/;
 
 function FeatureTitle({ title }: { title: string }) {
   const match = title.match(LEADING_NUMBER);
-  if (!match) return <>{title}</>;
+  if (!match || !match[1].includes("1")) return <>{title}</>;
   return (
     <>
-      <span className="font-heading">{match[1]}</span>
+      <span className="italic">{match[1]}</span>
       {match[2]}
     </>
   );
