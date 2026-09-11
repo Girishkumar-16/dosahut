@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
-
 // One sequence for every width this component runs at. A clip hands over just
 // before its playable end; the fallback timer is only reached if that never
 // happens — a stalled or blocked load — so the hero cannot freeze on a frame.
@@ -36,9 +34,9 @@ const POSTER = "/images/hero-video-poster.jpg";
  * another, looping back to the first.
  */
 export function HeroVideo() {
-  const prefersReducedMotion = usePrefersReducedMotion();
   const [step, setStep] = useState(0);
   const refs = useRef<(HTMLVideoElement | null)[]>([]);
+  const stepRef = useRef(0);
 
   // `timeupdate` fires several times a second, so the handover window below
   // can be hit more than once. Without this guard each hit queues another
@@ -52,10 +50,9 @@ export function HeroVideo() {
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
     const id = setTimeout(() => advance(step), CLIPS[step].fallbackMs);
     return () => clearTimeout(id);
-  }, [step, advance, prefersReducedMotion]);
+  }, [step, advance]);
 
   // Hand over just before the clip ends rather than waiting for `ended`, so
   // the dissolve is already under way as the last frames play out.
@@ -73,11 +70,16 @@ export function HeroVideo() {
   // Only the visible clip plays. Decoding both at once is what makes a video
   // hero stutter on an older phone.
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    stepRef.current = step;
     const active = refs.current[step];
     if (active) {
       active.currentTime = 0;
-      active.play().catch(() => {});
+      // Autoplay can be refused (a stalled buffer, a browser policy, a data
+      // saver). Retrying once the element reports it can play covers the
+      // common case where the first attempt simply came too early.
+      const attempt = () => active.play().catch(() => {});
+      attempt();
+      active.addEventListener("canplay", attempt, { once: true });
     }
     // The outgoing clip is left running until the fade is over; pausing it
     // straight away is what makes a cross-fade look like a freeze.
@@ -102,7 +104,42 @@ export function HeroVideo() {
       clearTimeout(pauseId);
       clearTimeout(preloadId);
     };
-  }, [step, prefersReducedMotion]);
+  }, [step]);
+
+  useEffect(() => {
+    refs.current.forEach((v) => {
+      if (!v) return;
+      // Set on the element as well as in JSX: older iOS Safari reads
+      // webkit-playsinline, and the muted *property* is honoured where the
+      // attribute alone is sometimes not.
+      v.muted = true;
+      v.defaultMuted = true;
+      v.setAttribute("muted", "");
+      v.setAttribute("playsinline", "true");
+      v.setAttribute("webkit-playsinline", "true");
+    });
+  }, []);
+
+  // Last resort: iOS Low Power Mode, desktop data savers and strict autoplay
+  // settings all refuse the initial play() outright. The first touch or scroll
+  // satisfies them, so retry silently on that rather than showing a play
+  // button the visitor has to find.
+  useEffect(() => {
+    function retry() {
+      refs.current[stepRef.current]?.play().catch(() => {});
+    }
+    const opts = { once: true, passive: true } as const;
+    window.addEventListener("touchstart", retry, opts);
+    window.addEventListener("scroll", retry, opts);
+    window.addEventListener("pointerdown", retry, opts);
+    window.addEventListener("keydown", retry, { once: true });
+    return () => {
+      window.removeEventListener("touchstart", retry);
+      window.removeEventListener("scroll", retry);
+      window.removeEventListener("pointerdown", retry);
+      window.removeEventListener("keydown", retry);
+    };
+  }, []);
 
   return (
     <div
@@ -117,13 +154,15 @@ export function HeroVideo() {
           }}
           src={src}
           poster={POSTER}
-          autoPlay={!prefersReducedMotion}
+          autoPlay
           muted
           playsInline
+          controls={false}
+          disablePictureInPicture
+          preload={i === 0 ? "auto" : "none"}
           onEnded={() => advance(i)}
           onTimeUpdate={(e) => handleTimeUpdate(e, i)}
-          preload={i === 0 ? "auto" : "none"}
-          className={`transform-gpu absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out will-change-[opacity] ${
+          className={`pointer-events-none transform-gpu absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out will-change-[opacity] ${
             i === step ? "opacity-100" : "opacity-0"
           }`}
         />
