@@ -195,6 +195,16 @@ html {
   }
 }
 
+/* A swipe rail should feel like a native carousel, so its scrollbar is hidden
+   entirely — the partial peek of the next card is what signals it scrolls. */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Tailwind has no thin-scrollbar utility, and the Craving Finder scroller
    needs one slim enough not to crowd the cards. */
 .scrollbar-thin {

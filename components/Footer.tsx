@@ -70,6 +70,14 @@ export function Footer() {
           >
             Catering
           </a>
+          <a
+            href={SITE.menuPdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-base font-medium text-cream-50/70 hover:text-cream-50"
+          >
+            Download Full Menu (PDF)
+          </a>
         </nav>
 
         <nav className="flex flex-col items-center gap-3.5 lg:items-start">

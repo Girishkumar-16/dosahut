@@ -152,3 +152,12 @@ export function InstagramIcon({ className, size = 16 }: IconProps) {
     </svg>
   );
 }
+
+export function SearchIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth={1.9} />
+      <path d="M16.5 16.5 21 21" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" />
+    </svg>
+  );
+}
