@@ -43,7 +43,7 @@ export function Location() {
             {HOURS.map((row, i) => (
               <div
                 key={row.day}
-                className={`flex justify-between py-3 text-base ${
+                className={`flex flex-col gap-0.5 py-3 text-base sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 ${
                   i < HOURS.length - 1 ? "border-b border-maroon-800/10" : ""
                 }`}
               >

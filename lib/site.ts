@@ -475,7 +475,17 @@ export const DOSA_MENU: Dish[] = [
     image: "/images/dish-rava-paneer-dosa.jpg",
     alt: "Rava dosa filled with spiced cottage cheese",
   },
-  { category: "Rava Dosa", name: "Rava Chicken Dosa", price: "$18.95", diet: "Non-Veg", spiceLevel: "Mild" },
+  {
+    category: "Rava Dosa",
+    name: "Rava Chicken Dosa",
+    price: "$18.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    // Reusing the Chicken Dosa photo — no distinct Rava Chicken Dosa shot
+    // has been supplied yet.
+    image: "/images/dish-chicken-dosa.jpg",
+    alt: "Dosa filled with spiced shredded chicken",
+  },
   {
     category: "Rava Dosa",
     name: "Rava Lamb Dosa",
@@ -1049,3 +1059,28 @@ export const FEATURES: Feature[] = [
     description: "Hot & fresh via UberEats, DoorDash, or direct takeaway.",
   },
 ];
+
+// Scratchy Tuesday: dine-in and spend $40+ on a Tuesday, staff hand out the
+// QR code, scan it to get a scratch card. Odds are weighted, not a plain
+// random pick off the list: each entry's `weight` is its share out of 100
+// scratches, and the weights below intentionally sum to 70 — the remaining
+// 30 out of 100 land on SCRATCHY_TUESDAY_LOSE_WEIGHT, a non-winning
+// "Better luck next time" outcome (see SCRATCHY_TUESDAY_LOSE_MESSAGE).
+export type ScratchReward = {
+  name: string;
+  weight: number;
+};
+
+export const SCRATCHY_TUESDAY_REWARDS: ScratchReward[] = [
+  { name: "Masala Dosa", weight: 2 },
+  { name: "Mango Lassi", weight: 14 },
+  { name: "Chai", weight: 14 },
+  { name: "Soft Drink", weight: 16 },
+  { name: "Samosa", weight: 14 },
+  { name: "Gulab Jamun", weight: 8 },
+  { name: "Idly", weight: 2 },
+];
+
+// Out of every 100 scratches, this many (30) reveal no prize at all.
+export const SCRATCHY_TUESDAY_LOSE_WEIGHT = 30;
+export const SCRATCHY_TUESDAY_LOSE_MESSAGE = "Better Luck Next Time";

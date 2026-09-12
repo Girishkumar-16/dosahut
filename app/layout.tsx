@@ -13,22 +13,27 @@ import "@fontsource/oswald/700.css";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 
+// Shared, sitewide defaults. A page (e.g. app/page.tsx, app/scratchy-tuesday)
+// can override title/description/openGraph/alternates for itself — Next.js
+// replaces these fields per route rather than merging into them, so anything
+// homepage-specific (the Restaurant JSON-LD, the "/" canonical, the homepage
+// OG copy) lives in app/page.tsx instead of here, where every route would
+// otherwise inherit it.
 const TITLE = "Dosa Hut Sunshine Coast | Authentic Indian Flavours";
 const DESCRIPTION =
   "Authentic Indian favourites, biryanis, curries, dosas and more at Dosa Hut Sunshine Coast. Order online for pickup or delivery, 5 Lutana Street, Buddina QLD 4575.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.siteUrl),
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: {
-    canonical: "/",
+  title: {
+    default: TITLE,
+    template: `%s | ${SITE.name}`,
   },
+  description: DESCRIPTION,
   openGraph: {
     type: "website",
     title: TITLE,
     description: DESCRIPTION,
-    url: "/",
     siteName: SITE.name,
     locale: "en_AU",
     images: [
@@ -42,74 +47,11 @@ export const metadata: Metadata = {
   },
 };
 
-// Opening hours in schema.org's day/time shape. Keep in step with HOURS in
-// lib/site.ts, which renders the same trading times in the Location section.
-const OPENING_HOURS = [
-  {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-    opens: "11:00",
-    closes: "14:30",
-  },
-  {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-    opens: "16:00",
-    closes: "21:00",
-  },
-  {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Friday", "Saturday", "Sunday"],
-    opens: "11:00",
-    closes: "21:30",
-  },
-];
-
-const RESTAURANT_JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "Restaurant",
-  name: SITE.name,
-  description: DESCRIPTION,
-  url: SITE.siteUrl,
-  image: new URL(SITE.ogImage, SITE.siteUrl).toString(),
-  telephone: "+61423841991",
-  priceRange: "$$",
-  servesCuisine: ["Indian", "South Indian", "Indo-Chinese"],
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: SITE.addressLine1,
-    addressLocality: "Buddina",
-    addressRegion: "QLD",
-    postalCode: "4575",
-    addressCountry: "AU",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: SITE.lat,
-    longitude: SITE.lng,
-  },
-  hasMap: SITE.placeUrl,
-  menu: SITE.menuPdfUrl,
-  acceptsReservations: false,
-  openingHoursSpecification: OPENING_HOURS,
-  sameAs: [SITE.facebookUrl, SITE.instagramUrl, SITE.mainSiteUrl],
-  potentialAction: {
-    "@type": "OrderAction",
-    target: SITE.orderUrl,
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(RESTAURANT_JSON_LD) }}
-        />
-      </head>
       <body className="antialiased bg-cream-50 text-ink-900">{children}</body>
     </html>
   );

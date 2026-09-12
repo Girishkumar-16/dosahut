@@ -170,6 +170,47 @@ body {
   50% { box-shadow: 0 0 0 7px rgba(241, 90, 39, 0); }
 }
 
+/* Scratchy Tuesday's reveal burst — see components/Confetti.tsx. */
+@keyframes confetti-fall {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  to {
+    transform: translate3d(var(--confetti-drift), 115vh, 0) rotate(var(--confetti-rotate));
+    opacity: 0;
+  }
+}
+.confetti-fall {
+  animation-name: confetti-fall;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+@keyframes confetti-pop {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  35% {
+    transform: translate3d(calc(var(--confetti-drift) * 0.6), -62vh, 0)
+      rotate(calc(var(--confetti-rotate) * 0.5));
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--confetti-drift), 8vh, 0) rotate(var(--confetti-rotate));
+    opacity: 0;
+  }
+}
+.confetti-pop {
+  animation-name: confetti-pop;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+/* Scratchy Tuesday hero CTA badge pulse — declared here, before the
+   reduced-motion block below, so that block's `.hero-badge-pulse { animation:
+   none }` override wins the cascade tie (same selector/specificity resolves
+   by source order — the override has to come after the base rule, not
+   before it, or reduced-motion never actually takes effect). */
+.hero-badge-pulse {
+  animation: pulse-glow 2.2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
 /* Tailwind v4's preflight resets buttons to cursor: default. Every button here
    is a real action, so the pointer comes back globally rather than one
@@ -193,6 +234,26 @@ html {
   .btn-primary-glow:active {
     transform: none;
   }
+  .hero-badge-pulse {
+    animation: none;
+  }
+}
+
+/* Scratchy Tuesday hero: a subtle diagonal scratch texture behind the
+   heading, tying the hero back to the scratch-card mechanic instead of
+   reading as a generic food photo, plus a gentle pulse on the CTA badge
+   to draw the eye. Both stay understated so they read as texture/emphasis,
+   not decoration competing with the food photo. */
+.scratch-texture-overlay {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 253, 250, 0.5) 0,
+    rgba(255, 253, 250, 0.5) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.35;
 }
 
 /* Tailwind has no thin-scrollbar utility, and the Craving Finder scroller
