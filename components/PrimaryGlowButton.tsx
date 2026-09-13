@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { cx } from "@/lib/cx";
 
 /**
  * The single primary call to action for the whole site: the 3D glow treatment
@@ -28,7 +29,7 @@ export function PrimaryGlowButton({
   full?: boolean;
   disabled?: boolean;
 }) {
-  const classes = `${PRIMARY_GLOW_CLASSES} ${full ? "w-full" : ""} ${disabled ? "opacity-60" : ""} ${className}`;
+  const classes = cx(PRIMARY_GLOW_CLASSES, full && "w-full", disabled && "opacity-60", className);
 
   if (!href) {
     return (

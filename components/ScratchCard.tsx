@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState, useEffect } from "react";
 import { Confetti } from "./Confetti";
+import { RewardPill } from "./RewardPill";
 
 // How long the confetti burst plays before it's torn down.
 const CONFETTI_MS = 3200;
@@ -145,9 +146,7 @@ export function ScratchCard({ outcome }: { outcome: Outcome }) {
             <span className="text-sm font-bold tracking-[0.18em] text-orange-500 uppercase">
               Congratulations, you won
             </span>
-            <span className="font-display text-3xl leading-snug font-bold text-maroon-900">
-              {outcome.label}
-            </span>
+            <RewardPill size="lg">{outcome.label}</RewardPill>
           </>
         ) : (
           <>

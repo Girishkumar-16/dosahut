@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { ScratchCard, type Outcome } from "./ScratchCard";
 import { PrimaryGlowButton } from "./PrimaryGlowButton";
+import { RewardPill } from "./RewardPill";
+import { SuburbAutocomplete } from "./SuburbAutocomplete";
 import {
   ChaiCupIcon,
   GiftBoxIcon,
@@ -185,19 +187,23 @@ export function ScratchyTuesdayFlow() {
 
             {/* flex-wrap + justify-center rather than CSS grid: a grid
                 leaves a dangling, left-aligned last row whenever the reward
-                count doesn't divide evenly into the column count. On sm+,
-                nowrap + flex-1 keeps every reward in a single row and
-                sized evenly, whatever the reward count ends up being. */}
-            <div className="relative mt-8 flex w-full flex-wrap justify-center gap-3 sm:flex-nowrap">
+                count doesn't divide evenly into the column count, while
+                justify-center on a wrapped flex line centers it instead.
+                Each tile gets a real min-width floor (enough for the widest
+                current reward-name pill, whitespace-nowrap so it never
+                splits mid-word) plus a max-width so a lone tile in an
+                incomplete row doesn't stretch oversized — the browser then
+                wraps to however many columns actually fit at any viewport
+                width or reward count, with no breakpoint-specific arithmetic
+                to re-derive if either changes. */}
+            <div className="relative mt-8 flex w-full flex-wrap justify-center gap-3">
               {SCRATCHY_TUESDAY_REWARDS.map((reward) => (
                 <div
                   key={reward.name}
-                  className="flex basis-[calc(50%-0.375rem)] flex-col items-center gap-2.5 rounded-2xl border border-orange-500/20 bg-cream-50 p-4 text-center sm:basis-0 sm:flex-1"
+                  className="flex min-w-[136px] max-w-[200px] flex-1 flex-col items-center gap-2.5 rounded-2xl border border-orange-500/20 bg-cream-50 p-4 text-center"
                 >
                   <RewardIcon reward={reward.name} className="h-14 w-14 text-maroon-800" />
-                  <span className="text-sm leading-snug font-bold text-maroon-900">
-                    {reward.name}
-                  </span>
+                  <RewardPill>{reward.name}</RewardPill>
                 </div>
               ))}
             </div>
@@ -236,12 +242,9 @@ export function ScratchyTuesdayFlow() {
 
                 <label className="flex flex-col gap-1.5">
                   <span className="text-sm font-bold text-maroon-800">Suburb *</span>
-                  <input
-                    type="text"
-                    required
-                    autoComplete="address-level2"
+                  <SuburbAutocomplete
                     value={details.suburb}
-                    onChange={(e) => setDetails((d) => ({ ...d, suburb: e.target.value }))}
+                    onChange={(suburb) => setDetails((d) => ({ ...d, suburb }))}
                     className={inputClass}
                     placeholder="Buddina"
                   />
