@@ -7,7 +7,6 @@ import {
   serial,
   timestamp,
   uniqueIndex,
-  text,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -18,15 +17,15 @@ export const vipMembers = pgTable(
   "vip_members",
   {
     id: serial("id").primaryKey(),
-    name: text("name").notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
     /** AU E.164, e.g. +61400000012. See lib/vip/mobile.ts — the UNIQUE
      *  constraint only means "one person" because every write is normalised
      *  through there first. */
     phone: varchar("phone", { length: 20 }).notNull().unique(),
     /** Nullable: customers migrated in from the existing contact list arrive
      *  with phone and name only. Requiring one here would lock them out. */
-    email: text("email"),
-    suburb: text("suburb"),
+    email: varchar("email", { length: 255 }),
+    suburb: varchar("suburb", { length: 255 }),
     source: varchar("source", { length: 100 }).default("vip_join"),
     vipMember: boolean("vip_member").default(true),
     visitCount: integer("visit_count").default(1),

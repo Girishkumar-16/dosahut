@@ -16,8 +16,6 @@ export type SendResult =
   | { ok: true; delivered: boolean; queued: boolean; channel: "email" | "whatsapp"; sentTo: string }
   | { ok: false; error: string };
 
-export const WATI_PAUSED = true;
-
 export async function sendOtp(
   phone: string,
   code: string,

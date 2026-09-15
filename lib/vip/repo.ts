@@ -34,39 +34,6 @@ export async function findByPhone(phone: string): Promise<VipMember | null> {
 }
 
 /**
- * Creates the member, or returns null if the phone is already taken.
- *
- * The insert is the decision: `ON CONFLICT DO NOTHING` means the UNIQUE
- * constraint on phone — not a prior SELECT — settles who is new. Two
- * registrations arriving together cannot both be treated as a new member.
- */
-export async function createMemberIfNew(
-  name: string,
-  phone: string,
-  email: string | null,
-): Promise<VipMember | null> {
-  const db = await getDb();
-  const now = Date.now();
-  const [row] = await db
-    .insert(vipMembers)
-    .values({
-      name,
-      phone,
-      email,
-      source: "vip_join",
-      vipMember: true,
-      visitCount: 1,
-      firstBranch: BRANCH,
-      homeBranch: BRANCH,
-      lastBranch: BRANCH,
-      lastSeenAt: now,
-    })
-    .onConflictDoNothing({ target: vipMembers.phone })
-    .returning();
-  return row ?? null;
-}
-
-/**
  * A known member coming back: count the visit, move the clock, and note the
  * branch. Done in one statement so concurrent visits cannot lose a count the
  * way a read-modify-write would.
@@ -253,10 +220,3 @@ export async function registerOrReturn(
   };
 }
 
-export async function countMembers(): Promise<number> {
-  const db = await getDb();
-  const [row] = await db
-    .select({ count: sql<number>`count(*)::int` })
-    .from(vipMembers);
-  return row?.count ?? 0;
-}

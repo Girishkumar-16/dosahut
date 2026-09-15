@@ -38,6 +38,13 @@ export type IssueResult =
 
 export async function issueOtp(phone: string): Promise<IssueResult> {
   const now = Date.now();
+
+  // Opportunistic housekeeping. A visitor who asks for a code and never comes
+  // back leaves a row nothing else would ever clear, so every issue sweeps the
+  // expired ones. Cheap, and it keeps the table from growing without bound.
+  await purgeExpiredOtps().catch((error) =>
+    console.error("[otp] purge failed:", error),
+  );
   const existing = await latestFor(phone);
 
   if (existing?.createdAt) {

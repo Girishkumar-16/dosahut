@@ -21,10 +21,10 @@ import * as schema from "./schema";
 const CREATE_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS vip_members (
       id            SERIAL PRIMARY KEY,
-      name          TEXT NOT NULL,
+      name          VARCHAR(255) NOT NULL,
       phone         VARCHAR(20) UNIQUE NOT NULL,
-      email         TEXT,
-      suburb        TEXT,
+      email         VARCHAR(255),
+      suburb        VARCHAR(255),
       source        VARCHAR(100) DEFAULT 'vip_join',
       vip_member    BOOLEAN DEFAULT TRUE,
       visit_count   INT DEFAULT 1,
