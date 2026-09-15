@@ -3,6 +3,27 @@ import { FEATURES } from "@/lib/site";
 
 const ICONS = [FlameIcon, UtensilsIcon, LeafIcon, DeviceIcon];
 
+// Cormorant Garamond's "1" is a bare vertical stroke at this weight and
+// size — same shape as a capital "I" — so "100% Halal & Pure Veg" misreads.
+// Switching the numeral to a different font family (tried earlier) fixed
+// the ambiguity but looked visibly inconsistent next to the other titles.
+// Italicizing just the numeral keeps the same font and does the job: real
+// italic Cormorant Garamond gives "1" a distinct hooked stroke, unlike "I".
+// Only titles that actually contain a "1" get this — "90+ Dosa Varieties"
+// has no ambiguous digit, so it stays untouched like every other title.
+const LEADING_NUMBER = /^([\d%+]+)(\s.*)$/;
+
+function FeatureTitle({ title }: { title: string }) {
+  const match = title.match(LEADING_NUMBER);
+  if (!match || !match[1].includes("1")) return <>{title}</>;
+  return (
+    <>
+      <span className="italic">{match[1]}</span>
+      {match[2]}
+    </>
+  );
+}
+
 export function WhyUs() {
   return (
     <section id="why-us" className="flex w-full flex-col items-center gap-6 bg-maroon-900 px-5 py-10 md:gap-10 md:px-16 md:py-16">
@@ -11,7 +32,7 @@ export function WhyUs() {
           Why Sunshine Coast Loves Us
         </span>
         <h2 className="font-display text-3xl leading-snug font-bold sm:text-4xl lg:text-5xl text-cream-0">
-          Not Just Food, It&rsquo;s a 90-Dosa Culinary Journey Right Here in Buddina.
+          Not Just Food, It&rsquo;s a 90+ Dosa Culinary Journey Right Here in Buddina.
         </h2>
       </div>
 
@@ -29,7 +50,7 @@ export function WhyUs() {
                 <Icon size={22} color="#6b0f0f" />
               </div>
               <span className="font-display text-2xl font-bold sm:text-3xl lg:text-4xl text-cream-0">
-                {feature.title}
+                <FeatureTitle title={feature.title} />
               </span>
               <p className="text-lg leading-relaxed text-cream-50/70 sm:text-xl">
                 {feature.description}

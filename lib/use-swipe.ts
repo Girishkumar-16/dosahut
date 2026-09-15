@@ -12,6 +12,7 @@ export type SwipeHandlers = {
   onTouchStart: (e: React.TouchEvent) => void;
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: (e: React.TouchEvent) => void;
+  onTouchCancel: () => void;
 };
 
 /**
@@ -52,6 +53,14 @@ export function useSwipe(onSwipe: (direction: 1 | -1) => void): SwipeHandlers & 
       if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) <= Math.abs(dy)) return;
       swiped.current = true;
       onSwipe(dx < 0 ? 1 : -1);
+    },
+    // iOS fires `touchcancel` instead of `touchend` whenever it takes the
+    // gesture away mid-touch — an edge back-swipe, the page scrolling, a
+    // system sheet appearing. Without this, `start` is left set and whatever
+    // the caller paused on touchstart (the carousel's auto-advance) never
+    // gets released, so the slide freezes for good.
+    onTouchCancel() {
+      start.current = null;
     },
     didSwipe: () => swiped.current,
   };

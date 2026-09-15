@@ -89,6 +89,13 @@ export function DishCarousel({ dishes, orderUrl }: { dishes: Dish[]; orderUrl: s
           swipe.onTouchEnd(e);
           setPaused(false);
         }}
+        onTouchCancel={() => {
+          // Without this, a touch iOS cancels instead of ending (an edge
+          // back-swipe, the page taking over the scroll) leaves the carousel
+          // paused forever — it looks stuck on one dish.
+          swipe.onTouchCancel();
+          setPaused(false);
+        }}
         style={{ touchAction: "pan-y" }}
       >
         {dishes.map((d, i) => {

@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ChevronRightIcon, CloseIcon, MenuIcon, PinIcon, SearchIcon } from "./Icons";
-import { MenuSearch } from "./MenuSearch";
+import { ChevronRightIcon, CloseIcon, MenuIcon, PinIcon } from "./Icons";
 import { NAV_LINKS, SITE } from "@/lib/site";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   // Stop the page behind the full-height drawer from scrolling.
   useEffect(() => {
@@ -54,18 +52,9 @@ export function Navbar() {
           <MenuIcon size={24} />
         </button>
 
-        <button
-          type="button"
-          onClick={() => setSearchOpen(true)}
-          aria-label="Search the menu"
-          className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center text-cream-50 transition-colors hover:text-peach-400"
-        >
-          <SearchIcon size={20} />
-        </button>
-
         <a
           href="#location"
-          className="font-heading flex shrink-0 items-center gap-2 text-[12.5px] font-bold tracking-[0.08em] text-cream-50 uppercase transition-colors hover:text-peach-400 sm:text-sm md:text-base"
+          className="font-heading ml-auto flex shrink-0 items-center gap-2 text-[12.5px] font-bold tracking-[0.08em] text-cream-50 uppercase transition-colors hover:text-peach-400 sm:text-sm md:text-base"
         >
           <PinIcon size={18} />
           Sunshine Coast
@@ -86,15 +75,6 @@ export function Navbar() {
         </a>
 
         <div className="flex items-center gap-6 xl:gap-8">
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            aria-label="Search the menu"
-            className="font-heading flex min-h-[44px] shrink-0 items-center gap-2 text-[17px] font-semibold tracking-wide text-cream-50 uppercase transition-colors hover:text-peach-400"
-          >
-            <SearchIcon size={19} />
-            Search
-          </button>
           {/* Plain anchors — no category dropdowns. */}
           {NAV_LINKS.map((link) => (
             <a
@@ -125,8 +105,6 @@ export function Navbar() {
           </a>
         </div>
       </div>
-
-      {searchOpen && <MenuSearch onClose={() => setSearchOpen(false)} />}
 
       {/* Full-height slide-out drawer */}
       <div

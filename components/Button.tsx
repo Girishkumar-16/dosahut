@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { cx } from "@/lib/cx";
 
 // Primary orange CTAs live in <PrimaryGlowButton>; this component covers the
 // secondary, outlined actions.
@@ -38,7 +39,7 @@ export function Button({
   external?: boolean;
   full?: boolean;
 }) {
-  const classes = `${base} ${variants[variant]} ${sizes[size]} ${full ? "w-full" : ""} ${className}`;
+  const classes = cx(base, variants[variant], sizes[size], full && "w-full", className);
 
   if (external) {
     return (

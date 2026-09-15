@@ -2,10 +2,13 @@ import Image from "next/image";
 import { FacebookIcon, InstagramIcon } from "./Icons";
 import { SITE } from "@/lib/site";
 
+// Root-relative ("/#menu") rather than bare ("#menu") so these still work
+// correctly from other pages (e.g. /scratchy-tuesday) — a bare hash link
+// only scrolls if the current page already has that section.
 const EXPLORE_LINKS = [
-  { label: "Menu", href: "#menu" },
-  { label: "About Us", href: "#why-us" },
-  { label: "Our Story", href: "#our-story" },
+  { label: "Menu", href: "/#menu" },
+  { label: "About Us", href: "/#why-us" },
+  { label: "Our Story", href: "/#our-story" },
 ];
 
 const SOCIALS = [
@@ -70,14 +73,6 @@ export function Footer() {
           >
             Catering
           </a>
-          <a
-            href={SITE.menuPdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base font-medium text-cream-50/70 hover:text-cream-50"
-          >
-            Download Full Menu (PDF)
-          </a>
         </nav>
 
         <nav className="flex flex-col items-center gap-3.5 lg:items-start">
@@ -100,28 +95,10 @@ export function Footer() {
 
       <div className="mx-auto h-px w-full max-w-[1200px] bg-cream-50/10" />
 
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-3 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center text-center lg:justify-start lg:text-left">
         <span className="text-[15px] text-cream-50/45">
           &copy; {new Date().getFullYear()} Dosa Hut Multi Cuisine Restaurant. All rights reserved.
         </span>
-        <div className="flex items-center justify-center gap-7 lg:justify-start">
-          <a
-            href={SITE.mainSiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50"
-          >
-            Dosa Hut Australia
-          </a>
-          <a
-            href={SITE.sitemapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[15px] font-medium text-cream-50/70 hover:text-cream-50"
-          >
-            Sitemap
-          </a>
-        </div>
       </div>
     </footer>
   );

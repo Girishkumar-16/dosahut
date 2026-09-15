@@ -79,269 +79,115 @@ export function categorySlug(category: string) {
   return category.toLowerCase().replace(/\s+/g, "-");
 }
 
-// The full menu per showcase category, in menu order. Every dish the printed
-// menu lists appears here, not a curated subset — the carousel renders whatever
-// this array holds for the active tab. Price and photo only: diet and spice
-// live in the per-section *_MENU arrays below, and duplicating them here is
-// what caused those values to drift apart previously. A dish with no photo in
-// its category folder simply has no `image`, and the carousel falls back to a
-// gradient card rather than borrowing another dish's picture.
 export const DISHES: Dish[] = [
   // Dosa
   {
     category: "Dosa",
-    name: "Plain Dosa",
-    price: "$8.95",
-    image: "/images/dosa_images/Plain_Dosa_1.jpg",
-    alt: "Golden plain dosa served with chutneys and sambar",
+    name: "Masala Dosa",
+    price: "$15.95",
+    image: "/images/dish-masala-dosa.jpg",
+    alt: "Crisp masala dosa served with a plate of accompaniments",
+  },
+  {
+    category: "Dosa",
+    name: "Paneer Dosa",
+    price: "$16.95",
+    image: "/images/dish-paneer-dosa.jpg",
+    alt: "Paneer dosa filled with spiced cottage cheese",
   },
   {
     category: "Dosa",
     name: "Onion Dosa",
     price: "$10.95",
-    image: "/images/dosa_images/Onion_Dosa_2.jpg",
+    image: "/images/dish-onion-dosa.jpg",
     alt: "Crisp onion dosa topped with onions",
   },
+
   {
     category: "Dosa",
-    name: "Masala Dosa",
-    price: "$15.95",
-    image: "/images/dosa_images/Masala_Dosa_3.jpg",
-    alt: "Crisp masala dosa served with a plate of accompaniments",
+    name: "Plain Dosa",
+    price: "$8.95",
+    image: "/images/dish-plain-dosa.jpg",
+    alt: "Golden plain dosa served with chutneys and sambar",
   },
   {
     category: "Dosa",
     name: "Paper Dosa",
     price: "$8.95",
-    image: "/images/dosa_images/Paper_Dosa_4.jpg",
+    image: "/images/dish-paper-dosa.jpg",
     alt: "Extra-thin paper dosa rolled tall on the plate",
   },
   {
     category: "Dosa",
     name: "Ghee Plain Dosa",
     price: "$9.95",
-    image: "/images/dosa_images/Ghee_Plain_Dosa_5.jpg",
+    image: "/images/dish-ghee-plain-dosa.jpg",
     alt: "Ghee-roasted plain dosa with chutneys and sambar",
-  },
-  {
-    category: "Dosa",
-    name: "Ghee Podi Dosa",
-    price: "$9.95",
-    image: "/images/dosa_images/Ghee_Podi_Dosa_6.jpg",
-    alt: "Ghee Podi Dosa at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Paneer Dosa",
-    price: "$16.95",
-    image: "/images/dosa_images/Paneer_Dosa_7.jpg",
-    alt: "Paneer dosa filled with spiced cottage cheese",
-  },
-  {
-    category: "Dosa",
-    name: "Mysore Masala Dosa",
-    price: "$15.95",
   },
   {
     category: "Dosa",
     name: "Cheese & Chilli Dosa",
     price: "$15.95",
-    image: "/images/dosa_images/Cheese_and_Chilli_Dosa_8.jpg",
+    image: "/images/dish-cheese-chilli-dosa.jpg",
     alt: "Cheese and chilli dosa with a melted cheese and green chilli filling",
-  },
-  {
-    category: "Dosa",
-    name: "Chicken Dosa",
-    price: "$16.95",
-    image: "/images/dosa_images/Chicken_Dosa_9.jpg",
-    alt: "Chicken Dosa at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Chicken 65 Dosa",
-    price: "$16.95",
-    image: "/images/dosa_images/Chicken_65_Dosa_10.jpg",
-    alt: "Chicken 65 Dosa at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Lamb Dosa",
-    price: "$16.95",
-    image: "/images/dosa_images/Lamb_Dosa_11.jpg",
-    alt: "Dosa filled with spiced minced lamb",
   },
   {
     category: "Dosa",
     name: "Veg Dosa Chef Special",
     price: "$17.95",
-    image: "/images/dosa_images/Vegetable_Dosa_(V)_12.jpg",
+    image: "/images/dish-vegetable-dosa.jpg",
     alt: "Dosa filled with a spiced mixed-vegetable masala",
   },
   {
     category: "Dosa",
-    name: "Non-Veg Dosa Chef Special",
-    price: "$17.95",
-    image: "/images/dosa_images/Non_Vegetable_Dosa_13.jpg",
-    alt: "Non-Veg Dosa Chef Special at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Rava Plain Dosa",
-    price: "$15.95",
-    image: "/images/dosa_images/Rava_Plain_Dosa_14.jpg",
-    alt: "Rava Plain Dosa at Dosa Hut Sunshine Coast",
+    name: "Lamb Dosa",
+    price: "$16.95",
+    image: "/images/dish-lamb-dosa.jpg",
+    alt: "Dosa filled with spiced minced lamb",
   },
   {
     category: "Dosa",
     name: "Rava Onion Dosa",
     price: "$16.95",
-    image: "/images/dosa_images/Rava_Onion_Dosa_15.jpg",
+    image: "/images/dish-rava-onion-dosa.jpg",
     alt: "Lacy rava onion dosa scattered with onion and coriander",
   },
   {
     category: "Dosa",
     name: "Rava Masala Dosa",
     price: "$16.95",
-    image: "/images/dosa_images/Rava_Masala_Dosa_16.jpg",
+    image: "/images/dish-rava-masala-dosa.jpg",
     alt: "Crisp rava masala dosa folded over a potato masala filling",
-  },
-  {
-    category: "Dosa",
-    name: "Rava Paneer Dosa",
-    price: "$17.95",
-    image: "/images/dosa_images/Rava_Paneer_Dosa_17.jpg",
-    alt: "Rava Paneer Dosa at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Rava Chicken Dosa",
-    price: "$18.95",
   },
   {
     category: "Dosa",
     name: "Rava Lamb Dosa",
     price: "$18.95",
-    image: "/images/dosa_images/Rava_Lamb_Dosa_18.jpg",
+    image: "/images/dish-rava-lamb-dosa.jpg",
     alt: "Rava dosa filled with spiced lamb",
-  },
-  {
-    category: "Dosa",
-    name: "Onion Uttapam",
-    price: "$16.95",
-    image: "/images/dosa_images/Onion_Uttapam_19.jpg",
-    alt: "Onion Uttapam at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Dosa",
-    name: "Onion & Chilli Uttapam",
-    price: "$16.95",
-    image: "/images/dosa_images/Onion_and_Chilli_Uttapam_20.jpg",
-    alt: "Onion & Chilli Uttapam at Dosa Hut Sunshine Coast",
   },
 
   // Biryani & More
   {
     category: "Biryani & More",
-    name: "Vegetarian Dum Biryani",
-    price: "$16.95",
-    image: "/images/biryani_images/Vegetarian_Dum_Biryani_(V)_1.jpg",
-    alt: "Vegetarian dum biryani with assorted vegetables and basmati rice",
-  },
-  {
-    category: "Biryani & More",
-    name: "Gobi 65 Biryani",
-    price: "$17.95",
-    image: "/images/biryani_images/Gobi_65_Biryani_(V)_2.jpg",
-    alt: "Gobi 65 Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Soya Chaap Tikka Biryani",
-    price: "$17.95",
-    image: "/images/biryani_images/Soya_Chaap_Tikka_Biryani_(V)_3.jpg",
-    alt: "Soya Chaap Tikka Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Paneer 65 Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Paneer_65_Biryani_(V)_4.jpg",
-    alt: "Paneer 65 Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Paneer Tikka Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Paneer_Tikka_Biryani_(V)_5.jpg",
-    alt: "Paneer Tikka Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Egg Biryani",
-    price: "$18.95",
-    image: "/images/biryani_images/Egg_Biryani_6.jpg",
-    alt: "Egg Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Egg 65 Biryani",
-    price: "$18.95",
-    image: "/images/biryani_images/Egg_65_Biryani_7.jpg",
-    alt: "Egg 65 Biryani at Dosa Hut Sunshine Coast",
+    name: "Chicken 65 Biryani",
+    price: "$20.95",
+    image: "/images/dish-chicken-65-biryani.jpg",
+    alt: "Chicken 65 biryani served in a copper handi with raita and curry on the side",
   },
   {
     category: "Biryani & More",
     name: "Chicken Dum Biryani",
     price: "$19.95",
-    image: "/images/biryani_images/Chicken_Dum_Biryani_8.jpg",
+    image: "/images/dish-chicken-dum-biryani.jpg",
     alt: "Chicken dum biryani thali with raita, curry, onion and lemon",
   },
   {
     category: "Biryani & More",
-    name: "Chicken 65 Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Chicken_65_Biryani_9.jpg",
-    alt: "Chicken 65 biryani served in a copper handi with raita and curry on the side",
-  },
-  {
-    category: "Biryani & More",
-    name: "Ghee Chicken Roast Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Ghee_Chicken_Roast_Biryani_10.jpg",
-    alt: "Ghee Chicken Roast Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Chicken Tikka Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Chicken_Tikka_Biryani_11.jpg",
-    alt: "Chicken Tikka Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Chicken Fry Piece Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Fried_Chicken_Pieces_Biryani_12.jpg",
-    alt: "Chicken Fry Piece Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Pacchi Mirchi Chicken Biryani",
-    price: "$19.95",
-    image: "/images/biryani_images/Pacchi_Mirchi_Chicken_Biryani_13.jpg",
-    alt: "Pacchi Mirchi Chicken Biryani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Biryani & More",
-    name: "Prawn Roast Biryani",
-    price: "$21.95",
-  },
-  {
-    category: "Biryani & More",
-    name: "Special Keema Pulao",
-    price: "$21.95",
-    image: "/images/biryani_images/Special_Keema_Pulao_14.jpg",
-    alt: "Special Keema Pulao at Dosa Hut Sunshine Coast",
+    name: "Vegetarian Dum Biryani",
+    price: "$18.95",
+    image: "/images/dish-vegetarian-dum-biryani.jpg",
+    alt: "Vegetarian dum biryani with assorted vegetables and basmati rice",
   },
 
   // Tandoori Starters
@@ -356,445 +202,828 @@ export const DISHES: Dish[] = [
     category: "Tandoori Starters",
     name: "Paneer Tikka",
     price: "$16.95",
-    image: "/images/tandoor_starters_images/Paneer_Tikka_1.jpg",
+    image: "/images/dish-paneer-tikka.jpg",
     alt: "Tandoori-grilled paneer tikka skewers",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Tandoori Soya Chaap",
-    price: "$16.95",
-    image: "/images/tandoor_starters_images/Tandoor_Soya_Chaap_2.jpg",
-    alt: "Tandoori Soya Chaap at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Soya Chaap Malai Tikka",
-    price: "$16.95",
-    image: "/images/tandoor_starters_images/Soya_Chaap_Malai_Tikka_3.jpg",
-    alt: "Soya Chaap Malai Tikka at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Chatpata Soya",
-    price: "$16.95",
-    image: "/images/tandoor_starters_images/Chatpat_Soya_4.jpg",
-    alt: "Chatpata Soya at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Murgh Malai Reshmi Tikka",
-    price: "$18.95",
   },
   {
     category: "Tandoori Starters",
     name: "Tandoori Chicken (Half)",
     price: "$18.95",
-    image: "/images/tandoor_starters_images/Tandoor_Chicken_5.jpg",
+    image: "/images/dish-tandoori-chicken-half.jpg",
     alt: "Tandoori roasted chicken pieces with lemon and onion",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Tandoori Chicken (Full)",
-    price: "$23.95",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Seekh Kebab (Lamb)",
-    price: "$19.95",
-    image: "/images/tandoor_starters_images/Lamb_Seekh_Kebab_6.jpg",
-    alt: "Seekh Kebab (Lamb) at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Mixed Tandoor Platter",
-    price: "$28.95",
-  },
-  {
-    category: "Tandoori Starters",
-    name: "Lamb Chop",
-    price: "$19.95",
   },
 
   // Vegetarian Curries
   {
     category: "Vegetarian Curries",
-    name: "Dal Tadka",
-    price: "$19.95",
-    image: "/images/curry_images/Dal_Tadka_(V)_26.jpg",
-    alt: "Dal Tadka at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
     name: "Dal Makhani",
-    price: "$19.95",
-    image: "/images/curry_images/Dal_Makhani_(V)_27.jpg",
+    price: "$20.95",
+    image: "/images/dish-dal-makhani.jpg",
     alt: "Creamy dal makhani made with black lentils and kidney beans",
   },
   {
     category: "Vegetarian Curries",
-    name: "Soya Chaap Tikka Masala",
-    price: "$18.50",
-    image: "/images/curry_images/Soya_Chaap_Tikka_Masala_(V)_28.jpg",
-    alt: "Soya Chaap Tikka Masala at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Paneer Tikka Masala",
-    price: "$19.95",
-    image: "/images/curry_images/Paneer_Tikka_Masala_(V)_29.jpg",
-    alt: "Paneer Tikka Masala at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
     name: "Paneer Butter Masala",
-    price: "$19.95",
-    image: "/images/curry_images/Paneer_Butter_Masala_(V)_30.jpg",
+    price: "$20.95",
+    image: "/images/dish-paneer-butter-masala.jpg",
     alt: "Paneer butter masala in a rich tomato gravy",
   },
   {
     category: "Vegetarian Curries",
     name: "Palak Paneer",
-    price: "$19.95",
-    image: "/images/curry_images/Palak_Paneer_(V)_31.jpg",
+    price: "$20.95",
+    image: "/images/dish-palak-paneer.jpg",
     alt: "Palak paneer with soft paneer cubes in a spiced spinach gravy",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Paneer Pudina Kali Mirch",
-    price: "$19.95",
-    image: "/images/curry_images/Paneer_Pudina_Kali_Mirch_(V)_32.jpg",
-    alt: "Paneer Pudina Kali Mirch at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Kadai Paneer",
-    price: "$19.95",
-    image: "/images/curry_images/Kadai_Paneer_(V)_33.jpg",
-    alt: "Kadai Paneer at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Veg Kolhapuri",
-    price: "$19.95",
-    image: "/images/curry_images/Vegetable_Kohlapuri_(V)_34.jpg",
-    alt: "Veg Kolhapuri at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Paneer Dhaniya Hara Pyaaz",
-    price: "$19.95",
-    image: "/images/curry_images/Paneer_Dhaniya_Hara_Pyaaz_(V)_35.jpg",
-    alt: "Paneer Dhaniya Hara Pyaaz at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Veg Korma",
-    price: "$19.95",
-    image: "/images/curry_images/Vegetable_Korma_36.jpg",
-    alt: "Veg Korma at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Veg Makhani",
-    price: "$19.95",
-    image: "/images/curry_images/Vegetable_Makhani_37.jpg",
-    alt: "Veg Makhani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Vegetarian Curries",
-    name: "Veg Saag",
-    price: "$19.95",
-    image: "/images/curry_images/Vegetarian_Saag_38.jpg",
-    alt: "Veg Saag at Dosa Hut Sunshine Coast",
   },
 
   // Chicken Curries
   {
     category: "Chicken Curries",
     name: "Butter Chicken",
-    price: "$21.95",
-    image: "/images/curry_images/Butter_Chicken_1.jpg",
+    price: "$22.95",
+    image: "/images/dish-butter-chicken.jpg",
     alt: "Creamy butter chicken curry garnished with mint",
   },
   {
     category: "Chicken Curries",
-    name: "Punjabi Butter Chicken",
-    price: "$21.95",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Delhi Mughlai Chicken",
-    price: "$21.95",
-    image: "/images/curry_images/Delhi_Mughlai_Chicken_2.jpg",
-    alt: "Delhi Mughlai Chicken at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Murgh Pudina Kali Mirch",
-    price: "$21.95",
-    image: "/images/curry_images/Murgh_Pudina_Kali_Mirch_3.jpg",
-    alt: "Murgh Pudina Kali Mirch at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Chicken Kolhapuri",
-    price: "$21.95",
-    image: "/images/curry_images/Chicken_Kolhapuri_4.jpg",
-    alt: "Chicken Kolhapuri at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Chicken Madras",
-    price: "$21.95",
-    image: "/images/curry_images/Chicken_Madras_5.jpg",
-    alt: "Dark, richly spiced Chicken Madras curry garnished with onion and lemon",
-  },
-  {
-    category: "Chicken Curries",
     name: "Chicken Tikka Masala",
-    price: "$21.95",
-    image: "/images/curry_images/Chicken_Tikka_Masala_6.jpg",
+    price: "$22.95",
+    image: "/images/dish-chicken-tikka-masala.jpg",
     alt: "Chicken tikka masala in a creamy tomato gravy",
   },
   {
     category: "Chicken Curries",
-    name: "Kadai Chicken",
-    price: "$21.95",
-    image: "/images/curry_images/Kadai_Chicken_7.jpg",
-    alt: "Kadai Chicken at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Adarki Rara Chicken",
-    price: "$21.95",
-    image: "/images/curry_images/Adarki_Rara_Chicken_8.jpg",
-    alt: "Adarki Rara Chicken at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Chicken Korma",
-    price: "$21.95",
-    image: "/images/curry_images/Chicken_Korma_10.jpg",
-    alt: "Chicken Korma at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Chicken Makhani",
-    price: "$21.95",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Chicken Saag",
-    price: "$21.95",
-    image: "/images/curry_images/Chicken_Saag_11.jpg",
-    alt: "Chicken Saag at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Chicken Curries",
-    name: "Mango Chicken",
-    price: "$21.95",
-    image: "/images/curry_images/Mango_Chicken_9.jpg",
-    alt: "Mango Chicken at Dosa Hut Sunshine Coast",
-  },
-
-  // Goat & Lamb Curry
-  {
-    category: "Goat & Lamb Curry",
-    name: "Lamb Roganjosh",
+    name: "Chicken Madras",
     price: "$22.95",
-    image: "/images/curry_images/Lamb_Rogan_Josh_13.jpg",
-    alt: "Lamb Roganjosh at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Pepper Lamb Masala",
-    price: "$22.95",
-    image: "/images/curry_images/Pepper_Lamb_Masala_14.jpg",
-    alt: "Pepper Lamb Masala at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Lamb Korma",
-    price: "$22.95",
-    image: "/images/curry_images/Lamb_Korma_15.jpg",
-    alt: "Lamb Korma at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Lamb Makhani",
-    price: "$22.95",
-    image: "/images/curry_images/Lamb_Makhani_16.jpg",
-    alt: "Lamb Makhani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Lamb Saag",
-    price: "$22.95",
-    image: "/images/curry_images/Lamb_Saag_17.jpg",
-    alt: "Lamb Saag at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Goat Curry",
-    price: "$23.95",
-    image: "/images/curry_images/Goat_Curry_19.jpg",
-    alt: "Thick, dark, richly spiced goat curry",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Bhuna Goat",
-    price: "$23.95",
-    image: "/images/curry_images/Bhuna_Goat_20.jpg",
-    alt: "Bhuna Goat at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Delhi Mughlai Goat Curry",
-    price: "$23.95",
-    image: "/images/curry_images/Delhi_Mughlai_Goat_Curry_21.jpg",
-    alt: "Delhi Mughlai Goat Curry at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Goat Karahi",
-    price: "$23.95",
-    image: "/images/curry_images/Goat_Karahi_22.jpg",
-    alt: "Goat karahi cooked with tomatoes and green chillies",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Goat Korma",
-    price: "$23.95",
-    image: "/images/curry_images/Goat_Korma_23.jpg",
-    alt: "Goat Korma at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Goat Makhani",
-    price: "$23.95",
-    image: "/images/curry_images/Goat_Makhani_24.jpg",
-    alt: "Goat Makhani at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Goat & Lamb Curry",
-    name: "Goat Saag",
-    price: "$23.95",
-    image: "/images/curry_images/Goat_Saag_25.jpg",
-    alt: "Goat Saag at Dosa Hut Sunshine Coast",
+    image: "/images/dish-chicken-madras.jpg",
+    alt: "Dark, richly spiced Chicken Madras curry garnished with onion and lemon",
   },
 
   // Indo-Chinese
   {
     category: "Indo-Chinese",
-    name: "Vegetarian Manchuria",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Vegetarian_Manchuria_(V)_1.jpg",
-    alt: "Vegetarian Manchuria at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Gobi Manchuria",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Gobi_Manchuria_(V)_2.jpg",
-    alt: "Gobi Manchuria at Dosa Hut Sunshine Coast",
+    name: "Chicken 65",
+    price: "$19.95",
+    image: "/images/dish-chicken-65.jpg",
+    alt: "Crispy Chicken 65 tossed with curry leaves, garlic and dry chillies",
   },
   {
     category: "Indo-Chinese",
     name: "Gobi 65",
     price: "$18.95",
-    image: "/images/indo_chinese_images/Gobi_65_(V)_3.jpg",
+    image: "/images/dish-gobi-65.jpg",
     alt: "Crispy fried Gobi 65 cauliflower florets",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Paneer 65",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Paneer_65_(V)_4.jpg",
-    alt: "Paneer 65 at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Schezwan Paneer",
-    price: "$18.95",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chilli Gobi",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Chilli_Gobi_(V)_5.jpg",
-    alt: "Chilli Gobi at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chilli Paneer",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Chilli_Paneer_(V)_6.jpg",
-    alt: "Chilli Paneer at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chilli Idly",
-    price: "$18.95",
-    image: "/images/indo_chinese_images/Chilli_Idly_(V)_7.jpg",
-    alt: "Chilli Idly at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chicken Manchuria",
-    price: "$19.95",
-    image: "/images/indo_chinese_images/Chicken_Manchuria_8.jpg",
-    alt: "Chicken Manchuria at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chicken 65",
-    price: "$19.95",
-    image: "/images/indo_chinese_images/Chicken_65_9.jpg",
-    alt: "Crispy Chicken 65 tossed with curry leaves, garlic and dry chillies",
   },
   {
     category: "Indo-Chinese",
     name: "Chilli Chicken",
     price: "$19.95",
-    image: "/images/indo_chinese_images/Chilli_Chicken_10.jpg",
+    image: "/images/dish-chilli-chicken.jpg",
     alt: "Chilli chicken tossed with spring onion, peanuts and green chilli",
   },
+
+  // Goat & Lamb Curry
   {
-    category: "Indo-Chinese",
-    name: "Schezwan Chicken",
-    price: "$19.95",
-    image: "/images/indo_chinese_images/Schezwan_Chicken_11.jpg",
-    alt: "Schezwan Chicken at Dosa Hut Sunshine Coast",
+    category: "Goat & Lamb Curry",
+    name: "Goat Curry",
+    price: "$23.95",
+    image: "/images/dish-goat-curry.jpg",
+    alt: "Thick, dark, richly spiced goat curry",
   },
   {
-    category: "Indo-Chinese",
-    name: "Ginger Chicken",
-    price: "$19.95",
-    image: "/images/indo_chinese_images/Ginger_Chicken_12.jpg",
-    alt: "Ginger Chicken at Dosa Hut Sunshine Coast",
+    category: "Goat & Lamb Curry",
+    name: "Goat Karahi",
+    price: "$23.95",
+    image: "/images/dish-goat-karahi.jpg",
+    alt: "Goat karahi cooked with tomatoes and green chillies",
   },
   {
-    category: "Indo-Chinese",
-    name: "Crispy Goat",
-    price: "$20.95",
-    image: "/images/indo_chinese_images/Crispy_Goat_13.jpg",
-    alt: "Crispy Goat at Dosa Hut Sunshine Coast",
-  },
-  {
-    category: "Indo-Chinese",
-    name: "Chilli Goat",
-    price: "$20.95",
-    image: "/images/indo_chinese_images/Chilli_Goat_14.jpg",
-    alt: "Chilli Goat at Dosa Hut Sunshine Coast",
+    category: "Goat & Lamb Curry",
+    name: "Lamb Rogan Josh",
+    price: "$24.95",
+    image: "/images/dish-lamb-rogan-josh.jpg",
+    alt: "Lamb rogan josh in a rich Kashmiri-style spiced gravy",
   },
 ];
 
-// The full per-section menus used to live here. They now live in lib/menu.ts
-// as MENU_ITEMS, which the Craving Finder and search both read — keeping a
-// second copy of prices, diet and spice here is what let those values drift
-// apart before. DISHES above stays: it is the showcase carousel's own list,
-// carrying price and photo only.
+// The full priced dosa menu, with the diet and spice level each item is
+// actually listed with. DISHES above stays a curated, photographed "top 3"
+// per category for the showcase carousel; this is the complete list the
+// Craving Finder filters over, so the two overlap by design on the three
+// photographed dosas.
+export const DOSA_MENU: Dish[] = [
+    
+  {
+    category: "Dosa",
+    name: "Plain Dosa",
+    price: "$8.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-plain-dosa.jpg",
+    alt: "Golden plain dosa served with chutneys and sambar",
+  },
+  {
+    category: "Dosa",
+    name: "Onion Dosa",
+    price: "$10.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-onion-dosa.jpg",
+    alt: "Crisp onion dosa topped with onions",
+  },
+  {
+    category: "Dosa",
+    name: "Masala Dosa",
+    price: "$15.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-masala-dosa.jpg",
+    alt: "Crisp masala dosa served with a plate of accompaniments",
+  },
+  {
+    category: "Dosa",
+    name: "Paper Dosa",
+    price: "$8.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-paper-dosa.jpg",
+    alt: "Extra-thin paper dosa rolled tall on the plate",
+  },
+  {
+    category: "Dosa",
+    name: "Ghee Plain Dosa",
+    price: "$9.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-ghee-plain-dosa.jpg",
+    alt: "Ghee-roasted plain dosa with chutneys and sambar",
+  },
+  {
+    category: "Dosa",
+    name: "Ghee Podi Dosa",
+    price: "$9.95",
+    diet: "Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-ghee-podi-dosa.jpg",
+    alt: "Ghee-roasted podi dosa dusted with spiced lentil chutney powder",
+  },
+  {
+    category: "Dosa",
+    name: "Paneer Dosa",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-paneer-dosa.jpg",
+    alt: "Paneer dosa filled with spiced cottage cheese",
+  },
+  {
+    category: "Dosa",
+    name: "Mysore Masala Dosa",
+    price: "$15.95",
+    diet: "Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-mysore-masala-dosa.jpg",
+    alt: "Mysore masala dosa with a spiced red chutney spread inside",
+  },
+  {
+    category: "Dosa",
+    name: "Cheese & Chilli Dosa",
+    price: "$15.95",
+    diet: "Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-cheese-chilli-dosa.jpg",
+    alt: "Cheese and chilli dosa with a melted cheese and green chilli filling",
+  },
+  {
+    category: "Dosa",
+    name: "Chicken Dosa",
+    price: "$16.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-chicken-dosa.jpg",
+    alt: "Dosa filled with spiced shredded chicken",
+  },
+  {
+    category: "Dosa",
+    name: "Chicken 65 Dosa",
+    price: "$16.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-chicken-65-dosa.jpg",
+    alt: "Dosa filled with crispy Chicken 65",
+  },
+  {
+    category: "Dosa",
+    name: "Lamb Dosa",
+    price: "$16.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-lamb-dosa.jpg",
+    alt: "Dosa filled with spiced minced lamb",
+  },
+  {
+    category: "Dosa",
+    name: "Veg Dosa Chef Special",
+    price: "$17.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-vegetable-dosa.jpg",
+    alt: "Dosa filled with a spiced mixed-vegetable masala",
+  },
+  {
+    category: "Dosa",
+    name: "Non-Veg Dosa Chef Special",
+    price: "$17.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-non-veg-dosa-chef-special.jpg",
+    alt: "Non-veg dosa chef special filled with a spiced meat masala",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Plain Dosa",
+    price: "$15.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-rava-plain-dosa.jpg",
+    alt: "Lacy rava plain dosa served with chutneys and sambar",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Onion Dosa",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-rava-onion-dosa.jpg",
+    alt: "Lacy rava onion dosa scattered with onion and coriander",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Masala Dosa",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-rava-masala-dosa.jpg",
+    alt: "Crisp rava masala dosa folded over a potato masala filling",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Paneer Dosa",
+    price: "$17.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-rava-paneer-dosa.jpg",
+    alt: "Rava dosa filled with spiced cottage cheese",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Chicken Dosa",
+    price: "$18.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    // Reusing the Chicken Dosa photo — no distinct Rava Chicken Dosa shot
+    // has been supplied yet.
+    image: "/images/dish-chicken-dosa.jpg",
+    alt: "Dosa filled with spiced shredded chicken",
+  },
+  {
+    category: "Rava Dosa",
+    name: "Rava Lamb Dosa",
+    price: "$18.95",
+    diet: "Non-Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-rava-lamb-dosa.jpg",
+    alt: "Rava dosa filled with spiced lamb",
+  },
+  {
+    category: "Uttapam",
+    name: "Onion Uttapam",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Mild",
+    image: "/images/dish-onion-uttapam.jpg",
+    alt: "Onion uttapam topped with chopped onions",
+  },
+  {
+    category: "Uttapam",
+    name: "Onion & Chilli Uttapam",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-onion-uttapam.jpg",
+    alt: "Onion uttapam topped with chopped onions and green chillies",
+  },
+];
 
+// The full priced biryani menu. Nothing in this section is Mild — the real
+// menu starts at one chilli — so the Craving Finder only ever offers Medium
+// and Spicy on this tab.
+export const BIRYANI_MENU: Dish[] = [
+  
+  {
+    category: "Biryani & More",
+    name: "Vegetarian Dum Biryani",
+    price: "$16.95",
+    diet: "Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-vegetarian-dum-biryani.jpg",
+    alt: "Vegetarian dum biryani with assorted vegetables and basmati rice"
+  },
+  {
+    category: "Biryani & More",
+    name: "Gobi 65 Biryani",
+    price: "$17.95",
+    diet: "Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-gobi-65-biryani.jpg",
+    alt: "Gobi 65 biryani topped with crispy fried cauliflower"
+  },
+  {
+    category: "Biryani & More",
+    name: "Soya Chaap Tikka Biryani",
+    price: "$17.95",
+    diet: "Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-soya-chaap-tikka-biryani.jpg",
+    alt: "Soya chaap tikka biryani with grilled soya chaap pieces"
+  },
+  {
+    category: "Biryani & More",
+    name: "Paneer 65 Biryani",
+    price: "$19.95",
+    diet: "Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-paneer-65-biryani.jpg",
+    alt: "Paneer 65 biryani topped with crispy fried paneer"
+  },
+  {
+    category: "Biryani & More",
+    name: "Paneer Tikka Biryani",
+    price: "$19.95",
+    diet: "Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-paneer-tikka-biryani.jpg",
+    alt: "Paneer tikka biryani with grilled paneer tikka pieces"
+  },
+
+  // EGG BIRYANIS
+  {
+    category: "Biryani & More",
+    name: "Egg Biryani",
+    price: "$18.95",
+    diet: "Egg",
+    spiceLevel: "Medium",
+    image: "/images/dish-egg-biryani.jpg",
+    alt: "Egg biryani topped with boiled egg halves"
+  },
+  {
+    category: "Biryani & More",
+    name: "Egg 65 Biryani",
+    price: "$18.95",
+    diet: "Egg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-egg-65-biryani.jpg",
+    alt: "Egg 65 biryani topped with crispy fried egg 65"
+  },
+
+  // NON-VEGETARIAN BIRYANIS (CHICKEN, SEAFOOD, MEAT)
+  {
+    category: "Biryani & More",
+    name: "Chicken Dum Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-chicken-dum-biryani.jpg",
+    alt: "Chicken dum biryani thali with raita, curry, onion and lemon"
+  },
+  {
+    category: "Biryani & More",
+    name: "Chicken 65 Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-chicken-65-biryani.jpg",
+    alt: "Chicken 65 biryani served in a copper handi with raita and curry on the side"
+  },
+  {
+    category: "Biryani & More",
+    name: "Ghee Chicken Roast Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-ghee-chicken-roast-biryani.jpg",
+    alt: "Ghee chicken roast biryani with ghee-roasted chicken pieces"
+  },
+  {
+    category: "Biryani & More",
+    name: "Chicken Tikka Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-chicken-tikka-biryani.jpg",
+    alt: "Chicken tikka biryani with grilled chicken tikka pieces"
+  },
+  {
+    category: "Biryani & More",
+    name: "Chicken Fry Piece Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-chicken-fry-piece-biryani.jpg",
+    alt: "Chicken fry piece biryani with crispy fried chicken pieces"
+  },
+  {
+    category: "Biryani & More",
+    name: "Pacchi Mirchi Chicken Biryani",
+    price: "$19.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-pacchi-mirchi-chicken-biryani.jpg",
+    alt: "Pacchi mirchi chicken biryani with raw marinated chicken and green chillies"
+  },
+  {
+    category: "Biryani & More",
+    name: "Prawn Roast Biryani",
+    price: "$21.95",
+    diet: "Non-Veg",
+    spiceLevel: "Spicy",
+    image: "/images/dish-prawn-roast-biryani.jpg",
+    alt: "Prawn roast biryani with roasted prawns"
+  },
+  {
+    category: "Biryani & More",
+    name: "Special Keema Pulao",
+    price: "$21.95",
+    diet: "Non-Veg",
+    spiceLevel: "Medium",
+    image: "/images/dish-special-keema-pulao.jpg",
+    alt: "Special keema pulao with minced meat and fragrant rice"
+  }
+
+];
+
+// The full priced curry menu. The printed menu lists these as one "Curries"
+// section rather than splitting them the way DISH_CATEGORIES does for the
+// showcase, so the whole section shares a single category here.
+export const CURRY_MENU: Dish[] = [
+{
+category: "Curries",
+name: "Dal Tadka",
+price: "$18.50",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-dal-tadka.jpg",
+alt: "Dal tadka finished with a tempering of ghee, cumin and curry leaves"
+},
+{
+category: "Curries",
+name: "Dal Makhani",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-dal-makhani.jpg",
+alt: "Creamy dal makhani made with black lentils and kidney beans"
+},
+{
+category: "Curries",
+name: "Soya Chaap Tikka Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-soya-chaap-tikka-masala.jpg",
+alt: "Soya chaap tikka masala in a spiced tomato gravy"
+},
+{
+category: "Curries",
+name: "Paneer Tikka Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-paneer-tikka-masala.jpg",
+alt: "Paneer tikka masala in a spiced tomato gravy"
+},
+{
+category: "Curries",
+name: "Paneer Butter Masala",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-paneer-butter-masala.jpg",
+alt: "Paneer butter masala in a rich tomato gravy"
+},
+{
+category: "Curries",
+name: "Palak Paneer",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-palak-paneer.jpg",
+alt: "Palak paneer with soft paneer cubes in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Paneer Pudina Kali Mirch",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Spicy",
+image: "/images/dish-paneer-pudina-kali-mirch.jpg",
+alt: "Paneer pudina kali mirch in a mint and black pepper gravy"
+},
+{
+category: "Curries",
+name: "Kadai Paneer",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Medium",
+image: "/images/dish-kadai-paneer.jpg",
+alt: "Kadai paneer cooked with peppers and onions in a kadai-style gravy"
+},
+{
+category: "Curries",
+name: "Veg Kolhapuri",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Medium",
+image: "/images/dish-veg-kolhapuri.jpg",
+alt: "Mixed vegetable Kolhapuri in a spicy, dark Kolhapuri-style gravy"
+},
+{
+category: "Curries",
+name: "Paneer Dhaniya Hara Pyaaz",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-paneer-dhaniya-hara-pyaaz.jpg",
+alt: "Paneer dhaniya hara pyaaz in a coriander and onion gravy"
+},
+{
+category: "Curries",
+name: "Veg Korma",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-veg-korma.jpg",
+alt: "Mixed vegetable korma in a mild, creamy gravy"
+},
+{
+category: "Curries",
+name: "Veg Makhani",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-veg-makhani.jpg",
+alt: "Mixed vegetable makhani in a rich buttery tomato gravy"
+},
+{
+category: "Curries",
+name: "Veg Saag",
+price: "$19.95",
+diet: "Veg",
+spiceLevel: "Mild",
+image: "/images/dish-veg-saag.jpg",
+alt: "Mixed vegetables cooked in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Butter Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-butter-chicken.jpg",
+alt: "Creamy butter chicken curry garnished with mint"
+},
+{
+category: "Curries",
+name: "Punjabi Butter Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-punjabi-butter-chicken.jpg",
+alt: "Punjabi butter chicken in a rich buttery tomato gravy"
+},
+{
+category: "Curries",
+name: "Delhi Mughlai Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-delhi-mughlai-chicken.jpg",
+alt: "Delhi Mughlai chicken in a rich, aromatic gravy"
+},
+{
+category: "Curries",
+name: "Murgh Pudina Kali Mirch",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy",
+image: "/images/dish-murgh-pudina-kali-mirch.jpg",
+alt: "Murgh pudina kali mirch chicken in a mint and black pepper gravy"
+},
+{
+category: "Curries",
+name: "Chicken Kolhapuri",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-chicken-kolhapuri.jpg",
+alt: "Chicken Kolhapuri in a spicy, dark Kolhapuri-style gravy"
+},
+{
+category: "Curries",
+name: "Chicken Madras",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-chicken-madras.jpg",
+alt: "Dark, richly spiced Chicken Madras curry garnished with onion and lemon"
+},
+{
+category: "Curries",
+name: "Chicken Tikka Masala",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-chicken-tikka-masala.jpg",
+alt: "Chicken tikka masala in a creamy tomato gravy"
+},
+{
+category: "Curries",
+name: "Kadai Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-kadai-chicken.jpg",
+alt: "Kadai chicken cooked with peppers and onions in a kadai-style gravy"
+},
+{
+category: "Curries",
+name: "Adarki Rara Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy",
+image: "/images/dish-adarki-rara-chicken.jpg",
+alt: "Adarki rara chicken in a ginger-spiced minced gravy"
+},
+{
+category: "Curries",
+name: "Chicken Korma",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-chicken-korma.jpg",
+alt: "Chicken korma in a mild, creamy gravy"
+},
+{
+category: "Curries",
+name: "Chicken Makhani",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-chicken-makhani.jpg",
+alt: "Chicken makhani in a rich buttery tomato gravy"
+},
+{
+category: "Curries",
+name: "Chicken Saag",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-chicken-saag.jpg",
+alt: "Chicken saag cooked in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Mango Chicken",
+price: "$21.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-mango-chicken.jpg",
+alt: "Mango chicken in a sweet and tangy mango-spiced gravy"
+},
+{
+category: "Curries",
+name: "Lamb Roganjosh",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-lamb-rogan-josh.jpg",
+alt: "Lamb rogan josh in a rich Kashmiri-style spiced gravy"
+},
+{
+category: "Curries",
+name: "Pepper Lamb Masala",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Spicy",
+image: "/images/dish-pepper-lamb-masala.jpg",
+alt: "Pepper lamb masala in a coarsely ground black pepper gravy"
+},
+{
+category: "Curries",
+name: "Lamb Korma",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-lamb-korma.jpg",
+alt: "Lamb korma in a mild, creamy gravy"
+},
+{
+category: "Curries",
+name: "Lamb Makhani",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-lamb-makhani.jpg",
+alt: "Lamb makhani in a rich buttery tomato gravy"
+},
+{
+category: "Curries",
+name: "Lamb Saag",
+price: "$22.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-lamb-saag.jpg",
+alt: "Lamb saag cooked in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Goat Curry",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-goat-curry.jpg",
+alt: "Thick, dark, richly spiced goat curry"
+},
+{
+category: "Curries",
+name: "Bhuna Goat",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-bhuna-goat.jpg",
+alt: "Bhuna goat cooked down in a thick, dry-roasted masala"
+},
+{
+category: "Curries",
+name: "Delhi Mughlai Goat Curry",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-delhi-mughlai-goat-curry.jpg",
+alt: "Delhi Mughlai goat curry in a rich, aromatic gravy"
+},
+{
+category: "Curries",
+name: "Goat Karahi",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-goat-karahi-curry.jpg",
+alt: "Goat karahi cooked with tomatoes and green chillies"
+},
+{
+category: "Curries",
+name: "Goat Korma",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-goat-korma.jpg",
+alt: "Goat korma in a mild, creamy gravy"
+},
+{
+category: "Curries",
+name: "Goat Makhani",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-goat-makhani.jpg",
+alt: "Goat makhani in a rich buttery tomato gravy"
+},
+{
+category: "Curries",
+name: "Goat Saag",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Mild",
+image: "/images/dish-goat-saag.jpg",
+alt: "Goat saag cooked in a spiced spinach gravy"
+},
+{
+category: "Curries",
+name: "Prawn Masala",
+price: "$23.95",
+diet: "Non-Veg",
+spiceLevel: "Medium",
+image: "/images/dish-prawn-masala.jpg",
+alt: "Prawn masala in a spiced tomato and onion gravy"
+}
+];
+
+// Everything the Craving Finder is allowed to return. DISHES is deliberately
+// not included: it is the curated, photographed showcase and repeats dishes
+// that these full menus already state authoritative diet, spice and prices
+// for, so spreading it in would double up rows.
+export const CRAVING_MENU: Dish[] = [...DOSA_MENU, ...BIRYANI_MENU, ...CURRY_MENU];
 
 export type Stat = {
   value: string;
@@ -830,3 +1059,28 @@ export const FEATURES: Feature[] = [
     description: "Hot & fresh via UberEats, DoorDash, or direct takeaway.",
   },
 ];
+
+// Scratchy Tuesday: dine-in and spend $40+ on a Tuesday, staff hand out the
+// QR code, scan it to get a scratch card. Odds are weighted, not a plain
+// random pick off the list: each entry's `weight` is its share out of 100
+// scratches, and the weights below intentionally sum to 70 — the remaining
+// 30 out of 100 land on SCRATCHY_TUESDAY_LOSE_WEIGHT, a non-winning
+// "Better luck next time" outcome (see SCRATCHY_TUESDAY_LOSE_MESSAGE).
+export type ScratchReward = {
+  name: string;
+  weight: number;
+};
+
+export const SCRATCHY_TUESDAY_REWARDS: ScratchReward[] = [
+  { name: "Masala Dosa", weight: 2 },
+  { name: "Mango Lassi", weight: 14 },
+  { name: "Chai", weight: 14 },
+  { name: "Soft Drink", weight: 16 },
+  { name: "Samosa", weight: 14 },
+  { name: "Gulab Jamun", weight: 8 },
+  { name: "Idly", weight: 2 },
+];
+
+// Out of every 100 scratches, this many (30) reveal no prize at all.
+export const SCRATCHY_TUESDAY_LOSE_WEIGHT = 30;
+export const SCRATCHY_TUESDAY_LOSE_MESSAGE = "Better Luck Next Time";

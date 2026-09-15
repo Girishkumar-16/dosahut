@@ -10,6 +10,17 @@
 !.yarn/releases
 !.yarn/versions
 
+# package manager lockfiles — not enforcing one exact dependency tree across
+# machines/CI for this project, so these are regenerated on install rather
+# than committed
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# local agent/tooling config (Claude Code) — machine-local, not app source
+.claude/
+
 # testing
 /coverage
 
@@ -39,8 +50,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/.pglite
-
-# poster preview renders (regenerable via design/vip-poster/preview.mjs)
-design/vip-poster/preview-*.html
-design/vip-poster/shot-*.png
+.pglite/

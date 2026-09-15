@@ -29,7 +29,11 @@ const COLLAGE = [
     alt: "A biryani thali served with raita, salad and curry on a steel plate",
     className: "",
     sizes: "(max-width: 640px) 100vw, 280px",
-    position: "object-center",
+    // The plate sits in the left ~60% of the source photo, with a wide strip
+    // of bare wooden table on the right. Centering the crop on the plate
+    // instead of the image's midpoint keeps the biryani the visual focus and
+    // crops the empty table out of frame.
+    position: "object-[35%_42%]",
   },
 ];
 

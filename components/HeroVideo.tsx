@@ -163,6 +163,15 @@ export function HeroVideo() {
             refs.current[i] = el;
           }}
           src={src}
+          // Muted autoplay via this attribute is what starts playback
+          // instantly for almost every visitor with no click needed — nearly
+          // every browser allows it unconditionally for a muted, playsinline
+          // video. The rarer case is Safari specifically refusing it (Low
+          // Power Mode, a per-site "Never Auto-Play" setting, some older iOS
+          // versions) and drawing its own native "tap to play" button over
+          // the video; the CSS below hides that button's paint, and the
+          // click/touch/scroll retry further down recovers playback silently
+          // without the visitor needing to find and press it.
           autoPlay
           muted
           playsInline
