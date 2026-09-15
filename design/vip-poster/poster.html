@@ -61,8 +61,10 @@
   .eyebrow { font-family: 'Oswald'; font-weight: 600; font-size: 4.6mm;
              letter-spacing: 0.42em; text-transform: uppercase; color: var(--orange); }
   h1 { font-family: 'Cormorant Garamond'; font-weight: 700; font-style: italic;
-       font-size: 17.5mm; line-height: 1.02; text-align: center; margin-top: 3mm; color: var(--maroon); }
-  h1 .accent { color: var(--orange); }
+       font-size: 12mm; line-height: 1.12; text-align: center; margin-top: 3mm;
+       color: var(--maroon); text-wrap: balance; max-width: 250mm; }
+  h1 .accent { color: var(--orange); font-size: 20mm; display: block;
+               margin-top: 2mm; line-height: 1.04; }
   .sub { margin-top: 3.5mm; font-size: 5mm; font-weight: 400; color: var(--ink-soft); text-align: center; }
 
   /* ── the ticket ─────────────────────────────────────────── */
@@ -113,7 +115,8 @@
 
   <main class="body">
     <p class="eyebrow">Welcome Reward</p>
-    <h1>You're in.<br><span class="accent">Go on, scratch it.</span></h1>
+    <h1>Join our VIP Club today &amp; unlock your instant reward!<br>
+        <span class="accent">Scan &amp; scratch to win.</span></h1>
     <p class="sub">Scan the code, verify on WhatsApp, and scratch your reward on the spot.</p>
 
     <!-- The ticket is drawn mid-scratch: foil partly torn away over a reward
