@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { SuburbAutocomplete } from "@/components/SuburbAutocomplete";
+import { PHONE_ERROR, isPlausibleEmail, isValidMobile } from "@/lib/vip/mobile";
 import ScratchCard from "./ScratchCard";
 
 type Reward = {
@@ -11,13 +13,14 @@ type Reward = {
   label: string;
   detail: string;
 };
-type Step = "phone" | "details" | "otp" | "card" | "returning";
+type Step = "form" | "otp" | "card" | "returning";
 
 export default function VipJoinFlow() {
-  const [step, setStep] = useState<Step>("phone");
+  const [step, setStep] = useState<Step>("form");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
+  const [suburb, setSuburb] = useState("");
   const [code, setCode] = useState("");
   // Where the code actually went, as reported by whichever channel sent it.
   const [sentTo, setSentTo] = useState("");
@@ -42,39 +45,41 @@ export default function VipJoinFlow() {
   }
 
   /**
-   * Step one: is this number already ours? Membership is decided by the member
-   * table alone, so customers migrated in from the contact list — who have no
-   * email and no reward row — are recognised straight away and asked for
-   * nothing further.
+   * One form, one submit. The phone is checked against the member table first,
+   * so a customer we already hold — including the contact-list imports, who
+   * have no email — is recognised immediately and never asked to verify or
+   * handed a second reward. Only an unknown number goes on to a code.
    */
-  async function submitPhone(event: React.FormEvent) {
+  async function submitRegistration(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
-    setBusy(true);
-    try {
-      const data = await post("/api/auth/check-phone", { phone: mobile });
-      if (data.isExisting) {
-        setWelcomeBack(data.member);
-        setStep("returning");
-      } else {
-        setStep("details");
-      }
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }
 
-  async function submitDetails(event: React.FormEvent) {
-    event.preventDefault();
-    setError(null);
+    // Checked here as well as by the server, so a typo is caught before a
+    // round trip rather than after it.
+    if (!isValidMobile(mobile)) {
+      setError(PHONE_ERROR);
+      return;
+    }
+
+    if (!isPlausibleEmail(email.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setBusy(true);
     try {
+      const check = await post("/api/auth/check-phone", { phone: mobile });
+      if (check.isExisting) {
+        setWelcomeBack(check.member);
+        setStep("returning");
+        return;
+      }
+
       const data = await post("/api/auth/send-otp", {
         name,
         phone: mobile,
         email,
+        suburb,
       });
       setSentTo(data.sentTo ?? data.phoneMasked);
       setChannel(data.channel ?? "email");
@@ -97,6 +102,7 @@ export default function VipJoinFlow() {
         code,
         name,
         email,
+        suburb,
       });
       // The reward is issued at verification, so a new member is already
       // holding theirs — scratching only reveals what is already theirs.
@@ -129,10 +135,22 @@ export default function VipJoinFlow() {
         </p>
       )}
 
-      {/* Step one asks for the number and nothing else, so a member we already
-          hold is never made to fill in details we do not need from them. */}
-      {step === "phone" && (
-        <form onSubmit={submitPhone} className="space-y-4">
+      {step === "form" && (
+        <form onSubmit={submitRegistration} className="space-y-4">
+          <div>
+            <label htmlFor="vip-name" className="mb-1.5 block text-sm font-semibold">
+              Full name
+            </label>
+            <input
+              id="vip-name"
+              className={field}
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              autoComplete="name"
+              required
+            />
+          </div>
+
           <div>
             <label htmlFor="vip-mobile" className="mb-1.5 block text-sm font-semibold">
               Mobile number
@@ -145,53 +163,18 @@ export default function VipJoinFlow() {
               type="tel"
               inputMode="tel"
               autoComplete="tel"
-              placeholder="0400 000 000"
+              placeholder="0412 345 678"
               required
             />
             <p className="mt-1.5 text-xs text-ink-600">
-              Already a member? We&rsquo;ll recognise your number straight away.
+              Already a member? We&rsquo;ll recognise your number and skip
+              straight through.
             </p>
           </div>
-          <button className={primary} disabled={busy}>
-            {busy ? "Checking…" : "Continue"}
-          </button>
-        </form>
-      )}
 
-      {step === "details" && (
-        <form onSubmit={submitDetails} className="space-y-4">
-          <p className="rounded-xl bg-cream-100 px-4 py-3 text-sm text-ink-600">
-            Great news — you&rsquo;re new here. Just two more details and your
-            welcome gift is yours.
-          </p>
-          <div>
-            <label htmlFor="vip-name" className="mb-1.5 block text-sm font-semibold">
-              Your name
-            </label>
-            <input
-              id="vip-name"
-              className={field}
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              autoComplete="name"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="vip-mobile-confirm" className="mb-1.5 block text-sm font-semibold">
-              Mobile number
-            </label>
-            <input
-              id="vip-mobile-confirm"
-              className={`${field} bg-cream-100 text-ink-600`}
-              value={mobile}
-              type="tel"
-              readOnly
-            />
-          </div>
           <div>
             <label htmlFor="vip-email" className="mb-1.5 block text-sm font-semibold">
-              Email
+              Email Address <span className="text-orange-600">*</span>
             </label>
             <input
               id="vip-email"
@@ -205,11 +188,30 @@ export default function VipJoinFlow() {
               required
             />
             <p className="mt-1.5 text-xs text-ink-600">
-              We will send a 6-digit verification code to your email/phone.
+              This is where your verification code is sent.
             </p>
           </div>
+
+          {/* SuburbAutocomplete owns its own input and takes no id, so the
+              label wraps it rather than pointing at one — otherwise htmlFor
+              would reference an element that does not exist. */}
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-semibold">
+              Home suburb{" "}
+              <span className="font-normal text-ink-600">(optional)</span>
+            </span>
+            {/* Reuses the autocomplete already built for Scratchy Tuesday, so
+                both forms behave identically. */}
+            <SuburbAutocomplete
+              value={suburb}
+              onChange={setSuburb}
+              className={field}
+              placeholder="Start typing your suburb"
+            />
+          </label>
+
           <button className={primary} disabled={busy}>
-            {busy ? "Sending code…" : "Join the VIP Club"}
+            {busy ? "Checking…" : "Join VIP Club & Scratch Now"}
           </button>
         </form>
       )}
@@ -245,7 +247,7 @@ export default function VipJoinFlow() {
             onClick={() => {
               setCode("");
               setError(null);
-              setStep("phone");
+              setStep("form");
             }}
             className="block w-full text-center text-sm text-ink-600 underline underline-offset-4"
           >

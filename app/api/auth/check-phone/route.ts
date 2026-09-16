@@ -1,4 +1,4 @@
-import { maskMobile, normaliseMobile } from "@/lib/vip/mobile";
+import { PHONE_ERROR, maskMobile, normaliseMobile } from "@/lib/vip/mobile";
 import { findByPhone, recordReturnVisit, touchBranchVisit } from "@/lib/vip/repo";
 
 /**
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   );
   if (!phone) {
     return Response.json(
-      { message: "Please enter a valid Australian mobile number." },
+      { message: PHONE_ERROR },
       { status: 400 },
     );
   }

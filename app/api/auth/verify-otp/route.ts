@@ -2,6 +2,7 @@ import { rewardByType } from "@/lib/vip/gifts";
 import { isPlausibleEmail, normaliseMobile } from "@/lib/vip/mobile";
 import { verifyOtp } from "@/lib/vip/otp";
 import { queueWhatsApp, registerOrReturn, touchBranchVisit } from "@/lib/vip/repo";
+import { sendWelcomeEmail } from "@/lib/vip/resend-otp";
 import { createSession } from "@/lib/vip/session";
 import type { VipReward } from "@/lib/vip/schema";
 
@@ -29,7 +30,13 @@ const shape = (reward: VipReward) => ({
 });
 
 export async function POST(request: Request) {
-  let body: { phone?: unknown; code?: unknown; name?: unknown; email?: unknown };
+  let body: {
+    phone?: unknown;
+    code?: unknown;
+    name?: unknown;
+    email?: unknown;
+    suburb?: unknown;
+  };
   try {
     body = await request.json();
   } catch {
@@ -42,6 +49,7 @@ export async function POST(request: Request) {
   const code = typeof body.code === "string" ? body.code.trim() : "";
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
+  const suburb = typeof body.suburb === "string" ? body.suburb.trim() : "";
 
   if (!phone || !/^\d{6}$/.test(code)) {
     return Response.json(
@@ -52,8 +60,9 @@ export async function POST(request: Request) {
   if (name.length < 2 || name.length > 255) {
     return Response.json({ message: "Please enter your name." }, { status: 400 });
   }
-  // vip_members.email is NOT NULL, so a member cannot be created without one.
-  if (!email || !isPlausibleEmail(email)) {
+  // email is nullable in the database — contact-list imports have none — but
+  // a self-registration got its code by email, so one is expected here.
+  if (email && !isPlausibleEmail(email)) {
     return Response.json(
       { message: "Please enter a valid email address." },
       { status: 400 },
@@ -66,7 +75,12 @@ export async function POST(request: Request) {
   }
 
   // Member row and welcome reward are written together, or not at all.
-  const outcome = await registerOrReturn(name, phone, email);
+  const outcome = await registerOrReturn(
+    name,
+    phone,
+    email || null,
+    suburb || null,
+  );
   await touchBranchVisit(phone);
 
   // The member exists now, so the queued WhatsApp row finally has somewhere to
@@ -74,6 +88,15 @@ export async function POST(request: Request) {
   if (!outcome.isExisting) {
     await queueWhatsApp(phone).catch((error) =>
       console.error(`[wa_logs] could not queue for ${phone}:`, error),
+    );
+  }
+
+  // Welcome email is a nicety, not part of the transaction. A failure here
+  // must never cost the customer the reward they just earned, so it is fired
+  // and forgotten with its own error handling.
+  if (!outcome.isExisting && email) {
+    void sendWelcomeEmail(email, outcome.member.name, outcome.reward).catch(
+      (error) => console.error("[Resend] welcome email failed:", error),
     );
   }
 

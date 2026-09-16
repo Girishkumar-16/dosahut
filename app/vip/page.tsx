@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import VipBenefits from "@/components/vip/VipBenefits";
+import VipRewardCards from "@/components/vip/VipRewardCards";
 import VipJoinFlow from "@/components/vip/VipJoinFlow";
-import { REWARDS } from "@/lib/vip/gifts";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -35,31 +35,26 @@ export default function VipPage() {
         </p>
       </section>
 
-      <section className="px-5 py-10">
-        <VipJoinFlow />
-      </section>
-
-      <section className="px-5 pb-10">
+      {/* Benefits and rewards come before the form: the visitor arriving from
+          the poster wants to know what they get before handing over a number. */}
+      <section className="px-5 pt-10 pb-8">
         <VipBenefits />
       </section>
 
-      <section className="px-5 pb-16">
-        <div className="mx-auto w-full max-w-md rounded-2xl bg-cream-100 px-6 py-6">
-          <h2 className="font-heading text-sm uppercase tracking-widest text-maroon-900">
-            What you could win
+      <section className="px-5 pb-10">
+        <VipRewardCards />
+      </section>
+
+      <section id="join" className="bg-cream-100 px-5 py-12">
+        <div className="mx-auto w-full max-w-md">
+          <h2 className="text-center font-heading text-sm uppercase tracking-widest text-maroon-900">
+            Join the club
           </h2>
-          <ul className="mt-3 space-y-2 text-sm text-ink-600">
-            {REWARDS.map((reward) => (
-              <li key={reward.type}>
-                <strong className="text-ink-900">{reward.label}</strong> —{" "}
-                {reward.detail}
-              </li>
-            ))}
-          </ul>
-          {/* Placeholder prizes pending owner sign-off (Girish, 2026-09-14). */}
-          <p className="mt-4 text-xs text-ink-600">
-            Offers subject to confirmation. One welcome gift per mobile number.
+          <p className="mx-auto mt-2 mb-6 max-w-sm text-center text-sm text-ink-600">
+            Takes about twenty seconds. Your reward is waiting on the other
+            side.
           </p>
+          <VipJoinFlow />
         </div>
       </section>
     </main>

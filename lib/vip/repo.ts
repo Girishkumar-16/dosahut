@@ -163,6 +163,7 @@ export async function registerOrReturn(
   name: string,
   phone: string,
   email: string | null,
+  suburb: string | null = null,
 ): Promise<RegisterOutcome> {
   const db = await getDb();
   const now = Date.now();
@@ -174,6 +175,7 @@ export async function registerOrReturn(
         name,
         phone,
         email,
+        suburb,
         source: "vip_join",
         vipMember: true,
         visitCount: 1,

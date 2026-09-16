@@ -1,5 +1,5 @@
 import { isMockDb } from "@/lib/vip/db";
-import { isPlausibleEmail, maskMobile, normaliseMobile } from "@/lib/vip/mobile";
+import { PHONE_ERROR, isPlausibleEmail, maskMobile, normaliseMobile } from "@/lib/vip/mobile";
 import { issueOtp } from "@/lib/vip/otp";
 import { findByPhone } from "@/lib/vip/repo";
 import { sendOtp } from "@/lib/vip/resend-otp";
@@ -14,7 +14,7 @@ import { sendOtp } from "@/lib/vip/resend-otp";
  * is created on verification, so an abandoned form leaves nothing behind.
  */
 export async function POST(request: Request) {
-  let body: { name?: unknown; phone?: unknown; email?: unknown };
+  let body: { name?: unknown; phone?: unknown; email?: unknown; suburb?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
   const phone = normaliseMobile(
     typeof body.phone === "string" ? body.phone : "",
   );
+  const suburb = typeof body.suburb === "string" ? body.suburb.trim() : "";
 
   if (name.length < 2 || name.length > 255) {
     return Response.json(
@@ -38,11 +39,24 @@ export async function POST(request: Request) {
   }
   if (!phone) {
     return Response.json(
-      { success: false, message: "Please enter a valid Australian mobile number." },
+      { success: false, message: PHONE_ERROR },
       { status: 400 },
     );
   }
-  if (!email || !isPlausibleEmail(email)) {
+  // Email is optional on the form, but it is the only channel that can carry
+  // a code while WhatsApp is paused — so a number we have never seen has to
+  // supply one. An existing member never reaches this check.
+  if (!email) {
+    return Response.json(
+      {
+        success: false,
+        message:
+          "Please add your email address — that is where your verification code goes while WhatsApp is being set up.",
+      },
+      { status: 400 },
+    );
+  }
+  if (!isPlausibleEmail(email)) {
     return Response.json(
       { success: false, message: "Please enter a valid email address." },
       { status: 400 },
@@ -94,6 +108,7 @@ export async function POST(request: Request) {
   return Response.json({
     success: true,
     message: "OTP sent successfully",
+    suburb: suburb || undefined,
     phone,
     phoneMasked: maskMobile(phone),
     // Where the code actually went, straight from the sender — so the screen

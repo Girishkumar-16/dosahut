@@ -12,38 +12,46 @@ export type Reward = {
   type: string;
   /** Prefix for the customer-facing code, e.g. LASSI-HKTLMI. */
   prefix: string;
+  /** Shown on the reward card and again when the card is scratched, so the
+   *  customer reads the same words before and after winning. */
   label: string;
+  /** One appetising line for the reward card. */
   detail: string;
+  icon: string;
   weight: number;
 };
 
 export const REWARDS: Reward[] = [
   {
-    type: "10_percent_off",
-    prefix: "TENOFF",
-    label: "10% off your next order",
-    detail: "Valid on dine-in and takeaway at Dosa Hut Sunshine Coast.",
-    weight: 40,
-  },
-  {
     type: "mango_lassi",
     prefix: "LASSI",
+    icon: "\u{1F96D}",
     label: "Free Mango Lassi",
-    detail: "One complimentary lassi with any main course.",
+    detail: "Thick, cold and properly sweet — the house pour, on us, with any main course.",
     weight: 25,
+  },
+  {
+    type: "10_percent_off",
+    prefix: "TENOFF",
+    icon: "\u{1F3F7}\u{FE0F}",
+    label: "10% Off Your Next Meal",
+    detail: "Straight off the bill, dine-in or takeaway. No minimum spend.",
+    weight: 40,
   },
   {
     type: "free_gulab_jamun",
     prefix: "JAMUN",
+    icon: "\u{1F368}",
     label: "Free Gulab Jamun",
-    detail: "A sweet finish on the house with any main course.",
+    detail: "Warm, syrup-soaked and impossible to share. Yours with any main course.",
     weight: 25,
   },
   {
     type: "5_dollar_off",
     prefix: "FIVEOFF",
-    label: "$5 off your next order",
-    detail: "On orders over $30, dine-in or takeaway.",
+    icon: "\u{1F4B5}",
+    label: "$5 Off Your Bill",
+    detail: "Five dollars back on any order over $30, dine-in or takeaway.",
     weight: 10,
   },
 ];
