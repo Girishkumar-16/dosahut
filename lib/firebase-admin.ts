@@ -1,9 +1,6 @@
 import { cert, getApps, initializeApp } from "firebase-admin/app";
-import { FieldValue, getFirestore } from "firebase-admin/firestore";
+import { FieldValue, getFirestore, Transaction } from "firebase-admin/firestore";
 
-// A serverless function can be reused across invocations, and re-running
-// initializeApp() on a warm instance throws — getApps() guards that without
-// needing a module-level singleton flag.
 function getAdminApp() {
   const existing = getApps();
   if (existing.length > 0) return existing[0]!;
@@ -30,14 +27,6 @@ export function getDb() {
 
 const RATE_LIMIT_COLLECTION = "apiRateLimits";
 
-/**
- * A simple fixed-window rate limiter backed by Firestore, shared by any
- * public-write API route (Scratchy Tuesday today; bookings/catering/event
- * endpoints later). `key` should identify the caller (e.g.
- * `scratchy-tuesday:<ip>`) so different routes and different callers don't
- * share a window. Returns `true` if the call is within the limit (and
- * counts it), `false` if the caller should be rejected.
- */
 export async function checkRateLimit(
   key: string,
   limit: number,
@@ -47,7 +36,7 @@ export async function checkRateLimit(
   const ref = db.collection(RATE_LIMIT_COLLECTION).doc(key);
   const now = Date.now();
 
-  return db.runTransaction(async (tx) => {
+  return db.runTransaction(async (tx: Transaction) => {
     const snap = await tx.get(ref);
     const data = snap.data() as { count: number; windowStart: number } | undefined;
 

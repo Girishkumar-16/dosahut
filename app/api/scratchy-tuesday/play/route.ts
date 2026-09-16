@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, Transaction } from "firebase-admin/firestore";
 import { checkRateLimit, getDb } from "@/lib/firebase-admin";
 import {
   SCRATCHY_TUESDAY_LOSE_MESSAGE,
@@ -115,7 +115,7 @@ export async function POST(request: Request) {
     // drawing the next card from the batch deck, so two near-simultaneous
     // requests for the same phone number can't both draw a card, and a draw
     // can't happen without the entry that records it.
-    const result = await db.runTransaction(async (tx) => {
+    const result = await db.runTransaction(async (tx: Transaction) => {
       const [entrySnap, batchSnap] = await Promise.all([tx.get(entryRef), tx.get(batchRef)]);
 
       if (entrySnap.exists) {
