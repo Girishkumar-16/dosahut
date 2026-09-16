@@ -43,9 +43,10 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  // Email is optional on the form, but it is the only channel that can carry
-  // a code while WhatsApp is paused — so a number we have never seen has to
-  // supply one. An existing member never reaches this check.
+  // Email is optional on the form. It is still required here because it is the
+  // only channel that can carry a code while WhatsApp is paused, and only an
+  // unregistered number ever reaches this route — an existing member is
+  // recognised by check-phone and never asked for one.
   if (!email) {
     return Response.json(
       {

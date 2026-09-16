@@ -21,6 +21,7 @@ export default function VipJoinFlow() {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [suburb, setSuburb] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [code, setCode] = useState("");
   // Where the code actually went, as reported by whichever channel sent it.
   const [sentTo, setSentTo] = useState("");
@@ -61,8 +62,13 @@ export default function VipJoinFlow() {
       return;
     }
 
-    if (!isPlausibleEmail(email.trim())) {
-      setError("Please enter a valid email address.");
+    if (!suburb.trim()) {
+      setError("Please tell us your home suburb.");
+      return;
+    }
+
+    if (!agreed) {
+      setError("Please agree to the terms before joining.");
       return;
     }
 
@@ -72,6 +78,17 @@ export default function VipJoinFlow() {
       if (check.isExisting) {
         setWelcomeBack(check.member);
         setStep("returning");
+        return;
+      }
+
+      // Joining for the first time, so an email is required — it is the only
+      // channel that can carry the verification code right now.
+      if (!isPlausibleEmail(email.trim())) {
+        setError(
+          email.trim()
+            ? "Please enter a valid email address."
+            : "Please add your email address — that is where your verification code is sent.",
+        );
         return;
       }
 
@@ -174,7 +191,7 @@ export default function VipJoinFlow() {
 
           <div>
             <label htmlFor="vip-email" className="mb-1.5 block text-sm font-semibold">
-              Email Address <span className="text-orange-600">*</span>
+              Email address <span className="text-orange-600">*</span>
             </label>
             <input
               id="vip-email"
@@ -185,10 +202,9 @@ export default function VipJoinFlow() {
               inputMode="email"
               autoComplete="email"
               placeholder="you@example.com"
-              required
             />
             <p className="mt-1.5 text-xs text-ink-600">
-              This is where your verification code is sent.
+              Your verification code is sent here while WhatsApp is being set up.
             </p>
           </div>
 
@@ -197,8 +213,7 @@ export default function VipJoinFlow() {
               would reference an element that does not exist. */}
           <label className="block">
             <span className="mb-1.5 block text-sm font-semibold">
-              Home suburb{" "}
-              <span className="font-normal text-ink-600">(optional)</span>
+              Home suburb <span className="text-orange-600">*</span>
             </span>
             {/* Reuses the autocomplete already built for Scratchy Tuesday, so
                 both forms behave identically. */}
@@ -210,7 +225,26 @@ export default function VipJoinFlow() {
             />
           </label>
 
-          <button className={primary} disabled={busy}>
+          {/* Spells out what is being agreed to rather than pointing at a
+              terms page that does not exist yet — a tick against nothing to
+              read is not consent. */}
+          <label className="flex items-start gap-3 rounded-xl bg-cream-0 px-4 py-3">
+            <input
+              id="vip-terms"
+              type="checkbox"
+              checked={agreed}
+              onChange={(event) => setAgreed(event.target.checked)}
+              className="mt-0.5 h-5 w-5 shrink-0 accent-orange-500"
+              required
+            />
+            <span className="text-sm leading-relaxed text-ink-600">
+              I agree to join the Dosa Hut Sunshine Coast VIP Club and to
+              receive member offers. One welcome reward per mobile number.
+              <span className="text-orange-600"> *</span>
+            </span>
+          </label>
+
+          <button className={primary} disabled={busy || !agreed}>
             {busy ? "Checking…" : "Join VIP Club & Scratch Now"}
           </button>
         </form>
