@@ -204,7 +204,7 @@ export default function VipJoinFlow() {
               placeholder="you@example.com"
             />
             <p className="mt-1.5 text-xs text-ink-600">
-              Your verification code is sent here while WhatsApp is being set up.
+              Your verification code is sent here.
             </p>
           </div>
 
@@ -225,9 +225,8 @@ export default function VipJoinFlow() {
             />
           </label>
 
-          {/* Spells out what is being agreed to rather than pointing at a
-              terms page that does not exist yet — a tick against nothing to
-              read is not consent. */}
+          {/* Opens in a new tab on purpose: a half-filled form must survive
+              someone going off to read the terms. */}
           <label className="flex items-start gap-3 rounded-xl bg-cream-0 px-4 py-3">
             <input
               id="vip-terms"
@@ -237,10 +236,18 @@ export default function VipJoinFlow() {
               className="mt-0.5 h-5 w-5 shrink-0 accent-orange-500"
               required
             />
-            <span className="text-sm leading-relaxed text-ink-600">
-              I agree to join the Dosa Hut Sunshine Coast VIP Club and to
-              receive member offers. One welcome reward per mobile number.
-              <span className="text-orange-600"> *</span>
+            <span className="text-xs leading-relaxed text-ink-600">
+              By joining, I agree to receive promotional messages and offers
+              from Dosa Hut Sunshine Coast and accept the{" "}
+              <a
+                href="/vip/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-maroon-900 underline underline-offset-4"
+              >
+                Terms &amp; Conditions
+              </a>
+              .<span className="text-orange-600"> *</span>
             </span>
           </label>
 

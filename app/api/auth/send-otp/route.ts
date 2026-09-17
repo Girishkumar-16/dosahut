@@ -2,16 +2,17 @@ import { isMockDb } from "@/lib/vip/db";
 import { PHONE_ERROR, isPlausibleEmail, maskMobile, normaliseMobile } from "@/lib/vip/mobile";
 import { issueOtp } from "@/lib/vip/otp";
 import { findByPhone } from "@/lib/vip/repo";
-import { sendOtp } from "@/lib/vip/resend-otp";
+import { sendVerificationCode } from "@/lib/vip/notify";
 
 /**
- * TEMPORARY: using email OTP via Resend until WhatsApp Business Profile + WATI
- * are approved. Switch back to lib/vip/wati.ts once WATI credentials arrive —
- * change the import below and the `opts` object passed to sendOtp; nothing
- * else in this file moves.
+ * Issues a verification code.
  *
- * Issues a verification code. Deliberately writes no member row — the member
- * is created on verification, so an abandoned form leaves nothing behind.
+ * The channel is not chosen here. lib/vip/notify.ts picks WhatsApp or email
+ * from the environment on every send, so adding WATI credentials switches this
+ * route over without a line changing.
+ *
+ * Deliberately writes no member row — the member is created on verification,
+ * so an abandoned form leaves nothing behind.
  */
 export async function POST(request: Request) {
   let body: { name?: unknown; phone?: unknown; email?: unknown; suburb?: unknown };
@@ -43,16 +44,16 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  // Email is optional on the form. It is still required here because it is the
-  // only channel that can carry a code while WhatsApp is paused, and only an
-  // unregistered number ever reaches this route — an existing member is
-  // recognised by check-phone and never asked for one.
+  // Required whichever channel is live: it is how the code reaches the
+  // customer while WhatsApp is unconfigured, and the fallback if a WhatsApp
+  // send fails once it is. Only an unregistered number reaches this route — an
+  // existing member is recognised by check-phone and never asked for one.
   if (!email) {
     return Response.json(
       {
         success: false,
         message:
-          "Please add your email address — that is where your verification code goes while WhatsApp is being set up.",
+          "Please add your email address — we send your verification code and your reward confirmation there.",
       },
       { status: 400 },
     );
@@ -93,12 +94,16 @@ export async function POST(request: Request) {
     );
   }
 
-  // WATI is paused, but every attempt is queued so there is a backlog to flush
-  // when the business profile goes live. vip_wa_logs.member_phone has a foreign
-  // key to vip_members, and we only reach here for numbers with no member row,
-  // so verify-otp queues it the moment the member exists.
-
-  const sent = await sendOtp(phone, issued.code, { email, name });
+  // memberExists is false by definition here: the member row is written at
+  // verification, and vip_wa_logs cannot reference a member that does not
+  // exist yet — so a WhatsApp send is logged in verify-otp instead.
+  const sent = await sendVerificationCode({
+    phone,
+    code: issued.code,
+    email,
+    name,
+    memberExists: false,
+  });
   if (!sent.ok) {
     return Response.json(
       { success: false, message: "We could not send your verification code. Please try again." },

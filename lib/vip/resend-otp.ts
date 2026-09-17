@@ -1,12 +1,10 @@
 /**
- * TEMPORARY: using email OTP via Resend until WhatsApp Business Profile + WATI
- * are approved. Switch back to lib/vip/wati.ts once WATI credentials arrive.
+ * Email delivery of the verification code, via Resend.
  *
  * ---------------------------------------------------------------------------
- * Deliberately mirrors lib/vip/wati.ts — same export name, same positional
- * shape `sendOtp(phone, code, opts)`, same SendResult. Swapping channels is a
- * change of import plus the one `opts` object in app/api/auth/send-otp; no
- * caller logic moves.
+ * The live channel until WATI credentials are set. Nothing selects this module
+ * by hand — lib/vip/notify.ts picks it whenever WhatsApp is unconfigured, and
+ * stops picking it the moment WATI credentials appear in the environment.
  *
  * This module only DELIVERS. Generating the code, hashing it, the 5-minute
  * expiry, the 5-attempt lockout and the 30-second resend cooldown all live in
@@ -15,18 +13,10 @@
  * ---------------------------------------------------------------------------
  */
 
-/**
- * Same shape lib/vip/wati.ts returns, so callers need no branching.
- *
- * `sentTo` is what the screen shows the customer. It comes from whichever
- * module actually did the sending, so the UI can never claim a destination the
- * code did not go to — the bug this replaced told people to check their phone
- * while the code was landing in their inbox.
- */
-export type SendResult =
-  | { ok: true; delivered: boolean; queued: boolean; channel: "email" | "whatsapp"; sentTo: string }
-  | { ok: false; error: string };
-
+// The result shape is shared with lib/vip/wati.ts so callers need no
+// branching; `sentTo` is what the screen shows, and it comes from whichever
+// module actually did the sending.
+import type { SendResult } from "./notify";
 import { maskEmail } from "./mobile";
 
 const TIMEOUT_MS = 10_000;

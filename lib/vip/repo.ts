@@ -70,17 +70,22 @@ export async function touchBranchVisit(phone: string): Promise<void> {
 }
 
 /**
- * Records that a WhatsApp message was wanted. Nothing is sent while the
- * business profile is inactive — the row is the backlog, so the day WATI is
- * switched on there is a queue to flush rather than a gap in the history.
+ * Records a WhatsApp send attempt and how it went.
+ *
+ * Only ever called when WhatsApp is the live channel, and always with the real
+ * outcome — so vip_wa_logs is a delivery history, not a queue that something
+ * has to drain later.
  */
-export async function queueWhatsApp(phone: string): Promise<void> {
+export async function logWhatsApp(
+  phone: string,
+  status: "sent" | "failed",
+): Promise<void> {
   const db = await getDb();
   const now = Date.now();
   await db.insert(vipWaLogs).values({
     memberPhone: phone,
     attempts: 1,
-    status: "queued",
+    status,
     queuedAt: now,
     lastAttemptAt: now,
   });
