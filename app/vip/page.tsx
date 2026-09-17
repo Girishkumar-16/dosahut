@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function VipPage() {
   return (
-    <main className="min-h-dvh bg-cream-50">
-      <section className="bg-maroon-900 px-5 py-10 text-center text-cream-0">
+    <main className="vip-content-wrapper min-h-dvh overflow-hidden bg-cream-50">
+      <section className="vip-card-text bg-maroon-900 px-5 py-10 text-center text-cream-0">
         {/* Visitors arrive here by scanning the in-store poster, so the first
             thing on screen has to be the same mark they just scanned from.
             The logo replaces what used to be the restaurant's name in text. */}
@@ -46,7 +46,7 @@ export default function VipPage() {
       </section>
 
       <section id="join" className="bg-cream-100 px-5 py-12">
-        <div className="mx-auto w-full max-w-md">
+        <div className="vip-card-text mx-auto w-full max-w-md">
           <h2 className="text-center font-heading text-sm uppercase tracking-widest text-maroon-900">
             Join the club
           </h2>

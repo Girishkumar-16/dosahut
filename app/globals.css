@@ -58,6 +58,115 @@ button:not(:disabled),
   cursor: pointer;
 }
 
+/* Selected text. Without this the browser default is its own blue, which on
+   the maroon VIP headers and the cream cards reads as a different site
+   momentarily pasted over ours.
+
+   Both background AND colour are set, and that pairing is the point: a
+   customer copying a reward code off the cream card and a member selecting a
+   line of the maroon hero both get dark text on warm amber, so nothing turns
+   unreadable at the moment it is being read most carefully. The amber is a
+   deliberate step outside the brand palette — maroon or orange behind maroon
+   or orange text would be the very thing this prevents.
+
+   The -moz- copy is for Firefox before 62, which only understood the prefixed
+   form. It must stay a separate rule: an unrecognised pseudo-element
+   invalidates the whole selector list it appears in, so combining the two
+   would cost us the unprefixed rule everywhere else. Lightning CSS drops the
+   prefixed copy from the production bundle when the browser targets no longer
+   need it, which is why it does not appear in the built stylesheet. */
+::-moz-selection {
+  background-color: #fde68a !important;
+  color: #1f2937 !important;
+}
+
+::selection {
+  background-color: #fde68a !important;
+  color: #1f2937 !important;
+  /* Safari applies -webkit-text-fill-color over color wherever the two
+     disagree, and loses the selected-text colour without this. */
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+/* Selection bleeding across block boundaries.
+   ---------------------------------------------------------------------------
+   WebKit paints "selection gaps": when a selection runs from one block into
+   the next, it fills the space between them across the full width of the
+   containing block, which reads as a highlight strip running out past the
+   text. Blink stopped doing this, so the strips are invisible in Chrome and
+   show up in Safari and on an iPhone.
+
+   Two things are done about it. Each text block shrinks to its own content, so
+   there is less box for the fill to spread across; and the containers that
+   stack those blocks become flex columns, because WebKit only paints gaps
+   between children in normal block flow — a flex container lays its children
+   out with no gaps to fill. Both are layout-neutral, which the before/after
+   screenshots of all four pages confirm to the pixel. */
+.vip-content-wrapper p,
+.vip-content-wrapper h1,
+.vip-content-wrapper h2,
+.vip-content-wrapper h3,
+/* An explicit class, not li or even ul li: the numbered section cards on
+   /vip/terms and /vip/privacy are <li>, and so are the benefit cards on /vip,
+   and shrink-wrapping those pulled every card border in to hug its text.
+   .vip-prose-list marks the lists that really are runs of prose. */
+.vip-content-wrapper .vip-prose-list li {
+  /* fit-content resolves to min(max-content, available), so a block can never
+     grow past its parent and needs no max-width guard. Adding `max-width:100%`
+     here would outrank every Tailwind max-w-* utility inside the wrapper —
+     specificity (0,1,1) against (0,1,0) — and strip the line-length limits off
+     the hero copy, which is exactly what it did the first time. */
+  width: fit-content;
+}
+
+/* Marks a container whose children are stacked text. Visually identical to the
+   block flow it replaces — the spacing comes from margin utilities, which flex
+   honours — but it gives WebKit no block-level gaps to paint. */
+.vip-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.vip-card-text p {
+  /* Only bites if a paragraph ever goes inline: it keeps a wrapped highlight
+     from painting one box across the line break. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Say out loud that body text is selectable. Safari will otherwise inherit
+   user-select from an ancestor set for a different reason and quietly make a
+   paragraph unselectable. */
+.vip-content-wrapper :is(p, h1, h2, h3, h4, li) {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ...except inside a deliberately unselectable subtree. The scratch card sets
+   select-none so a finger still moving across a revealed prize does not drag a
+   selection over it; the rule above would inherit-beat that and hand the bug
+   back. This comes after it so it wins the cascade. */
+.select-none,
+.select-none :is(p, h1, h2, h3, h4, li, span, div) {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* A shrink-wrapped box no longer fills its parent, so anything the layout was
+   centring by text-align would sit against the left edge instead — the hero
+   headline, the section eyebrows, the staff redemption header. Auto margins
+   put those back where the design has them.
+
+   Both forms are needed: text-center sits on an ancestor section in some
+   places and directly on the heading in others, and missing the second form
+   left-aligned every eyebrow on /vip. Scoped to text-center so left-aligned
+   body copy is untouched — auto margins there would centre short paragraphs
+   that are meant to start at the left edge. */
+.vip-content-wrapper .text-center :is(p, h1, h2, h3, .vip-prose-list li),
+.vip-content-wrapper :is(p, h1, h2, h3).text-center {
+  margin-inline: auto;
+}
+
 html {
   /* Anchor links — the navbar's Sunshine Coast pin, the menu category jumps —
      glide to their section instead of snapping. */

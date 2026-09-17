@@ -1,17 +1,17 @@
 import { rewardByType } from "@/lib/vip/gifts";
 import { isPlausibleEmail, normaliseMobile } from "@/lib/vip/mobile";
 import { verifyOtp } from "@/lib/vip/otp";
-import { queueWhatsApp, registerOrReturn, touchBranchVisit } from "@/lib/vip/repo";
+import { logWhatsApp, registerOrReturn, touchBranchVisit } from "@/lib/vip/repo";
+import { activeChannel } from "@/lib/vip/notify";
 import { sendWelcomeEmail } from "@/lib/vip/resend-otp";
 import { createSession } from "@/lib/vip/session";
 import type { VipReward } from "@/lib/vip/schema";
 
 /**
- * TEMPORARY: the code being checked here was delivered by email via Resend,
- * not WhatsApp, until the WhatsApp Business Profile + WATI are approved. The
- * checking logic is channel-agnostic (lib/vip/otp.ts), so switching back to
- * lib/vip/wati.ts changes only how the code was sent, never how it is
- * verified — nothing in this file needs to change.
+ * Verifies a code and creates the member.
+ *
+ * Channel-agnostic on purpose: lib/vip/otp.ts owns the code itself, so whether
+ * it arrived by email or WhatsApp changes nothing here.
  */
 const REASONS: Record<string, string> = {
   expired: "That code has expired. Please request a new one.",
@@ -83,11 +83,14 @@ export async function POST(request: Request) {
   );
   await touchBranchVisit(phone);
 
-  // The member exists now, so the queued WhatsApp row finally has somewhere to
-  // hang — this is the first moment the foreign key allows it.
-  if (!outcome.isExisting) {
-    await queueWhatsApp(phone).catch((error) =>
-      console.error(`[wa_logs] could not queue for ${phone}:`, error),
+  // The member row exists now, so a WhatsApp delivery finally has somewhere to
+  // be recorded — the foreign key would have rejected it at send time. Only
+  // written when WhatsApp actually carried the code; while email is the live
+  // channel vip_wa_logs stays empty rather than filling with rows nothing
+  // will ever act on.
+  if (!outcome.isExisting && activeChannel() === "whatsapp") {
+    await logWhatsApp(phone, "sent").catch((error) =>
+      console.error(`[wa_logs] could not record send for ${phone}:`, error),
     );
   }
 
