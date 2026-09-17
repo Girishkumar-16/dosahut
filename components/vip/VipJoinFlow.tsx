@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SuburbAutocomplete } from "@/components/SuburbAutocomplete";
 import { PHONE_ERROR, isPlausibleEmail, isValidMobile } from "@/lib/vip/mobile";
+import PhoneInput from "./PhoneInput";
 import ScratchCard from "./ScratchCard";
 
 type Reward = {
@@ -172,17 +173,9 @@ export default function VipJoinFlow() {
             <label htmlFor="vip-mobile" className="mb-1.5 block text-sm font-semibold">
               Mobile number
             </label>
-            <input
-              id="vip-mobile"
-              className={field}
-              value={mobile}
-              onChange={(event) => setMobile(event.target.value)}
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="0412 345 678"
-              required
-            />
+            {/* mobile holds the local nine digits; the +61 lives in the badge
+                and is added back by normaliseMobile on the server. */}
+            <PhoneInput value={mobile} onChange={setMobile} required />
             <p className="mt-1.5 text-xs text-ink-600">
               Already a member? We&rsquo;ll recognise your number and skip
               straight through.
@@ -246,6 +239,15 @@ export default function VipJoinFlow() {
                 className="font-medium text-maroon-900 underline underline-offset-4"
               >
                 Terms &amp; Conditions
+              </a>{" "}
+              and{" "}
+              <a
+                href="/vip/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-maroon-900 underline underline-offset-4"
+              >
+                Privacy Policy
               </a>
               .<span className="text-orange-600"> *</span>
             </span>

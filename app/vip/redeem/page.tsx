@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function RedeemPage() {
   return (
-    <main className="min-h-dvh bg-maroon-900 px-5 py-10">
+    <main className="vip-content-wrapper min-h-dvh overflow-hidden bg-maroon-900 px-5 py-10">
       <div className="mx-auto w-full max-w-sm">
-        <header className="text-center">
+        <header className="vip-card-text text-center">
           {/* Matches the /vip header, a little smaller: this runs on a phone
               behind the counter, so the form itself has to stay above the
               fold. The logo carries the brand name, so it replaces the text

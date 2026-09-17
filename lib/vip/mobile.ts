@@ -42,6 +42,29 @@ export function normaliseMobile(input: string): string | null {
   return `+61${local}`;
 }
 
+/**
+ * The nine digits after the country code, e.g. 412345678.
+ *
+ * Drops a leading +61, 61 or 0 so that every shape the customer types collapses
+ * to the same local number. Partial input is returned as typed, because this
+ * runs on every keystroke — the lone "0" someone starts with has to survive
+ * until the "4" arrives and makes it a prefix worth dropping.
+ */
+export function toLocalMobile(input: string): string {
+  const digits = input.replace(/\D/g, "");
+  if (digits.startsWith("614")) return digits.slice(2, 11);
+  if (digits.startsWith("04")) return digits.slice(1, 10);
+  return digits.slice(0, 9);
+}
+
+/** Groups the local number as 412 345 678, for reading back a typed number. */
+export function formatLocalMobile(input: string): string {
+  const local = toLocalMobile(input);
+  return [local.slice(0, 3), local.slice(3, 6), local.slice(6, 9)]
+    .filter(Boolean)
+    .join(" ");
+}
+
 /** Good enough to catch typos; real validation is the code we send. */
 export const isPlausibleEmail = (value: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) && value.length <= 255;

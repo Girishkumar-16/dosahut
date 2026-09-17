@@ -78,12 +78,12 @@ const SECTIONS = [
 
 export default function VipTermsPage() {
   return (
-    <main className="min-h-dvh bg-cream-50">
+    <main className="vip-content-wrapper min-h-dvh overflow-hidden bg-cream-50">
       {/* Same maroon header and logo as /vip: the customer opens this page
           from the consent checkbox, in a new tab, and has to recognise
           instantly that it is still Dosa Hut. The logo carries the brand name,
           so it replaces the text eyebrow rather than sitting above it. */}
-      <section className="bg-maroon-900 px-5 py-10 text-center text-cream-0">
+      <section className="vip-card-text bg-maroon-900 px-5 py-10 text-center text-cream-0">
         <Image
           src="/images/logo.png"
           alt={SITE.name}
@@ -121,11 +121,11 @@ export default function VipTermsPage() {
           Back to the VIP Club
         </Link>
 
-        <ol className="mt-8 space-y-4">
+        <ol className="vip-card-text mt-8 space-y-4">
           {SECTIONS.map((section, index) => (
             <li
               key={section.heading}
-              className="rounded-2xl border border-maroon-900/12 bg-cream-0 p-6"
+              className="vip-card-text rounded-2xl border border-maroon-900/12 bg-cream-0 p-6"
             >
               <h2 className="font-heading text-base uppercase tracking-wide text-maroon-900">
                 <span className="mr-2 font-normal text-ink-600">
@@ -133,7 +133,7 @@ export default function VipTermsPage() {
                 </span>
                 {section.heading}
               </h2>
-              <div className="mt-3 space-y-3">
+              <div className="vip-card-text mt-3 space-y-3">
                 {section.body.map((paragraph) => (
                   <p
                     key={paragraph}
@@ -147,7 +147,7 @@ export default function VipTermsPage() {
           ))}
         </ol>
 
-        <div className="mt-6 rounded-2xl bg-cream-100 p-6 text-sm leading-relaxed text-ink-700">
+        <div className="vip-card-text mt-6 rounded-2xl bg-cream-100 p-6 text-sm leading-relaxed text-ink-700">
           <p className="font-heading text-sm uppercase tracking-wide text-maroon-900">
             {SITE.name}
           </p>
@@ -156,6 +156,16 @@ export default function VipTermsPage() {
             <a href={SITE.phoneHref} className="underline underline-offset-4">
               {SITE.phoneDisplay}
             </a>
+          </p>
+          <p className="mt-3">
+            See also the{" "}
+            <Link
+              href="/vip/privacy"
+              className="font-medium text-maroon-900 underline underline-offset-4"
+            >
+              VIP Club Privacy Policy
+            </Link>
+            .
           </p>
         </div>
 
