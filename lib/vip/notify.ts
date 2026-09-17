@@ -27,9 +27,10 @@ export type SendResult =
 
 export type NotifyChannel = "email" | "whatsapp";
 
-/** What the channel would be right now, without sending anything. */
-export const activeChannel = (): NotifyChannel =>
-  isWatiConfigured() ? "whatsapp" : "email";
+/* There is deliberately no exported "which channel would we use" helper. The
+   only honest answer to "how was this code delivered" is the channel the send
+   actually returned, which travels with the request; anything re-derived from
+   the environment later describes the next send, not this one. */
 
 export async function sendVerificationCode(params: {
   phone: string;
