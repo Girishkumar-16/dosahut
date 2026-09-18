@@ -1051,8 +1051,9 @@ export const FEATURES: Feature[] = [
     description: "Queensland's largest live dosa menu served fresh and hot.",
   },
   {
-    title: "100% Halal & Pure Veg",
-    description: "Dedicated preparation spaces respecting all dietary choices.",
+    title: "Dietary & Veg Friendly",
+    description:
+      "Separate preparation spaces and flexible menu options catering to all dietary needs and preferences.",
   },
   {
     title: "Fast Local Delivery",

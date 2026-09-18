@@ -3,14 +3,15 @@ import { FEATURES } from "@/lib/site";
 
 const ICONS = [FlameIcon, UtensilsIcon, LeafIcon, DeviceIcon];
 
-// Cormorant Garamond's "1" is a bare vertical stroke at this weight and
-// size — same shape as a capital "I" — so "100% Halal & Pure Veg" misreads.
-// Switching the numeral to a different font family (tried earlier) fixed
-// the ambiguity but looked visibly inconsistent next to the other titles.
-// Italicizing just the numeral keeps the same font and does the job: real
-// italic Cormorant Garamond gives "1" a distinct hooked stroke, unlike "I".
-// Only titles that actually contain a "1" get this — "90+ Dosa Varieties"
-// has no ambiguous digit, so it stays untouched like every other title.
+// Cormorant Garamond's "1" is a bare vertical stroke at this weight and size —
+// the same shape as a capital "I" — so a title like the former "100% Halal &
+// Pure Veg" read as "IOO%". Switching the numeral to a different font family
+// (tried earlier) fixed the ambiguity but looked visibly inconsistent next to
+// the other titles. Italicising just the numeral keeps the same font and does
+// the job: real italic Cormorant Garamond gives "1" a distinct hooked stroke.
+//
+// No title in FEATURES currently starts with a "1", so this is dormant rather
+// than dead — it is what keeps the next one that does from misreading.
 const LEADING_NUMBER = /^([\d%+]+)(\s.*)$/;
 
 function FeatureTitle({ title }: { title: string }) {
