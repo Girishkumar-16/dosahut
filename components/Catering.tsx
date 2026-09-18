@@ -25,15 +25,14 @@ const COLLAGE = [
     position: "object-center",
   },
   {
-    src: "/images/catering-biryani.jpg",
-    alt: "A biryani thali served with raita, salad and curry on a steel plate",
+    src: "/images/catering/new-catering.jpg",
+    alt: "Garnished rice and salad in a chafing dish on a Dosa Hut catering buffet, with further trays behind",
     className: "",
     sizes: "(max-width: 640px) 100vw, 280px",
-    // The plate sits in the left ~60% of the source photo, with a wide strip
-    // of bare wooden table on the right. Centering the crop on the plate
-    // instead of the image's midpoint keeps the biryani the visual focus and
-    // crops the empty table out of frame.
-    position: "object-[35%_42%]",
+    // The front tray fills the frame with no dead space to crop away, so this
+    // one needs no offset — the object-[35%_42%] that used to sit here was
+    // measured against the old biryani photo and would now cut the tray.
+    position: "object-center",
   },
 ];
 

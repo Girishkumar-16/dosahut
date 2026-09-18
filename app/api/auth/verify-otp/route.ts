@@ -2,9 +2,12 @@ import { rewardByType } from "@/lib/vip/gifts";
 import { isPlausibleEmail, normaliseMobile } from "@/lib/vip/mobile";
 import { verifyOtp } from "@/lib/vip/otp";
 import { logWhatsApp, registerOrReturn, touchBranchVisit } from "@/lib/vip/repo";
-import { activeChannel } from "@/lib/vip/notify";
 import { sendWelcomeEmail } from "@/lib/vip/resend-otp";
-import { createSession } from "@/lib/vip/session";
+import {
+  clearOtpChannel,
+  createSession,
+  readOtpChannel,
+} from "@/lib/vip/session";
 import type { VipReward } from "@/lib/vip/schema";
 
 /**
@@ -84,11 +87,18 @@ export async function POST(request: Request) {
   await touchBranchVisit(phone);
 
   // The member row exists now, so a WhatsApp delivery finally has somewhere to
-  // be recorded — the foreign key would have rejected it at send time. Only
-  // written when WhatsApp actually carried the code; while email is the live
-  // channel vip_wa_logs stays empty rather than filling with rows nothing
-  // will ever act on.
-  if (!outcome.isExisting && activeChannel() === "whatsapp") {
+  // be recorded — the foreign key would have rejected it at send time.
+  //
+  // deliveredBy is what actually carried THIS code, read from the signed
+  // cookie send-otp wrote. Asking the environment again would answer "what
+  // would we use now", which is a different question: a WhatsApp send that
+  // failed and fell back to email would be logged as a WhatsApp delivery that
+  // never happened. Absent or unreadable means no proof of a WhatsApp send, so
+  // nothing is logged.
+  const deliveredBy = await readOtpChannel(phone);
+  await clearOtpChannel();
+
+  if (!outcome.isExisting && deliveredBy === "whatsapp") {
     await logWhatsApp(phone, "sent").catch((error) =>
       console.error(`[wa_logs] could not record send for ${phone}:`, error),
     );

@@ -3,6 +3,7 @@ import { PHONE_ERROR, isPlausibleEmail, maskMobile, normaliseMobile } from "@/li
 import { issueOtp } from "@/lib/vip/otp";
 import { findByPhone } from "@/lib/vip/repo";
 import { sendVerificationCode } from "@/lib/vip/notify";
+import { rememberOtpChannel } from "@/lib/vip/session";
 
 /**
  * Issues a verification code.
@@ -109,6 +110,13 @@ export async function POST(request: Request) {
       { success: false, message: "We could not send your verification code. Please try again." },
       { status: 502 },
     );
+  }
+
+  // Which channel carried this particular code, recorded now while it is a
+  // fact rather than re-derived at verification time, where a WhatsApp send
+  // that fell back to email would otherwise be logged as a WhatsApp delivery.
+  if (sent.delivered) {
+    await rememberOtpChannel(phone, sent.channel);
   }
 
   return Response.json({

@@ -36,11 +36,18 @@ export function OurStory() {
 
         <div className="group relative mx-auto h-[320px] w-full overflow-hidden rounded-3xl border border-orange-500/20 shadow-2xl sm:h-[400px] lg:h-[500px] lg:min-h-[480px]">
           <Image
-            src="/images/dosa-hut-restaurant.png"
-            alt="The Dosa Hut shopfront, its orange sign reading Dosa Hut above a row of yellow-framed windows and a bench on the footpath"
+            src="/images/dosa-hut-storefront.jpg"
+            alt="The Dosa Hut Sunshine Coast shopfront on Lutana Street, its sign above the awning, seen from across the road"
             fill
             sizes="(max-width: 768px) 100vw, 700px"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            // The source is a tall portrait shot: sky fills the top half and
+            // road the bottom third, with the shopfront in a band around 60%
+            // down. A centred cover crop frames the roofline and the empty
+            // street instead, so the focal point is pushed down onto the sign
+            // and the entrance. 60% was chosen by rendering 60/72/85/100 and
+            // comparing: past 60 the sky disappears and the frame fills with
+            // road without bringing the shopfront any closer.
+            className="object-cover object-[50%_60%] transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
       </div>
